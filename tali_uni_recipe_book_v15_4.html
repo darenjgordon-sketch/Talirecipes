@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tali’s Uni Recipes</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0f12; --card:#17171c; --muted:#9aa0a6; --text:#fff; --chip:#23232a; --btn:#23232a; --star:#ffd166; --accent:#7cf4a6; --accent2:#7ab8ff; --accent3:#ff5c8a;}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 800px at 20% -10%,#1d1d24 0%,#0f0f12 60%);color:var(--text);
+       font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.45;font-size:18px;}
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(90deg,#ff5c8a,#7ab8ff,#7cf4a6);color:#0f0f12;
+          padding:18px 16px;text-align:center;border-bottom:3px solid rgba(255,255,255,.15);}
+  .title{margin:0;font-size:28px;font-weight:700;letter-spacing:.3px}
+  .subtitle{margin:6px 0 4px;font-size:16px;opacity:.9}
+  .rot-affirm{display:inline-block;margin:6px auto 2px;font-size:22px;font-weight:900;letter-spacing:.2px;
+              color:#0f0f12;text-shadow:0 2px 0 rgba(255,255,255,.55), 0 6px 18px rgba(0,0,0,.35);}
+  main{padding:20px 16px 48px;max-width:960px;margin:0 auto;}
+  .nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0 8px;}
+  .pill{border:0;border-radius:14px;padding:16px 14px;min-height:60px;font-size:17px;font-weight:700;cursor:pointer;color:#0f0f12;box-shadow:0 6px 16px rgba(0,0,0,.25);width:100%;}
+  .lvl1{background:linear-gradient(180deg,#7cf4a6,#43d17b)}
+  .lvl2{background:linear-gradient(180deg,#ffd166,#ffb703)}
+  .lvl3{background:linear-gradient(180deg,#ff8aa6,#ff5c8a)}
+  .cocktail{background:linear-gradient(180deg,#7ab8ff,#4f93ff)}
+  .shortcuts{background:linear-gradient(180deg,#d39cff,#a96bff)}
+  .staples{background:linear-gradient(180deg,#ffa6a6,#ff6b6b)}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.35);padding:18px 18px 14px;margin-top:18px;border:1px solid rgba(255,255,255,.06);}
+  .card h3{margin:0 0 10px;font-size:24px;font-weight:700;letter-spacing:.2px}
+  .tab-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 4px;}
+  .tab-btn{background:var(--btn);color:#e6e6ea;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;font-weight:700;cursor:pointer;}
+  .list{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px;}
+  @media (min-width:560px){.list{grid-template-columns:repeat(2,1fr);}}
+  .list button{text-align:left;background:var(--card);color:#e6e6ea;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.25);}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .chip{background:var(--chip);padding:8px 10px;border-radius:999px;font-size:14px;color:#e6e6ea;display:inline-flex;align-items:center;gap:6px;}
+  .well{margin-top:4px;font-size:14px;color:var(--muted)}
+  .back-btn{margin-top:12px;display:inline-flex;align-items:center;gap:8px;background:#23232a;color:#cfe3ff;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:700}
+  .back-btn:active{transform:translateY(1px)}
+  .stars{font-size:28px;letter-spacing:4px;cursor:pointer;user-select:none;display:inline-block}
+  .star-on{color:#ffd166}
+  .star-off{color:#777}
+  .staples-wrap{display:grid;gap:16px}
+  .staples-group{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px;}
+  .staples-group h4{margin:4px 0 8px}
+  .staple-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px}
+  .staple-row input{transform:scale(1.4)}
+  .staple-row.checked{color:#8f94a1;text-decoration:line-through;background:#17171c}
+  .resetBtn{display:inline-block;background:#ff5c8a;color:#0f0f12;font-weight:800;border:0;border-radius:10px;padding:12px 16px;margin-top:10px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.35)}
+  footer{text-align:center;color:#9aa0a6;font-size:13px;padding:18px 12px 36px}
+  footer .love{font-size:12px;color:#888}
+  footer .ver{font-size:10px;color:#666;margin-top:6px;display:block}
+</style>
+</head>
+<body>
+<header>
+  <h1 class="title">Tali’s Uni Recipes</h1>
+  <p class="subtitle">Birmingham University</p>
+  <div id="rotAff" class="rot-affirm"></div>
+</header>
+<main>
+  <div class="nav" id="homeNav">
+    <button class="pill lvl1" data-action="open-level" data-level="1">🌟 Level 1</button>
+    <button class="pill lvl2" data-action="open-level" data-level="2">🥙 Level 2</button>
+    <button class="pill lvl3" data-action="open-level" data-level="3">🍲 Level 3</button>
+    <button class="pill cocktail" data-action="open-cocktails">🍹 Cocktails</button>
+    <button class="pill shortcuts" data-action="open-shortcuts">⚡ Shortcuts</button>
+    <button class="pill staples" data-action="open-staples">📦 Staples</button>
+  </div>
+  <section id="content"></section>
+</main>
+<footer>Made with love for Tali<br><span class="love">Dad x</span><span class="ver">v15.4</span></footer>
+
+<script>
+
+var DATA = {"affirmations": ["You light up every room.", "Bold choices make bold women.", "Your energy changes everything.", "Confidence is your superpower.", "Power looks natural on you.", "Stand tall. Take space. Shine.", "Lead the way and don\u2019t look back.", "Unstoppable is your default setting.", "You are the moment.", "Own the room \u2014 you already do."], "recipes": {"levels": [{"id": 1, "name": "Level 1", "desc": "0\u20135 mins", "categories": [{"id": "snack", "name": "Snacks", "items": [{"title": "Bedtime Banana", "size": "Snack", "time": "1\u20132 mins", "ingredients": ["Banana", "Honey (opt)"], "method": ["Peel, eat, drizzle if you like."]}, {"title": "Grapes (fresh/frozen)", "size": "Snack", "time": "1 min", "ingredients": ["Grapes"], "method": ["Rinse; freeze some for later."]}, {"title": "Yogurt + Honey + Fruit", "size": "Snack", "time": "2 mins", "ingredients": ["Greek yogurt", "Honey", "Fruit"], "method": ["Spoon yogurt; top fruit + honey."]}, {"title": "Avocado Rice Cake", "size": "Snack", "time": "2\u20133 mins", "ingredients": ["Rice cakes", "Avocado", "Chili flakes"], "method": ["Mash avo; spread; chili."]}, {"title": "Peanut Butter Apple", "size": "Snack", "time": "2 mins", "ingredients": ["Apple", "Peanut butter"], "method": ["Slice apple; dip."]}, {"title": "Hummus Dippers", "size": "Snack", "time": "3 mins", "ingredients": ["Hummus", "Carrot/cucumber sticks"], "method": ["Dip + crunch."]}, {"title": "Cheese & Crackers", "size": "Snack", "time": "2 mins", "ingredients": ["Crackers", "Cheddar or feta"], "method": ["Stack + snack."]}, {"title": "Pitta + Hummus", "size": "Snack", "time": "3 mins", "ingredients": ["Pitta", "Hummus"], "method": ["Toast pitta; tear + dip."]}, {"title": "Ready Egg + Chili Salt", "size": "Snack", "time": "3 mins", "ingredients": ["Ready\u2011boiled egg", "Chili flakes", "Salt"], "method": ["Peel; slice; season."]}, {"title": "Instant Couscous Cup", "size": "Snack", "time": "4\u20135 mins", "ingredients": ["Instant couscous", "Boiling water", "Lemon"], "method": ["Hydrate; squeeze lemon."]}]}, {"id": "light", "name": "Light Meals", "items": [{"title": "Couscous Feta Bowl", "size": "Light Meal", "time": "4\u20135 mins", "ingredients": ["Instant couscous", "Feta", "Lemon"], "method": ["Hydrate couscous; crumble feta; lemon."]}, {"title": "Stuffed Pasta Pesto Salad", "size": "Light Meal", "time": "4\u20135 mins", "ingredients": ["Fresh tortelloni", "Pesto", "Spinach"], "method": ["Toss together."]}, {"title": "Protein Green Bowl", "size": "Light Meal", "time": "4\u20135 mins", "ingredients": ["Bagged salad", "Ready egg", "Seeds", "Vinaigrette"], "method": ["Toss; slice egg; scatter seeds."]}, {"title": "Falafel Salad Box", "size": "Light Meal", "time": "4\u20135 mins", "ingredients": ["Falafel", "Leaves", "Hummus", "Tahini"], "method": ["Plate; drizzle tahini."]}, {"title": "Bean Salsa Cup", "size": "Light Meal", "time": "5 mins", "ingredients": ["Mixed beans (drained)", "Salsa", "Lime"], "method": ["Mix; lime."]}, {"title": "Halloumi Snack Plate", "size": "Light Meal", "time": "5 mins", "ingredients": ["Halloumi slices (ready\u2011grilled if possible)", "Olives", "Tomatoes"], "method": ["Assemble plate."]}, {"title": "Tofu Snack Bowl", "size": "Light Meal", "time": "5 mins", "ingredients": ["Marinated tofu (ready)", "Leaves", "Soy or sesame"], "method": ["Toss + serve."]}, {"title": "Caprese\u2011ish Pot", "size": "Light Meal", "time": "4\u20135 mins", "ingredients": ["Mozzarella balls", "Cherry tomatoes", "Basil", "Balsamic"], "method": ["Mix; drizzle."]}, {"title": "Mediterranean Couscous Pot", "size": "Light Meal", "time": "5 mins", "ingredients": ["Instant couscous", "Olives", "Feta"], "method": ["Hydrate; fold in bits."]}, {"title": "Quick Sandwich Thins", "size": "Light Meal", "time": "5 mins", "ingredients": ["Sandwich thins", "Hummus", "Avocado", "Chili"], "method": ["Spread + stack."]}]}, {"id": "hearty", "name": "Hearty Meals", "items": [{"title": "Falafel + Couscous + Hummus", "size": "Hearty Meal", "time": "4\u20135 mins", "ingredients": ["Falafel", "Couscous cup", "Hummus"], "method": ["Hydrate couscous; plate all."], "friends": true}, {"title": "Grain Bowl + Tofu", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Grain pouch", "Marinated tofu", "Leaves", "Tahini"], "method": ["Heat grains; top; tahini."]}, {"title": "Hot Counter Jacket + Slaw", "size": "Hearty Meal", "time": "3\u20134 mins", "ingredients": ["Hot jacket potato", "Coleslaw pot"], "method": ["Split; top."]}, {"title": "Microwave Rice + Beans Bowl", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Microwave rice", "Mixed beans", "Salsa"], "method": ["Heat rice; mix; top salsa."]}, {"title": "Pesto Tortelloni Bowl (warm)", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Fresh tortelloni", "Boiling kettle water", "Pesto"], "method": ["Cover pasta with kettle water 3\u20134 mins; drain; pesto."]}, {"title": "Chili Couscous & Halloumi", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Instant couscous", "Halloumi (ready\u2011grilled)", "Chili oil"], "method": ["Hydrate; top; drizzle."], "friends": true}, {"title": "Paneer\u2011ish (Halloumi) Wrap", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Wrap", "Halloumi (ready)", "Pickled onions"], "method": ["Warm wrap; fill; fold."]}, {"title": "Pitta Pocket Falafel", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Pitta", "Falafel", "Hummus", "Salad"], "method": ["Warm pitta; stuff."]}, {"title": "Speedy Greek Bowl", "size": "Hearty Meal", "time": "5 mins", "ingredients": ["Microwave rice", "Feta", "Olives", "Tomato"], "method": ["Heat rice; scatter toppings."]}, {"title": "Tortelloni + Butter + Pepper", "size": "Hearty Meal", "time": "4\u20135 mins", "ingredients": ["Fresh stuffed pasta", "Butter", "Black pepper"], "method": ["Kettle water soak 3\u20134 mins; drain; butter + pepper."]}]}]}, {"id": 2, "name": "Level 2", "desc": "Up to 10 mins", "categories": [{"id": "snack", "name": "Snacks", "items": [{"title": "Quesadilla Wedges", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Tortillas", "Cheese", "Hot sauce"], "method": ["Fill; pan 2\u20133 mins/side; slice."], "friends": true}, {"title": "Garlic Mushrooms", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Mushrooms", "Butter/oil", "Garlic powder"], "method": ["Pan 6\u20138 mins; season."]}, {"title": "Sweetcorn Chili Lime", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Frozen corn", "Chili flakes", "Lime"], "method": ["Pan; chili + lime."]}, {"title": "Pan\u2011Fried Halloumi Nibbles", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Halloumi", "Honey", "Chili"], "method": ["Fry slices; drizzle."]}, {"title": "Spicy Beans on Toast", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Bread", "Baked beans", "Chili oil"], "method": ["Toast; heat beans; top; chili oil."]}, {"title": "Smashed Avo Toast", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Bread", "Avocado", "Lemon", "Chili flakes"], "method": ["Toast; smash avo; lemon; chili."]}, {"title": "Crispy Tortilla Chips", "size": "Snack", "time": "9\u201310 mins", "ingredients": ["Tortillas", "Oil", "Salt"], "method": ["Cut; pan crisp; salt."]}, {"title": "Mini Omelette Wrap", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Egg", "Wrap", "Hot sauce"], "method": ["Thin omelette; roll in wrap; sauce."]}, {"title": "Chili Yogurt Dip + Chips", "size": "Snack", "time": "8\u20139 mins", "ingredients": ["Greek yogurt", "Chili oil", "Garlic powder"], "method": ["Mix; dip."]}, {"title": "Toasted Pitta Pizza", "size": "Snack", "time": "9\u201310 mins", "ingredients": ["Pitta", "Passata", "Cheese"], "method": ["Spread passata; cheese; toast/grill."]}]}, {"id": "light", "name": "Light Meals", "items": [{"title": "Halloumi Wrap", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Wrap", "Halloumi", "Tomato"], "method": ["Fry halloumi; wrap."]}, {"title": "Egg & Chili Wrap", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Wrap", "2 eggs", "Hot sauce"], "method": ["Scramble; wrap; sauce."]}, {"title": "Bean Salsa Wrap", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Wrap", "Mixed beans", "Salsa"], "method": ["Mix; wrap."]}, {"title": "15\u2011Min Pitta Pizzas", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Pittas", "Passata", "Mozzarella"], "method": ["Top; grill 5 mins."]}, {"title": "Harissa Couscous Bowl", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Couscous", "Harissa", "Feta"], "method": ["Hydrate; mix; top feta."]}, {"title": "Stir\u2011Fry Noodles (cheat)", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Ready noodles", "Stir\u2011fry veg", "Soy sauce"], "method": ["Pan 5\u20137 mins; toss."]}, {"title": "Hot Honey Halloumi Salad", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Halloumi", "Leaves", "Hot honey"], "method": ["Fry; toss; drizzle."]}, {"title": "Quick Fried Rice", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Microwave rice", "Egg", "Soy"], "method": ["Pan rice; push; scramble; mix."]}, {"title": "Pesto Couscous Pot", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Couscous", "Pesto", "Spinach"], "method": ["Hydrate; stir pesto + spinach."]}, {"title": "Tofu Sesame Noodles", "size": "Light Meal", "time": "9\u201310 mins", "ingredients": ["Ready noodles", "Marinated tofu", "Sesame/soy"], "method": ["Warm; toss."]}]}, {"id": "hearty", "name": "Hearty Meals", "items": [{"title": "Speedy Pesto Gnocchi", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Fresh gnocchi", "Pesto", "Spinach"], "method": ["Pan\u2011fry gnocchi; toss pesto + spinach."]}, {"title": "Dirty Fries (Pan Hack)", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Frozen fries", "Cheese", "Jalape\u00f1os"], "method": ["Pan; melt; top."], "friends": true}, {"title": "Chili Peanut Noodles", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Ready noodles", "Peanut butter", "Soy", "Chili oil"], "method": ["Mix sauce; toss noodles."]}, {"title": "One\u2011Pan Chickpeas", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Chickpeas", "Passata", "Paprika"], "method": ["Simmer 8\u201310 mins; season."]}, {"title": "Creamy Spinach Tortelloni", "size": "Hearty Meal", "time": "9\u201310 mins", "ingredients": ["Fresh tortelloni", "Cream or yogurt", "Pepper"], "method": ["Boil 3\u20134; finish with cream; pepper."]}, {"title": "Halloumi Tacos", "size": "Hearty Meal", "time": "9\u201310 mins", "ingredients": ["Taco shells", "Halloumi", "Salsa"], "method": ["Pan halloumi; fill shells; salsa."], "friends": true}, {"title": "Quick Dal (cheat)", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Cooked lentils", "Curry paste", "Coconut milk"], "method": ["Simmer 8\u201310 mins."]}, {"title": "Pesto Pasta Hot", "size": "Hearty Meal", "time": "9\u201310 mins", "ingredients": ["Pasta", "Pesto", "Tomatoes"], "method": ["Boil; toss pesto + tomatoes."]}, {"title": "Veggie Sausage Rolls\u2011ish", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Veggie sausages", "Wraps", "Mustard"], "method": ["Pan sausages; wrap; mustard."], "friends": true}, {"title": "Soya\u2011Ginger Tofu Rice", "size": "Hearty Meal", "time": "10 mins", "ingredients": ["Microwave rice", "Tofu", "Soy + ginger"], "method": ["Pan together; serve."]}]}]}, {"id": 3, "name": "Level 3", "desc": "Up to 15 mins", "categories": [{"id": "snack", "name": "Snacks", "items": [{"title": "Mini Corn Fritters", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Tin corn", "1 egg", "Flour"], "method": ["Mix; spoon to pan; 2\u20133 mins/side."]}, {"title": "Honey Chili Halloumi Bites", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Halloumi", "Honey", "Chili"], "method": ["Fry; drizzle."], "friends": true}, {"title": "Spicy Scrambled Eggs", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Eggs", "Butter", "Chili flakes"], "method": ["Soft scramble; chili."]}, {"title": "Garlic Butter Mushrooms", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Mushrooms", "Butter", "Garlic"], "method": ["Saut\u00e9 8\u201310 mins; season."]}, {"title": "Crispy Tortilla Chips", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Tortillas", "Oil", "Salt"], "method": ["Cut; pan crisp; salt."]}, {"title": "Hot Honey Toast", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Bread", "Hot honey", "Butter"], "method": ["Toast; butter; drizzle."]}, {"title": "Halloumi Skewers (pan)", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Halloumi", "Skewers (opt)"], "method": ["Cube; pan on sticks (opt)."]}, {"title": "Eggy Bread", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Egg", "Milk", "Bread"], "method": ["Soak bread; pan both sides."]}, {"title": "Crispy Tofu Bites", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Tofu", "Cornflour", "Soy"], "method": ["Dust; pan; dip soy."]}, {"title": "Cheesy Fries (pan)", "size": "Snack", "time": "12\u201315 mins", "ingredients": ["Frozen fries", "Cheese"], "method": ["Pan; cover; melt."]}]}, {"id": "light", "name": "Light Meals", "items": [{"title": "Pesto Pasta (Hot)", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Pasta", "Pesto", "Tomatoes", "Spinach"], "method": ["Boil; toss."]}, {"title": "Thai\u2011Style Noodles + Tofu", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Rice noodles", "Tofu", "Soy", "Lime"], "method": ["Cook; stir\u2011fry; toss."]}, {"title": "Spinach Ricotta Tortelloni (Hot)", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Fresh stuffed pasta", "Pesto or butter", "Pepper"], "method": ["Boil 3\u20134; toss; pepper."]}, {"title": "Chili Egg Fried Rice", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Microwave rice", "Eggs", "Soy", "Chili"], "method": ["Pan rice; scramble egg; mix."]}, {"title": "Harissa Chickpeas Bowl", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Chickpeas", "Harissa", "Yogurt"], "method": ["Simmer; dollop yogurt."]}, {"title": "Lemon Garlic Couscous", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Couscous", "Lemon", "Garlic", "Olive oil"], "method": ["Hydrate; stir lemon garlic oil."]}, {"title": "Sesame Tofu Noodles", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Noodles", "Tofu", "Sesame", "Soy"], "method": ["Cook; toss."]}, {"title": "Halloumi Salad Warm", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Halloumi", "Leaves", "Vinaigrette"], "method": ["Fry; toss."]}, {"title": "Tomato Butter Tortelloni", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Tortelloni", "Butter", "Passata"], "method": ["Boil; melt butter + passata; toss."]}, {"title": "Egg & Veg Stir\u2011Fry", "size": "Light Meal", "time": "12\u201315 mins", "ingredients": ["Stir\u2011fry veg", "Egg", "Soy"], "method": ["Pan; scramble egg; combine."]}]}, {"id": "hearty", "name": "Hearty Meals", "items": [{"title": "Thai Aubergine Curry", "size": "Hearty Meal", "time": "15 mins", "ingredients": ["Aubergine", "Curry paste", "Coconut milk", "Rice"], "method": ["Fry aubergine; paste; coconut; simmer; serve with rice."], "friends": true}, {"title": "Creamy Lentil Curry", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Cooked lentils", "Curry paste", "Coconut milk"], "method": ["Simmer 10; done."]}, {"title": "Veggie Sausage Pasta", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Pasta", "Veggie sausages", "Passata"], "method": ["Boil pasta; pan sausages; combine."], "friends": true}, {"title": "Chili Peanut Udon", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Udon", "Peanut butter", "Soy", "Chili oil"], "method": ["Loosen PB; toss hot udon."]}, {"title": "Taco Night (veg)", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Taco shells", "Beans", "Salsa", "Cheese"], "method": ["Warm shells; fill; top."], "friends": true}, {"title": "Halloumi Dirty Fries", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Fries", "Halloumi", "Hot sauce"], "method": ["Pan fries; fry halloumi; combine."], "friends": true}, {"title": "Spicy Tomato Gnocchi", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Gnocchi", "Passata", "Chili flakes"], "method": ["Pan\u2011fry gnocchi; toss sauce."]}, {"title": "Tofu & Rice Bowl", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Microwave rice", "Tofu", "Soy", "Spring onions"], "method": ["Pan tofu; add rice; season."]}, {"title": "Mushroom Butter Pasta", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Pasta", "Mushrooms", "Butter", "Garlic"], "method": ["Saut\u00e9; toss pasta."]}, {"title": "Aubergine Peanut Stir\u2011Fry", "size": "Hearty Meal", "time": "12\u201315 mins", "ingredients": ["Aubergine", "Peanut butter", "Soy", "Lime"], "method": ["Cube; pan; sauce; lime."]}]}]}]}, "cocktails": [{"title": "Vodka Lemon", "time": "2 mins", "desc": "Light & fizzy", "ingredients": ["1 shot vodka", "Lemonade", "Lime wedge"], "method": ["Ice; vodka + lemonade; lime."]}, {"title": "Cuba Libre", "time": "2 mins", "desc": "Sweet cola kick", "ingredients": ["1 shot rum", "Coke", "Lime wedge"], "method": ["Ice; rum + Coke; lime."]}, {"title": "Classic G&T", "time": "2 mins", "desc": "Crisp & refreshing", "ingredients": ["1 shot gin", "Tonic water", "Lime"], "method": ["Ice; gin + tonic; lime."]}, {"title": "Screwdriver", "time": "1\u20132 mins", "desc": "Simple & citrusy", "ingredients": ["1 shot vodka", "Orange juice"], "method": ["Ice; vodka + OJ."]}, {"title": "Whisky Ginger", "time": "2 mins", "desc": "Warming & sharp", "ingredients": ["1 shot whisky", "Ginger ale", "Lime"], "method": ["Ice; whisky + ginger ale; lime."]}, {"title": "Rum & Pineapple", "time": "1\u20132 mins", "desc": "Tropical sweet", "ingredients": ["1 shot rum", "Pineapple juice", "Lime"], "method": ["Ice; rum + pineapple; lime."]}, {"title": "Aperol Spritz (budget)", "time": "2 mins", "desc": "Bitter\u2011bright", "ingredients": ["Aperol", "Cheap bubbly or soda", "Orange slice"], "method": ["Ice; Aperol + bubbly/soda; orange."]}, {"title": "Gin & Juice", "time": "1\u20132 mins", "desc": "Fruity & easy", "ingredients": ["Gin", "Any fruit juice"], "method": ["Ice; gin + juice."]}, {"title": "Tequila Sunrise (cheat)", "time": "2 mins", "desc": "Sweet sunset", "ingredients": ["Tequila", "Orange juice", "Dash grenadine"], "method": ["Ice; tequila + OJ; grenadine float."]}, {"title": "Rum & Ginger", "time": "1\u20132 mins", "desc": "Spicy sweet", "ingredients": ["Rum", "Ginger beer/ale", "Lime"], "method": ["Ice; rum + ginger drink; lime."]}, {"title": "Vodka Tonic", "time": "1\u20132 mins", "desc": "Clean & crisp", "ingredients": ["Vodka", "Tonic", "Lime"], "method": ["Ice; vodka + tonic; lime."]}, {"title": "Spritzer", "time": "1\u20132 mins", "desc": "Light & bubbly", "ingredients": ["Cheap white wine", "Soda water", "Lemon"], "method": ["Ice; wine + soda; lemon."]}], "shortcuts": {"Techniques (speed hacks)": ["Microwave + pan combo for potatoes/fries.", "Kettle\u2011boil first for pasta/noodles.", "Lid\u2011on melting for toasties/quesadillas.", "Use frozen pre\u2011chopped veg.", "One\u2011bowl sauces: PB + soy + chili oil.", "Pan\u2011fry gnocchi for crisp speed.", "Squeeze of citrus at the end."], "Smart Shopping": ["Microwave rice/grain pouches.", "Fresh stuffed pasta = 3\u2011min dinner.", "Pre\u2011marinated tofu / falafel.", "Halloumi = 5\u2011minute showstopper.", "Sauces that save time: pesto, curry paste, salsa."]}, "staples": [["Long\u2011term Staples", ["Soy sauce", "Olive oil", "Vinegar", "Curry paste", "Pesto", "Stock cubes", "Tahini/peanut butter", "Honey", "Salt", "Pepper", "Chili flakes", "Paprika", "Garlic powder", "Mixed herbs", "Pasta", "Rice", "Couscous", "Tinned tomatoes", "Tinned beans", "Chickpeas", "Coconut milk", "Wraps/Pittas/Taco shells"]], ["Weekly Regulars", ["Milk/plant milk", "Greek yogurt", "Cheddar/Feta/Mozzarella", "Halloumi", "Hummus", "Tofu/Falafel", "Salad leaves/Spinach", "Lemons/Limes", "Bread/Pittas", "Fresh salsa/guacamole"]], ["Freezer Back\u2011ups", ["Stir\u2011fry veg mix", "Peas", "Sweetcorn", "Spinach", "Frozen berries", "Frozen fries", "Bread/pittas"]]]};
+var content = document.getElementById('content');
+
+// Affirmation
+(function(){ try{ var a = (DATA && DATA.affirmations) ? DATA.affirmations : []; var pick = a.length ? a[Math.floor(Math.random()*a.length)] : "You’ve got this."; document.getElementById('rotAff').textContent = "✨ " + pick; }catch(err){ document.getElementById('rotAff').textContent = "✨ You’ve got this."; } })();
+
+function chip(t,e){ return '<span class="chip">'+(e?(e+' '):'')+t+'</span>'; }
+function goHome(){ content.innerHTML=''; window.scrollTo(0,0); }
+
+var RKEY='taliRatings_v14', HKEY='taliHiddenRecipes_v14';
+function loadHidden(){ try{return JSON.parse(localStorage.getItem(HKEY))||[]}catch(e){return []} }
+function saveHidden(a){ localStorage.setItem(HKEY, JSON.stringify(a)); }
+function loadRatings(){ try{return JSON.parse(localStorage.getItem(RKEY))||{};}catch(e){return {}}}
+function saveRatings(o){ localStorage.setItem(RKEY, JSON.stringify(o)); }
+function rid(levelId, catId, idx){ return levelId+':'+catId+':'+idx; }
+
+function openLevel(i){
+  var level = (DATA.recipes.levels||[]).find(function(l){return l.id===i;});
+  if(!level) return;
+  var html = '<article class="card"><h3>'+level.name+' — <span style="font-size:16px;color:#9aa0a6;">'+level.desc+'</span></h3>';
+  html += '<div class="tab-buttons">';
+  level.categories.forEach(function(c){ html += '<button class="tab-btn" data-level="'+i+'" data-cat="'+c.id+'">'+c.name+' ('+c.items.length+')</button>'; });
+  html += '</div><div id="catlist"></div><button id="levelBack" class="back-btn" type="button" data-back="home">← Back</button></article>';
+  content.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function showLevelBack(show){
+  var b = document.getElementById('levelBack');
+  if(!b) return;
+  b.style.display = show ? '' : 'none';
+}
+
+function rotatingShortcut(){
+  var pools = []; try{ var s = DATA.shortcuts; Object.keys(s).forEach(function(k){ pools = pools.concat(s[k]); }); }catch(e){}
+  if(!pools.length) return "Tip: tidy as you cook = faster finish.";
+  return pools[Math.floor(Math.random()*pools.length)];
+}
+
+function openCategory(levelId, catId){
+  var level = (DATA.recipes.levels||[]).find(function(l){return l.id===levelId;});
+  if(!level) return;
+  var cat = (level.categories||[]).find(function(c){return c.id===catId;});
+  if(!cat) return;
+  var hidden = new Set(loadHidden());
+  var listHTML = '';
+  cat.items.forEach(function(item,i){ if(!hidden.has(rid(levelId,catId,i))) listHTML += '<button class="recipe-btn" data-level="'+levelId+'" data-cat="'+catId+'" data-idx="'+i+'">'+item.title+'</button>'; });
+  var tip = rotatingShortcut();
+  var footerTip = '<div class="well" style="margin:20px 0 0;text-align:center;font-weight:900;color:#e6e6ea">⚡ '+tip+'</div>';
+  var backOnly = '<div style="margin-top:12px"><button class="back-btn" type="button" data-back="level" data-level="'+levelId+'">← Back</button></div>';
+  document.getElementById('catlist').innerHTML = (listHTML? '<div class="list">'+listHTML+'</div>' : '<div class="well">Everything here is hidden on this device.</div>') + footerTip + backOnly;
+  // Hide the Level back-to-home to avoid two backs at once
+  showLevelBack(false);
+  window.scrollTo(0,0);
+}
+
+function renderStars(id, current){
+  var out = ''; for(var s=1;s<=5;s++){ out += '<span class="'+(s<=current?'star-on':'star-off')+'">★</span>'; }
+  return '<span class="stars" data-id="'+id+'">'+out+'</span>';
+}
+
+function openRecipe(levelId, catId, idx){
+  var level = (DATA.recipes.levels||[]).find(function(l){return l.id===levelId;});
+  var cat = (level.categories||[]).find(function(c){return c.id===catId;});
+  var r = cat.items[idx];
+  var id = rid(levelId,catId,idx);
+  var ratings = loadRatings(); var current = ratings[id]||0;
+  var tags = [chip(level.name,'🎯'), chip(r.size,'🍽️'), chip(r.time,'⏱️')];
+  if(r.friends) tags.push(chip('Make or eat with friends','🧑‍🤝‍🧑'));
+  var html = '<article class="card">'+
+      '<h3>'+r.title+'</h3>'+
+      '<div class="meta">'+tags.join('')+'</div>'+
+      '<div>Ingredients:<ul>'+r.ingredients.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+      '<div>Method:<ol>'+r.method.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol></div>'+
+      '<div class="well">Your rating: '+renderStars(id, current)+'</div>'+
+      '<button class="back-btn" type="button" data-back="category" data-level="'+levelId+'" data-cat="'+catId+'">← Back</button>'+
+    '</article>';
+  content.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+// Single robust handler
+document.addEventListener('click', function(e){
+  var el;
+  // Home nav
+  el = e.target.closest('[data-action="open-level"]'); if(el){ openLevel(parseInt(el.getAttribute('data-level'),10)); return; }
+  el = e.target.closest('[data-action="open-cocktails"]'); if(el){ openCocktails(); return; }
+  el = e.target.closest('[data-action="open-shortcuts"]'); if(el){ openShortcuts(); return; }
+  el = e.target.closest('[data-action="open-staples"]'); if(el){ openStaples(); return; }
+  // Tabs & items
+  el = e.target.closest('.tab-btn'); if(el){ openCategory(parseInt(el.getAttribute('data-level'),10), el.getAttribute('data-cat')); return; }
+  el = e.target.closest('.recipe-btn'); if(el){ openRecipe(parseInt(el.getAttribute('data-level'),10), el.getAttribute('data-cat'), parseInt(el.getAttribute('data-idx'),10)); return; }
+  // Back
+  el = e.target.closest('[data-back]'); if(el){
+    var mode = el.getAttribute('data-back');
+    if(mode==='home'){ goHome(); return; }
+    if(mode==='level'){ openLevel(parseInt(el.getAttribute('data-level'),10)); showLevelBack(true); return; }
+    if(mode==='category'){ openCategory(parseInt(el.getAttribute('data-level'),10), el.getAttribute('data-cat')); return; }
+    if(mode==='open-cocktails'){ openCocktails(); return; }
+  }
+  // Stars
+  el = e.target.closest('.stars'); if(el){
+    var id = el.getAttribute('data-id');
+    var rect = el.getBoundingClientRect(); var x = e.clientX - rect.left; var starWidth = rect.width / 5;
+    var clicked = Math.min(5, Math.max(1, Math.ceil(x / starWidth)));
+    var ratings = loadRatings(); ratings[id]=clicked; saveRatings(ratings);
+    var hidden = new Set(loadHidden()); if(clicked<=3) hidden.add(id); else hidden.delete(id); saveHidden(Array.from(hidden));
+    el.outerHTML = renderStars(id, clicked);
+  }
+});
+
+// Cocktails
+function openCocktails(){
+  var list = (DATA.cocktails||[]);
+  var html = '<article class="card"><h3>🍹 Cocktails ('+list.length+')</h3><div class="list">';
+  for (var i=0;i<list.length;i++){ html += '<button class="cock-btn" data-idx="'+i+'">'+list[i].title+'</button>'; }
+  html += '</div><button class="back-btn" type="button" data-back="home">← Back</button></article>';
+  content.innerHTML = html;
+}
+document.addEventListener('click', function(e){
+  var b = e.target.closest('.cock-btn');
+  if(b){
+    var i = parseInt(b.getAttribute('data-idx'),10);
+    var c = (DATA.cocktails||[])[i]; if(!c) return;
+    var html = '<article class="card"><h3>'+c.title+'</h3>'+
+               '<div class="meta">'+chip(c.time,'⏱️')+' '+(c.desc?chip(c.desc,'✨'):'')+'</div>'+
+               '<div>Ingredients:<ul>'+c.ingredients.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+               '<div>Method:<ol>'+c.method.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol></div>'+
+               '<button class="back-btn" type="button" data-back="open-cocktails">← Back</button></article>';
+    content.innerHTML = html;
+  }
+});
+
+// Shortcuts
+function openShortcuts(){
+  var s = DATA.shortcuts || {};
+  var groups = Object.keys(s).map(function(g){ return '<div class="section-label" style="margin-top:10px;font-weight:800">'+g+'</div><ul>'+s[g].map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>'; }).join('');
+  content.innerHTML = '<article class="card"><h3>⚡ Shortcuts — Techniques & Smart Shopping</h3>'+groups+'<button class="back-btn" type="button" data-back="home">← Back</button></article>';
+}
+
+// Staples
+var STAPLEKEY='taliStaplesChecks_v10';
+function loadStaples(){ try{return JSON.parse(localStorage.getItem(STAPLEKEY))||{};}catch(e){return {}}}
+function saveStaples(o){ localStorage.setItem(STAPLEKEY, JSON.stringify(o)); }
+function openStaples(){
+  var saved = loadStaples();
+  var html = '<article class="card"><h3>📦 Staples — Stock Up Smart</h3><div class="staples-wrap">';
+  for (var si=0; si<DATA.staples.length; si++){ var section = DATA.staples[si]; html += '<div class="staples-group"><h4>'+section[0]+'</h4>'; for (var ii=0; ii<section[1].length; ii++){ var item = section[1][ii]; var key = si+':'+ii; var checked = !!saved[key]; html += '<div class="staple-row '+(checked?'checked':'')+'"><input type="checkbox" data-staple="'+key+'" '+(checked?'checked':'')+'><span>'+item+'</span></div>'; } html += '</div>'; }
+  html += '</div><button class="resetBtn" data-reset-staples>🔄 Reset Shopping List</button><button class="back-btn" type="button" data-back="home" style="margin-left:10px">← Back</button></article>';
+  content.innerHTML = html;
+}
+document.addEventListener('change', function(e){
+  var cb = e.target;
+  if(cb && cb.matches && cb.matches('input[type="checkbox"][data-staple]')){
+    var key = cb.getAttribute('data-staple');
+    var saved = loadStaples(); saved[key] = cb.checked; saveStaples(saved);
+    var row = cb.closest('.staple-row'); if(cb.checked) row.classList.add('checked'); else row.classList.remove('checked');
+  }
+});
+document.addEventListener('click', function(e){
+  var r = e.target.closest('[data-reset-staples]'); if(r){ saveStaples({}); openStaples(); }
+});
+
+</script>
+</body>
+</html>
