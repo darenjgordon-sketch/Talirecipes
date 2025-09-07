@@ -25,7 +25,8 @@
   }
   .hero h1{margin:0; font-size:34px; font-weight:900}
   .hero h2{margin:8px 0 0; font-size:20px; font-weight:700; opacity:.8}
-  .hero p{margin:14px auto 0; font-size:18px; font-weight:800; max-width:520px; text-shadow:0 2px 0 rgba(255,255,255,.25)}
+  .hero p{margin:14px auto 0; font-size:18px; font-weight:800; max-width:520px}
+  .affirmation{margin:16px auto 0; font-size:16px; font-weight:600; color:#222}
 
   /* Buttons grid */
   .grid{display:grid; gap:16px; grid-template-columns:repeat(2,minmax(0,1fr)); margin:22px 0 26px}
@@ -56,6 +57,7 @@
     <h1>Tali’s Uni Recipes</h1>
     <h2>Birmingham University</h2>
     <p>✨ Lead the way and don’t look back.</p>
+    <div class="affirmation" id="affirm"></div>
   </div>
 </header>
 
@@ -112,7 +114,18 @@
 </footer>
 
 <script>
-  // Simple navigation: show/hide home vs. panels
+  // Random affirmation on load
+  const affirmations = [
+    "🌟 You’ve got this, Tali.",
+    "💪 Every day you’re stronger.",
+    "🎉 Keep going, you’re smashing it.",
+    "🥗 Cooking is self-care.",
+    "✨ Believe in yourself and your journey."
+  ];
+  const choice = affirmations[Math.floor(Math.random()*affirmations.length)];
+  document.getElementById('affirm').textContent = choice;
+
+  // Navigation logic
   const home = document.getElementById('home');
   document.addEventListener('click', (e)=>{
     const open = e.target.closest('[data-open]');
