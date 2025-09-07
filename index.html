@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tali’s Uni Recipes</title>
+  <style>
+body{margin:0;font-family:system-ui,sans-serif;background:#0b0e1d;color:#fff}
+.header{padding:32px 16px;text-align:center;background:linear-gradient(90deg,#ff5f6d,#ffc371,#47c6ff,#9a6dff);background-size:600% 600%;animation:grad 15s ease infinite}
+@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.header h1{margin:0;font-size:28px}
+.subtitle{margin:4px 0;color:#eee}
+.affirmation{margin:6px 0 0;font-weight:600}
+.page{display:none;max-width:900px;margin:0 auto;padding:16px}
+.page.active{display:block}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0}
+.home-btn{padding:18px;font-size:16px;font-weight:600;border-radius:12px;border:none;cursor:pointer;color:#000}
+.green{background:#7fffa1}.yellow{background:#ffd966}.pink{background:#ff9eb3}.blue{background:#9ed0ff}.purple{background:#c7a4ff}.coral{background:#ffb29e}
+.subcol{background:#222;color:#fff}
+.nav-row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.back,.reset{padding:10px 16px;border-radius:8px;border:none;cursor:pointer}
+.back{background:#444;color:#fff}
+.reset{background:#ff5f6d;color:#fff;font-weight:700}
+.section-title{margin:8px 0 4px;font-size:20px}
+.plain-list{padding-left:18px}
+.cols-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tick{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid #444;border-radius:6px;margin:4px 0}
+.tick input:checked + span{color:#777;text-decoration:line-through;opacity:0.6}
+.placeholder{opacity:0.8}
+footer{text-align:center;padding:28px 12px;color:#ccc}
+</style>
+</head>
+<body>
+  
+<section id="home" class="page active">
+  <header class="header">
+    <h1>Tali’s Uni Recipes</h1>
+    <p class="subtitle">Birmingham University</p>
+    <p id="affirmation" class="affirmation"></p>
+  </header>
+  <nav class="home-grid">
+    <button class="home-btn green" onclick="go('level-1')">🌟 Level 1</button>
+    <button class="home-btn yellow" onclick="go('level-2')">🥙 Level 2</button>
+    <button class="home-btn pink" onclick="go('level-3')">🍜 Level 3</button>
+    <button class="home-btn blue" onclick="go('cocktails')">🍹 Cocktails</button>
+    <button class="home-btn purple" onclick="go('shortcuts')">⚡ Shortcuts</button>
+    <button class="home-btn coral" onclick="go('staples')">📦 Staples</button>
+  </nav>
+</section>
+
+<section id="level-1" class="page">
+  <h2 class="section-title">Level 1</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol" onclick="go('level-1-snacks')">Snacks</button>
+    <button class="home-btn subcol" onclick="go('level-1-light')">Light Meals</button>
+    <button class="home-btn subcol" onclick="go('level-1-hearty')">Hearty Meals</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="level-2" class="page">
+  <h2 class="section-title">Level 2</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol" onclick="go('level-2-snacks')">Snacks</button>
+    <button class="home-btn subcol" onclick="go('level-2-light')">Light Meals</button>
+    <button class="home-btn subcol" onclick="go('level-2-hearty')">Hearty Meals</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="level-3" class="page">
+  <h2 class="section-title">Level 3</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol" onclick="go('level-3-snacks')">Snacks</button>
+    <button class="home-btn subcol" onclick="go('level-3-light')">Light Meals</button>
+    <button class="home-btn subcol" onclick="go('level-3-hearty')">Hearty Meals</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="level-1-snacks" class="page">
+  <h2 class="section-title">Snacks</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="level-1-light" class="page">
+  <h2 class="section-title">Light Meals</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="level-1-hearty" class="page">
+  <h2 class="section-title">Hearty Meals</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="level-2-snacks" class="page">
+  <h2 class="section-title">Snacks</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-2')">Back</button></div>
+</section>
+
+<section id="level-2-light" class="page">
+  <h2 class="section-title">Light Meals</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-2')">Back</button></div>
+</section>
+
+<section id="level-2-hearty" class="page">
+  <h2 class="section-title">Hearty Meals</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-2')">Back</button></div>
+</section>
+
+<section id="level-3-snacks" class="page">
+  <h2 class="section-title">Snacks</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-3')">Back</button></div>
+</section>
+
+<section id="level-3-light" class="page">
+  <h2 class="section-title">Light Meals</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-3')">Back</button></div>
+</section>
+
+<section id="level-3-hearty" class="page">
+  <h2 class="section-title">Hearty Meals</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('level-3')">Back</button></div>
+</section>
+
+<section id="cocktails" class="page">
+  <h2 class="section-title">Cocktails</h2>
+  <nav class="home-grid">
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+    <button class="home-btn subcol placeholder">Coming soon</button>
+  </nav>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="shortcuts" class="page">
+  <h2 class="section-title">Shortcuts</h2>
+  <p class="placeholder">Shortcuts will appear inside recipes like this: ★ <b>Bold helpful tip</b></p>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="staples" class="page">
+  <h2 class="section-title">Staples</h2>
+  <div class="nav-row"><button class="reset" onclick="resetTicks()">Reset ticks</button></div>
+  <div class="cols-3">
+    <div><h3>Long-term shopping</h3><label class='tick'><input type='checkbox' id='lt-0' onchange="saveTick('lt-0',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='lt-1' onchange="saveTick('lt-1',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='lt-2' onchange="saveTick('lt-2',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='lt-3' onchange="saveTick('lt-3',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='lt-4' onchange="saveTick('lt-4',this)"><span>Coming soon</span></label></div>
+    <div><h3>Weekly fresh shopping</h3><label class='tick'><input type='checkbox' id='wk-0' onchange="saveTick('wk-0',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='wk-1' onchange="saveTick('wk-1',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='wk-2' onchange="saveTick('wk-2',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='wk-3' onchange="saveTick('wk-3',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='wk-4' onchange="saveTick('wk-4',this)"><span>Coming soon</span></label></div>
+    <div><h3>Frozen</h3><label class='tick'><input type='checkbox' id='fr-0' onchange="saveTick('fr-0',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='fr-1' onchange="saveTick('fr-1',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='fr-2' onchange="saveTick('fr-2',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='fr-3' onchange="saveTick('fr-3',this)"><span>Coming soon</span></label>
+<label class='tick'><input type='checkbox' id='fr-4' onchange="saveTick('fr-4',this)"><span>Coming soon</span></label></div>
+  </div>
+  <div class="nav-row"><button class="reset" onclick="resetTicks()">Reset ticks</button><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+  <footer>Made with love for Tali<br/>Dad x<br/>v15.4</footer>
+  <script>
+const PAGES=[...document.querySelectorAll('.page')];
+function go(id){PAGES.forEach(p=>p.classList.remove('active'));document.getElementById(id)?.classList.add('active');window.scrollTo(0,0);localStorage.setItem('tali_last',id);}
+function randomAff(){const list=['You are stronger than you think.', 'Your voice matters.', 'Step by step, you rise.', 'Courage is already in you.', 'You are enough, exactly as you are.', 'Your presence makes a difference.', 'Confidence is your natural state.', 'Every new day is your chance.', 'You carry light wherever you go.', 'Your worth is unshakable.', 'You are becoming who you were meant to be.', 'There is power in your calm.', 'You rise by lifting yourself.', 'Your potential is limitless.', 'Keep going — you’re closer than you think.', 'You are allowed to take up space.', 'Strength grows with every choice you make.', 'Peace is your power.', 'The future is open to you.', 'You are unafraid, unstoppable, undeniable.', 'Your resilience is your crown.', 'You are the author of your own story.', 'Nothing can dim your inner light.', 'You are steady, grounded, and capable.', 'Every step forward is victory.'];const pick=list[Math.floor(Math.random()*list.length)];document.getElementById('affirmation').textContent='✨ '+pick;}
+function saveTick(id,el){localStorage.setItem('tick_'+id,el.checked?'1':'');}
+function restoreTicks(){document.querySelectorAll('.tick input').forEach(cb=>cb.checked=localStorage.getItem('tick_'+cb.id)==='1');}
+function resetTicks(){document.querySelectorAll('.tick input').forEach(cb=>{cb.checked=false;localStorage.removeItem('tick_'+cb.id);});}
+window.addEventListener('load',()=>{randomAff();restoreTicks();const last=localStorage.getItem('tali_last');go(last&&document.getElementById(last)?last:'home');});
+</script>
+</body>
+</html>
