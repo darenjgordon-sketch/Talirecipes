@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tali’s Uni Recipes</title>
+  <style>
+:root{ --text:#0b0e1d; --muted:#5b6078; }
+body{margin:0;font-family:system-ui,sans-serif;background:#0b0e1d;color:#fff}
+.header{padding:32px 16px;text-align:center;background:linear-gradient(90deg,#ff5f6d,#ffc371,#47c6ff,#9a6dff);background-size:600% 600%;animation:grad 15s ease infinite}
+@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.header h1{margin:0;font-size:28px}
+.subtitle{margin:4px 0;color:#eee}
+.affirmation{margin:6px 0 0;font-weight:600}
+.page{display:none;max-width:900px;margin:0 auto;padding:16px}
+.page.active{display:block}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0}
+.home-btn{padding:18px;font-size:16px;font-weight:700;border-radius:14px;border:none;cursor:pointer;color:#000;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.home-btn:active{transform:translateY(1px)}
+.green{background:#7fffa1}.yellow{background:#ffd966}.pink{background:#ff9eb3}.blue{background:#9ed0ff}.purple{background:#c7a4ff}.coral{background:#ffb29e}
+.sub-green{background:#7fffa1;color:#000}
+.nav-row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.back{background:#000;color:#ff3333;padding:12px 20px;border-radius:12px;border:3px solid #ff3333;cursor:pointer;font-weight:800;font-size:16px;font-family:'Courier New',monospace;letter-spacing:0.5px;text-transform:uppercase;text-shadow:0 0 6px rgba(255,51,51,0.9), 0 0 12px rgba(255,51,51,0.6)}
+.reset{background:#ff5f6d;color:#fff;padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+.section-title{margin:8px 0 4px;font-size:22px}
+.note{margin:0 0 6px 2px;color:#ddd}
+.placeholder{opacity:0.85}
+.recipe-wrap{margin-top:10px}
+.recipe-header{padding:14px 16px;border-radius:14px;color:#000;font-weight:800}
+.rh-green{background:#7fffa1}.rh-yellow{background:#ffd966}.rh-pink{background:#ff9eb3}.rh-blue{background:#9ed0ff}.rh-purple{background:#c7a4ff}.rh-coral{background:#ffb29e}
+.card{border-radius:14px;padding:14px;margin-top:12px}
+.card h3{margin:6px 0 8px}
+.card ul, .card ol{margin:6px 0 12px 20px}
+.card li{margin-bottom:4px}
+.shortcut{color:orange;font-weight:700;margin-top:6px}
+.card-green{background:#fff2b3;color:var(--text)}
+.card-yellow{background:#ffd1dc;color:var(--text)}
+.card-pink{background:#d6ecff;color:var(--text)}
+.card-blue{background:#ffd9cc;color:var(--text)}
+.card-purple{background:#c9ffd7;color:var(--text)}
+.card-coral{background:#e6d6ff;color:var(--text)}
+.stars{display:flex;gap:6px;align-items:center;margin-top:8px}
+.star{font-size:28px;cursor:pointer;color:#ffffff;text-shadow:0 0 3px rgba(0,0,0,.35)}
+.star.on{color:#ffd700;text-shadow:0 0 4px #000}
+.rating-note{color:var(--text);font-size:13px;opacity:.85;margin-left:8px}
+footer{text-align:center;padding:28px 12px;color:#ccc}
+.hidden{display:none!important}
+
+.shortcut{
+  display:inline-block;
+  background:#fff3b0;
+  color:#000;
+  font-weight:700;
+  padding:4px 8px;
+  border-radius:8px;
+  margin-top:8px;
+}
+</style>
+</head>
+<body>
+  
+<section id="home" class="page active">
+  <header class="header">
+    <h1>Tali’s Uni Recipes</h1>
+    <p class="subtitle">Birmingham University</p>
+    <p id="affirmation" class="affirmation"></p>
+  </header>
+  <nav class="home-grid">
+    <button class="home-btn green" onclick="go('level-1')">🌟 Level 1</button>
+    <button class="home-btn yellow" onclick="go('level-2')">🥙 Level 2</button>
+    <button class="home-btn pink" onclick="go('level-3')">🍜 Level 3</button>
+    <button class="home-btn blue" onclick="go('cocktails')">🍹 Cocktails</button>
+    <button class="home-btn purple" onclick="go('shortcuts')">⚡ Shortcuts</button>
+    <button class="home-btn coral" onclick="go('staples')">📦 Staples</button>
+  </nav>
+</section>
+
+  
+<section id="level-1" class="page">
+  <h2 class="section-title">Level 1</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid">
+    <button class="home-btn sub-green" onclick="go('snacks-list')">Snacks</button>
+    <button class="home-btn sub-green" onclick="go('light-list')">Light Meals</button>
+    <button class="home-btn sub-green" onclick="go('hearty-list')">Hearty Meals</button>
+  </nav>
+  <div class="nav-row">
+    <button class="reset" onclick="resetRatings()">Reset ratings</button>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+  
+<section id="snacks-list" class="page">
+  <h2 class="section-title">Snacks</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='snacks-0' onclick="go('snacks-0')">Avocado Toast</button><button class='home-btn yellow' data-recipe-link='snacks-1' onclick="go('snacks-1')">Peanut Butter Banana</button><button class='home-btn pink' data-recipe-link='snacks-2' onclick="go('snacks-2')">Cheese Quesadilla</button><button class='home-btn blue' data-recipe-link='snacks-3' onclick="go('snacks-3')">Hummus Dip</button><button class='home-btn purple' data-recipe-link='snacks-4' onclick="go('snacks-4')">Greek Yogurt &amp; Honey</button><button class='home-btn coral' data-recipe-link='snacks-5' onclick="go('snacks-5')">Tomato Bruschetta</button><button class='home-btn green' data-recipe-link='snacks-6' onclick="go('snacks-6')">Fruit Salad Cup</button><button class='home-btn yellow' data-recipe-link='snacks-7' onclick="go('snacks-7')">Crisps &amp; Salsa</button><button class='home-btn pink' data-recipe-link='snacks-8' onclick="go('snacks-8')">Rice Cake Snack</button><button class='home-btn blue' data-recipe-link='snacks-9' onclick="go('snacks-9')">Apple &amp; Peanut Butter</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="snacks-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Avocado Toast</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>1 slice bread</li><li>½ avocado</li><li>Pinch salt &amp; pepper</li></ul>
+      <h3>Method</h3>
+      <ol><li>Toast bread.</li><li>Mash avocado on top.</li><li>Sprinkle salt &amp; pepper.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Mash avocado directly on toast to save washing up.</div>
+      <div class="stars" data-stars-for="snacks-0"><span class='star' onclick="setRating('snacks-0', 1)">★</span><span class='star' onclick="setRating('snacks-0', 2)">★</span><span class='star' onclick="setRating('snacks-0', 3)">★</span><span class='star' onclick="setRating('snacks-0', 4)">★</span><span class='star' onclick="setRating('snacks-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-0');</script>
+</section>
+
+<section id="snacks-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Peanut Butter Banana</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>1 slice bread</li><li>1 tbsp peanut butter</li><li>½ banana</li></ul>
+      <h3>Method</h3>
+      <ol><li>Spread peanut butter.</li><li>Slice banana.</li><li>Place on top of bread.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use pre-sliced banana from a fruit pot.</div>
+      <div class="stars" data-stars-for="snacks-1"><span class='star' onclick="setRating('snacks-1', 1)">★</span><span class='star' onclick="setRating('snacks-1', 2)">★</span><span class='star' onclick="setRating('snacks-1', 3)">★</span><span class='star' onclick="setRating('snacks-1', 4)">★</span><span class='star' onclick="setRating('snacks-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-1');</script>
+</section>
+
+<section id="snacks-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Cheese Quesadilla</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>1 tortilla</li><li>2 tbsp grated cheese</li></ul>
+      <h3>Method</h3>
+      <ol><li>Heat tortilla in pan.</li><li>Sprinkle cheese on half.</li><li>Fold &amp; toast until melted.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Microwave instead of pan to save washing up.</div>
+      <div class="stars" data-stars-for="snacks-2"><span class='star' onclick="setRating('snacks-2', 1)">★</span><span class='star' onclick="setRating('snacks-2', 2)">★</span><span class='star' onclick="setRating('snacks-2', 3)">★</span><span class='star' onclick="setRating('snacks-2', 4)">★</span><span class='star' onclick="setRating('snacks-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-2');</script>
+</section>
+
+<section id="snacks-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Hummus Dip</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>3 tbsp hummus</li><li>Carrot sticks</li><li>Cucumber sticks</li></ul>
+      <h3>Method</h3>
+      <ol><li>Spoon hummus into bowl.</li><li>Serve with veg sticks.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use pre-cut veg packs.</div>
+      <div class="stars" data-stars-for="snacks-3"><span class='star' onclick="setRating('snacks-3', 1)">★</span><span class='star' onclick="setRating('snacks-3', 2)">★</span><span class='star' onclick="setRating('snacks-3', 3)">★</span><span class='star' onclick="setRating('snacks-3', 4)">★</span><span class='star' onclick="setRating('snacks-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-3');</script>
+</section>
+
+<section id="snacks-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Greek Yogurt &amp; Honey</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>½ cup Greek yogurt</li><li>1 tsp honey</li></ul>
+      <h3>Method</h3>
+      <ol><li>Scoop yogurt into bowl.</li><li>Drizzle with honey.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Swap honey for maple syrup sachet for variety.</div>
+      <div class="stars" data-stars-for="snacks-4"><span class='star' onclick="setRating('snacks-4', 1)">★</span><span class='star' onclick="setRating('snacks-4', 2)">★</span><span class='star' onclick="setRating('snacks-4', 3)">★</span><span class='star' onclick="setRating('snacks-4', 4)">★</span><span class='star' onclick="setRating('snacks-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-4');</script>
+</section>
+
+<section id="snacks-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Tomato Bruschetta</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>1 slice baguette</li><li>1 chopped tomato</li><li>Pinch basil</li></ul>
+      <h3>Method</h3>
+      <ol><li>Toast bread.</li><li>Top with tomato &amp; basil.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use dried basil instead of fresh.</div>
+      <div class="stars" data-stars-for="snacks-5"><span class='star' onclick="setRating('snacks-5', 1)">★</span><span class='star' onclick="setRating('snacks-5', 2)">★</span><span class='star' onclick="setRating('snacks-5', 3)">★</span><span class='star' onclick="setRating('snacks-5', 4)">★</span><span class='star' onclick="setRating('snacks-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-5');</script>
+</section>
+
+<section id="snacks-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Fruit Salad Cup</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>½ apple</li><li>½ banana</li><li>Handful grapes</li></ul>
+      <h3>Method</h3>
+      <ol><li>Chop fruit.</li><li>Mix in bowl or cup.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use a ready fruit cup.</div>
+      <div class="stars" data-stars-for="snacks-6"><span class='star' onclick="setRating('snacks-6', 1)">★</span><span class='star' onclick="setRating('snacks-6', 2)">★</span><span class='star' onclick="setRating('snacks-6', 3)">★</span><span class='star' onclick="setRating('snacks-6', 4)">★</span><span class='star' onclick="setRating('snacks-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-6');</script>
+</section>
+
+<section id="snacks-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Crisps &amp; Salsa</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Tortilla chips</li><li>2 tbsp salsa</li></ul>
+      <h3>Method</h3>
+      <ol><li>Pour chips into bowl.</li><li>Serve with salsa dip.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use microwave nacho cheese dip.</div>
+      <div class="stars" data-stars-for="snacks-7"><span class='star' onclick="setRating('snacks-7', 1)">★</span><span class='star' onclick="setRating('snacks-7', 2)">★</span><span class='star' onclick="setRating('snacks-7', 3)">★</span><span class='star' onclick="setRating('snacks-7', 4)">★</span><span class='star' onclick="setRating('snacks-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-7');</script>
+</section>
+
+<section id="snacks-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Rice Cake Snack</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>1 rice cake</li><li>1 tbsp cream cheese</li><li>Cucumber slices</li></ul>
+      <h3>Method</h3>
+      <ol><li>Spread cream cheese.</li><li>Top with cucumber.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Swap cream cheese for hummus.</div>
+      <div class="stars" data-stars-for="snacks-8"><span class='star' onclick="setRating('snacks-8', 1)">★</span><span class='star' onclick="setRating('snacks-8', 2)">★</span><span class='star' onclick="setRating('snacks-8', 3)">★</span><span class='star' onclick="setRating('snacks-8', 4)">★</span><span class='star' onclick="setRating('snacks-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-8');</script>
+</section>
+
+<section id="snacks-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Apple &amp; Peanut Butter</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>1 apple</li><li>2 tbsp peanut butter</li></ul>
+      <h3>Method</h3>
+      <ol><li>Slice apple.</li><li>Dip into peanut butter.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Buy snack pots with both apple and PB.</div>
+      <div class="stars" data-stars-for="snacks-9"><span class='star' onclick="setRating('snacks-9', 1)">★</span><span class='star' onclick="setRating('snacks-9', 2)">★</span><span class='star' onclick="setRating('snacks-9', 3)">★</span><span class='star' onclick="setRating('snacks-9', 4)">★</span><span class='star' onclick="setRating('snacks-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks-list')">Back</button></div>
+  <script>renderStars('snacks-9');</script>
+</section>
+
+  
+<section id="light-list" class="page">
+  <h2 class="section-title">Light Meals</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='light-0' onclick="go('light-0')">Caprese Wrap</button><button class='home-btn yellow' data-recipe-link='light-1' onclick="go('light-1')">Egg Mayo Sandwich</button><button class='home-btn pink' data-recipe-link='light-2' onclick="go('light-2')">Cheese &amp; Spinach Pita</button><button class='home-btn blue' data-recipe-link='light-3' onclick="go('light-3')">Couscous Salad Cup</button><button class='home-btn purple' data-recipe-link='light-4' onclick="go('light-4')">Avocado &amp; Halloumi Wrap</button><button class='home-btn coral' data-recipe-link='light-5' onclick="go('light-5')">Bean &amp; Cheese Toastie</button><button class='home-btn green' data-recipe-link='light-6' onclick="go('light-6')">Greek Salad Bowl</button><button class='home-btn yellow' data-recipe-link='light-7' onclick="go('light-7')">Houmous &amp; Veg Pita</button><button class='home-btn pink' data-recipe-link='light-8' onclick="go('light-8')">Tomato &amp; Cheese Bagel</button><button class='home-btn blue' data-recipe-link='light-9' onclick="go('light-9')">Microwave Mac &amp; Cheese Mug</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="light-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Caprese Wrap</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>1 tortilla</li><li>Mozzarella slices</li><li>Tomato slices</li><li>Basil or pesto</li></ul>
+      <h3>Method</h3>
+      <ol><li>Layer ingredients on tortilla.</li><li>Fold and eat.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use pesto instead of fresh basil for speed.</div>
+      <div class="stars" data-stars-for="light-0"><span class='star' onclick="setRating('light-0', 1)">★</span><span class='star' onclick="setRating('light-0', 2)">★</span><span class='star' onclick="setRating('light-0', 3)">★</span><span class='star' onclick="setRating('light-0', 4)">★</span><span class='star' onclick="setRating('light-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-0');</script>
+</section>
+
+<section id="light-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Egg Mayo Sandwich</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>2 slices bread</li><li>1 boiled egg (pre-cooked)</li><li>1 tbsp mayo</li></ul>
+      <h3>Method</h3>
+      <ol><li>Mash egg with mayo.</li><li>Spread on bread.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Buy pre-boiled eggs.</div>
+      <div class="stars" data-stars-for="light-1"><span class='star' onclick="setRating('light-1', 1)">★</span><span class='star' onclick="setRating('light-1', 2)">★</span><span class='star' onclick="setRating('light-1', 3)">★</span><span class='star' onclick="setRating('light-1', 4)">★</span><span class='star' onclick="setRating('light-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-1');</script>
+</section>
+
+<section id="light-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Cheese &amp; Spinach Pita</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>1 pita</li><li>2 tbsp cheese</li><li>Handful spinach</li></ul>
+      <h3>Method</h3>
+      <ol><li>Stuff pita.</li><li>Microwave 30 sec.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use frozen spinach straight from freezer.</div>
+      <div class="stars" data-stars-for="light-2"><span class='star' onclick="setRating('light-2', 1)">★</span><span class='star' onclick="setRating('light-2', 2)">★</span><span class='star' onclick="setRating('light-2', 3)">★</span><span class='star' onclick="setRating('light-2', 4)">★</span><span class='star' onclick="setRating('light-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-2');</script>
+</section>
+
+<section id="light-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Couscous Salad Cup</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>½ cup couscous</li><li>Hot water</li><li>Veg (cucumber, tomato)</li></ul>
+      <h3>Method</h3>
+      <ol><li>Cover couscous with water.</li><li>Stir in veg.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use instant couscous sachet.</div>
+      <div class="stars" data-stars-for="light-3"><span class='star' onclick="setRating('light-3', 1)">★</span><span class='star' onclick="setRating('light-3', 2)">★</span><span class='star' onclick="setRating('light-3', 3)">★</span><span class='star' onclick="setRating('light-3', 4)">★</span><span class='star' onclick="setRating('light-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-3');</script>
+</section>
+
+<section id="light-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Avocado &amp; Halloumi Wrap</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>1 wrap</li><li>2 slices halloumi</li><li>½ avocado</li></ul>
+      <h3>Method</h3>
+      <ol><li>Fill wrap with halloumi &amp; avocado.</li><li>Fold.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Buy pre-grilled halloumi strips.</div>
+      <div class="stars" data-stars-for="light-4"><span class='star' onclick="setRating('light-4', 1)">★</span><span class='star' onclick="setRating('light-4', 2)">★</span><span class='star' onclick="setRating('light-4', 3)">★</span><span class='star' onclick="setRating('light-4', 4)">★</span><span class='star' onclick="setRating('light-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-4');</script>
+</section>
+
+<section id="light-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Bean &amp; Cheese Toastie</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>2 slices bread</li><li>2 tbsp beans</li><li>Cheese</li></ul>
+      <h3>Method</h3>
+      <ol><li>Fill bread with beans &amp; cheese.</li><li>Toast in pan.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Microwave beans in bread before toasting.</div>
+      <div class="stars" data-stars-for="light-5"><span class='star' onclick="setRating('light-5', 1)">★</span><span class='star' onclick="setRating('light-5', 2)">★</span><span class='star' onclick="setRating('light-5', 3)">★</span><span class='star' onclick="setRating('light-5', 4)">★</span><span class='star' onclick="setRating('light-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-5');</script>
+</section>
+
+<section id="light-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Greek Salad Bowl</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Cucumber</li><li>Tomato</li><li>Olives</li><li>Feta</li><li>Olive oil</li></ul>
+      <h3>Method</h3>
+      <ol><li>Chop veg.</li><li>Mix with feta &amp; olives.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Buy a pre-cut salad pack.</div>
+      <div class="stars" data-stars-for="light-6"><span class='star' onclick="setRating('light-6', 1)">★</span><span class='star' onclick="setRating('light-6', 2)">★</span><span class='star' onclick="setRating('light-6', 3)">★</span><span class='star' onclick="setRating('light-6', 4)">★</span><span class='star' onclick="setRating('light-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-6');</script>
+</section>
+
+<section id="light-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Houmous &amp; Veg Pita</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>1 pita</li><li>3 tbsp hummus</li><li>Sliced cucumber/carrot</li></ul>
+      <h3>Method</h3>
+      <ol><li>Spread hummus.</li><li>Stuff with veg.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use pre-sliced veg sticks.</div>
+      <div class="stars" data-stars-for="light-7"><span class='star' onclick="setRating('light-7', 1)">★</span><span class='star' onclick="setRating('light-7', 2)">★</span><span class='star' onclick="setRating('light-7', 3)">★</span><span class='star' onclick="setRating('light-7', 4)">★</span><span class='star' onclick="setRating('light-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-7');</script>
+</section>
+
+<section id="light-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Tomato &amp; Cheese Bagel</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>1 bagel</li><li>2 tomato slices</li><li>2 cheese slices</li></ul>
+      <h3>Method</h3>
+      <ol><li>Toast bagel.</li><li>Add tomato &amp; cheese.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use soft cheese spread instead of slicing.</div>
+      <div class="stars" data-stars-for="light-8"><span class='star' onclick="setRating('light-8', 1)">★</span><span class='star' onclick="setRating('light-8', 2)">★</span><span class='star' onclick="setRating('light-8', 3)">★</span><span class='star' onclick="setRating('light-8', 4)">★</span><span class='star' onclick="setRating('light-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-8');</script>
+</section>
+
+<section id="light-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Microwave Mac &amp; Cheese Mug</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>½ cup pasta</li><li>½ cup water</li><li>2 tbsp cheese</li></ul>
+      <h3>Method</h3>
+      <ol><li>Microwave pasta &amp; water (4 mins).</li><li>Stir in cheese.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use instant macaroni sachet.</div>
+      <div class="stars" data-stars-for="light-9"><span class='star' onclick="setRating('light-9', 1)">★</span><span class='star' onclick="setRating('light-9', 2)">★</span><span class='star' onclick="setRating('light-9', 3)">★</span><span class='star' onclick="setRating('light-9', 4)">★</span><span class='star' onclick="setRating('light-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light-list')">Back</button></div>
+  <script>renderStars('light-9');</script>
+</section>
+
+  
+<section id="hearty-list" class="page">
+  <h2 class="section-title">Hearty Meals</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='hearty-0' onclick="go('hearty-0')">Instant Noodle Veg Bowl</button><button class='home-btn yellow' data-recipe-link='hearty-1' onclick="go('hearty-1')">Chilli Bean Wrap</button><button class='home-btn pink' data-recipe-link='hearty-2' onclick="go('hearty-2')">Lentil Soup Mug</button><button class='home-btn blue' data-recipe-link='hearty-3' onclick="go('hearty-3')">Veggie Fried Rice (Microwave)</button><button class='home-btn purple' data-recipe-link='hearty-4' onclick="go('hearty-4')">Halloumi Burger</button><button class='home-btn coral' data-recipe-link='hearty-5' onclick="go('hearty-5')">3-Bean Salad Bowl</button><button class='home-btn green' data-recipe-link='hearty-6' onclick="go('hearty-6')">Pasta Pesto Pot</button><button class='home-btn yellow' data-recipe-link='hearty-7' onclick="go('hearty-7')">Veggie Nachos</button><button class='home-btn pink' data-recipe-link='hearty-8' onclick="go('hearty-8')">Spinach &amp; Feta Omelette (Microwave)</button><button class='home-btn blue' data-recipe-link='hearty-9' onclick="go('hearty-9')">Quick Chickpea Curry</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="hearty-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Instant Noodle Veg Bowl</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>1 pack noodles</li><li>Frozen peas</li><li>Soy sauce</li></ul>
+      <h3>Method</h3>
+      <ol><li>Add peas to noodles.</li><li>Microwave/cook.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use kettle-boiled water straight in the bowl.</div>
+      <div class="stars" data-stars-for="hearty-0"><span class='star' onclick="setRating('hearty-0', 1)">★</span><span class='star' onclick="setRating('hearty-0', 2)">★</span><span class='star' onclick="setRating('hearty-0', 3)">★</span><span class='star' onclick="setRating('hearty-0', 4)">★</span><span class='star' onclick="setRating('hearty-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-0');</script>
+</section>
+
+<section id="hearty-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Chilli Bean Wrap</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>1 wrap</li><li>½ tin chilli beans</li><li>Cheese</li></ul>
+      <h3>Method</h3>
+      <ol><li>Heat beans.</li><li>Fill wrap with beans &amp; cheese.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use microwave chilli pot.</div>
+      <div class="stars" data-stars-for="hearty-1"><span class='star' onclick="setRating('hearty-1', 1)">★</span><span class='star' onclick="setRating('hearty-1', 2)">★</span><span class='star' onclick="setRating('hearty-1', 3)">★</span><span class='star' onclick="setRating('hearty-1', 4)">★</span><span class='star' onclick="setRating('hearty-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-1');</script>
+</section>
+
+<section id="hearty-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Lentil Soup Mug</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>½ tin lentil soup</li><li>½ cup water</li></ul>
+      <h3>Method</h3>
+      <ol><li>Microwave soup.</li><li>Serve in mug.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Buy ready-to-heat cartons.</div>
+      <div class="stars" data-stars-for="hearty-2"><span class='star' onclick="setRating('hearty-2', 1)">★</span><span class='star' onclick="setRating('hearty-2', 2)">★</span><span class='star' onclick="setRating('hearty-2', 3)">★</span><span class='star' onclick="setRating('hearty-2', 4)">★</span><span class='star' onclick="setRating('hearty-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-2');</script>
+</section>
+
+<section id="hearty-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Veggie Fried Rice (Microwave)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>1 microwave rice pack</li><li>Soy sauce</li><li>Frozen veg</li></ul>
+      <h3>Method</h3>
+      <ol><li>Microwave rice &amp; veg.</li><li>Stir with soy sauce.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use microwave stir-fry mix.</div>
+      <div class="stars" data-stars-for="hearty-3"><span class='star' onclick="setRating('hearty-3', 1)">★</span><span class='star' onclick="setRating('hearty-3', 2)">★</span><span class='star' onclick="setRating('hearty-3', 3)">★</span><span class='star' onclick="setRating('hearty-3', 4)">★</span><span class='star' onclick="setRating('hearty-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-3');</script>
+</section>
+
+<section id="hearty-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Halloumi Burger</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>1 bun</li><li>2 slices halloumi</li><li>Lettuce</li><li>Mayo</li></ul>
+      <h3>Method</h3>
+      <ol><li>Grill halloumi.</li><li>Assemble burger.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Buy pre-grilled halloumi strips.</div>
+      <div class="stars" data-stars-for="hearty-4"><span class='star' onclick="setRating('hearty-4', 1)">★</span><span class='star' onclick="setRating('hearty-4', 2)">★</span><span class='star' onclick="setRating('hearty-4', 3)">★</span><span class='star' onclick="setRating('hearty-4', 4)">★</span><span class='star' onclick="setRating('hearty-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-4');</script>
+</section>
+
+<section id="hearty-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>3-Bean Salad Bowl</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>½ tin 3-bean mix</li><li>Cucumber</li><li>Dressing</li></ul>
+      <h3>Method</h3>
+      <ol><li>Drain beans.</li><li>Mix with veg &amp; dressing.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use bottled salad dressing.</div>
+      <div class="stars" data-stars-for="hearty-5"><span class='star' onclick="setRating('hearty-5', 1)">★</span><span class='star' onclick="setRating('hearty-5', 2)">★</span><span class='star' onclick="setRating('hearty-5', 3)">★</span><span class='star' onclick="setRating('hearty-5', 4)">★</span><span class='star' onclick="setRating('hearty-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-5');</script>
+</section>
+
+<section id="hearty-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Pasta Pesto Pot</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>½ cup pasta</li><li>Hot water</li><li>1 tbsp pesto</li></ul>
+      <h3>Method</h3>
+      <ol><li>Microwave pasta in water (4 mins).</li><li>Stir in pesto.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use instant pasta cup.</div>
+      <div class="stars" data-stars-for="hearty-6"><span class='star' onclick="setRating('hearty-6', 1)">★</span><span class='star' onclick="setRating('hearty-6', 2)">★</span><span class='star' onclick="setRating('hearty-6', 3)">★</span><span class='star' onclick="setRating('hearty-6', 4)">★</span><span class='star' onclick="setRating('hearty-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-6');</script>
+</section>
+
+<section id="hearty-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Veggie Nachos</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Tortilla chips</li><li>Cheese</li><li>Salsa</li></ul>
+      <h3>Method</h3>
+      <ol><li>Spread chips.</li><li>Sprinkle cheese &amp; salsa.</li><li>Microwave 1 min.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use grated cheese.</div>
+      <div class="stars" data-stars-for="hearty-7"><span class='star' onclick="setRating('hearty-7', 1)">★</span><span class='star' onclick="setRating('hearty-7', 2)">★</span><span class='star' onclick="setRating('hearty-7', 3)">★</span><span class='star' onclick="setRating('hearty-7', 4)">★</span><span class='star' onclick="setRating('hearty-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-7');</script>
+</section>
+
+<section id="hearty-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Spinach &amp; Feta Omelette (Microwave)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>2 eggs</li><li>Handful spinach</li><li>Feta</li></ul>
+      <h3>Method</h3>
+      <ol><li>Beat eggs.</li><li>Add spinach &amp; feta.</li><li>Microwave 2 mins.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use frozen spinach cubes.</div>
+      <div class="stars" data-stars-for="hearty-8"><span class='star' onclick="setRating('hearty-8', 1)">★</span><span class='star' onclick="setRating('hearty-8', 2)">★</span><span class='star' onclick="setRating('hearty-8', 3)">★</span><span class='star' onclick="setRating('hearty-8', 4)">★</span><span class='star' onclick="setRating('hearty-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-8');</script>
+</section>
+
+<section id="hearty-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Quick Chickpea Curry</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>½ tin chickpeas</li><li>Curry paste</li><li>2 tbsp yogurt</li></ul>
+      <h3>Method</h3>
+      <ol><li>Microwave chickpeas with curry paste.</li><li>Stir in yogurt.</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Use tikka masala stir-in sauce.</div>
+      <div class="stars" data-stars-for="hearty-9"><span class='star' onclick="setRating('hearty-9', 1)">★</span><span class='star' onclick="setRating('hearty-9', 2)">★</span><span class='star' onclick="setRating('hearty-9', 3)">★</span><span class='star' onclick="setRating('hearty-9', 4)">★</span><span class='star' onclick="setRating('hearty-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty-list')">Back</button></div>
+  <script>renderStars('hearty-9');</script>
+</section>
+
+  
+<section id="level-2" class="page">
+  <h2 class="section-title">Level 2</h2>
+  <p class="note">Under 10 mins</p>
+  <nav class="home-grid">
+    <button class="home-btn sub-green" onclick="go('snacks2-list')">Snacks</button>
+    <button class="home-btn sub-green" onclick="go('light2-list')">Light Meals</button>
+    <button class="home-btn sub-green" onclick="go('hearty2-list')">Hearty Meals</button>
+  </nav>
+  <div class="nav-row">
+    <button class="reset" onclick="resetRatings()">Reset ratings</button>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="snacks2-list" class="page">
+  <h2 class="section-title">Snacks</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='snacks2-0' onclick="go('snacks2-0')">Snack Recipe 1 (L2)</button><button class='home-btn yellow' data-recipe-link='snacks2-1' onclick="go('snacks2-1')">Snack Recipe 2 (L2)</button><button class='home-btn pink' data-recipe-link='snacks2-2' onclick="go('snacks2-2')">Snack Recipe 3 (L2)</button><button class='home-btn blue' data-recipe-link='snacks2-3' onclick="go('snacks2-3')">Snack Recipe 4 (L2)</button><button class='home-btn purple' data-recipe-link='snacks2-4' onclick="go('snacks2-4')">Snack Recipe 5 (L2)</button><button class='home-btn coral' data-recipe-link='snacks2-5' onclick="go('snacks2-5')">Snack Recipe 6 (L2)</button><button class='home-btn green' data-recipe-link='snacks2-6' onclick="go('snacks2-6')">Snack Recipe 7 (L2)</button><button class='home-btn yellow' data-recipe-link='snacks2-7' onclick="go('snacks2-7')">Snack Recipe 8 (L2)</button><button class='home-btn pink' data-recipe-link='snacks2-8' onclick="go('snacks2-8')">Snack Recipe 9 (L2)</button><button class='home-btn blue' data-recipe-link='snacks2-9' onclick="go('snacks2-9')">Snack Recipe 10 (L2)</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="snacks2-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Snack Recipe 1 (L2)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 1 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-0"><span class='star' onclick="setRating('snacks2-0', 1)">★</span><span class='star' onclick="setRating('snacks2-0', 2)">★</span><span class='star' onclick="setRating('snacks2-0', 3)">★</span><span class='star' onclick="setRating('snacks2-0', 4)">★</span><span class='star' onclick="setRating('snacks2-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-0');</script>
+</section>
+
+<section id="snacks2-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Snack Recipe 2 (L2)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 2 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-1"><span class='star' onclick="setRating('snacks2-1', 1)">★</span><span class='star' onclick="setRating('snacks2-1', 2)">★</span><span class='star' onclick="setRating('snacks2-1', 3)">★</span><span class='star' onclick="setRating('snacks2-1', 4)">★</span><span class='star' onclick="setRating('snacks2-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-1');</script>
+</section>
+
+<section id="snacks2-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Snack Recipe 3 (L2)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 3 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-2"><span class='star' onclick="setRating('snacks2-2', 1)">★</span><span class='star' onclick="setRating('snacks2-2', 2)">★</span><span class='star' onclick="setRating('snacks2-2', 3)">★</span><span class='star' onclick="setRating('snacks2-2', 4)">★</span><span class='star' onclick="setRating('snacks2-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-2');</script>
+</section>
+
+<section id="snacks2-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Snack Recipe 4 (L2)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 4 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-3"><span class='star' onclick="setRating('snacks2-3', 1)">★</span><span class='star' onclick="setRating('snacks2-3', 2)">★</span><span class='star' onclick="setRating('snacks2-3', 3)">★</span><span class='star' onclick="setRating('snacks2-3', 4)">★</span><span class='star' onclick="setRating('snacks2-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-3');</script>
+</section>
+
+<section id="snacks2-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Snack Recipe 5 (L2)</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 5 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-4"><span class='star' onclick="setRating('snacks2-4', 1)">★</span><span class='star' onclick="setRating('snacks2-4', 2)">★</span><span class='star' onclick="setRating('snacks2-4', 3)">★</span><span class='star' onclick="setRating('snacks2-4', 4)">★</span><span class='star' onclick="setRating('snacks2-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-4');</script>
+</section>
+
+<section id="snacks2-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Snack Recipe 6 (L2)</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 6 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-5"><span class='star' onclick="setRating('snacks2-5', 1)">★</span><span class='star' onclick="setRating('snacks2-5', 2)">★</span><span class='star' onclick="setRating('snacks2-5', 3)">★</span><span class='star' onclick="setRating('snacks2-5', 4)">★</span><span class='star' onclick="setRating('snacks2-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-5');</script>
+</section>
+
+<section id="snacks2-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Snack Recipe 7 (L2)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 7 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-6"><span class='star' onclick="setRating('snacks2-6', 1)">★</span><span class='star' onclick="setRating('snacks2-6', 2)">★</span><span class='star' onclick="setRating('snacks2-6', 3)">★</span><span class='star' onclick="setRating('snacks2-6', 4)">★</span><span class='star' onclick="setRating('snacks2-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-6');</script>
+</section>
+
+<section id="snacks2-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Snack Recipe 8 (L2)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 8 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-7"><span class='star' onclick="setRating('snacks2-7', 1)">★</span><span class='star' onclick="setRating('snacks2-7', 2)">★</span><span class='star' onclick="setRating('snacks2-7', 3)">★</span><span class='star' onclick="setRating('snacks2-7', 4)">★</span><span class='star' onclick="setRating('snacks2-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-7');</script>
+</section>
+
+<section id="snacks2-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Snack Recipe 9 (L2)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 9 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-8"><span class='star' onclick="setRating('snacks2-8', 1)">★</span><span class='star' onclick="setRating('snacks2-8', 2)">★</span><span class='star' onclick="setRating('snacks2-8', 3)">★</span><span class='star' onclick="setRating('snacks2-8', 4)">★</span><span class='star' onclick="setRating('snacks2-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-8');</script>
+</section>
+
+<section id="snacks2-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Snack Recipe 10 (L2)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 10 (L2).</div>
+      <div class="stars" data-stars-for="snacks2-9"><span class='star' onclick="setRating('snacks2-9', 1)">★</span><span class='star' onclick="setRating('snacks2-9', 2)">★</span><span class='star' onclick="setRating('snacks2-9', 3)">★</span><span class='star' onclick="setRating('snacks2-9', 4)">★</span><span class='star' onclick="setRating('snacks2-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks2-list')">Back</button></div>
+  <script>renderStars('snacks2-9');</script>
+</section>
+
+<section id="light2-list" class="page">
+  <h2 class="section-title">Light Meals</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='light2-0' onclick="go('light2-0')">Light Meal Recipe 1 (L2)</button><button class='home-btn yellow' data-recipe-link='light2-1' onclick="go('light2-1')">Light Meal Recipe 2 (L2)</button><button class='home-btn pink' data-recipe-link='light2-2' onclick="go('light2-2')">Light Meal Recipe 3 (L2)</button><button class='home-btn blue' data-recipe-link='light2-3' onclick="go('light2-3')">Light Meal Recipe 4 (L2)</button><button class='home-btn purple' data-recipe-link='light2-4' onclick="go('light2-4')">Light Meal Recipe 5 (L2)</button><button class='home-btn coral' data-recipe-link='light2-5' onclick="go('light2-5')">Light Meal Recipe 6 (L2)</button><button class='home-btn green' data-recipe-link='light2-6' onclick="go('light2-6')">Light Meal Recipe 7 (L2)</button><button class='home-btn yellow' data-recipe-link='light2-7' onclick="go('light2-7')">Light Meal Recipe 8 (L2)</button><button class='home-btn pink' data-recipe-link='light2-8' onclick="go('light2-8')">Light Meal Recipe 9 (L2)</button><button class='home-btn blue' data-recipe-link='light2-9' onclick="go('light2-9')">Light Meal Recipe 10 (L2)</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="light2-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Light Meal Recipe 1 (L2)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 1 (L2).</div>
+      <div class="stars" data-stars-for="light2-0"><span class='star' onclick="setRating('light2-0', 1)">★</span><span class='star' onclick="setRating('light2-0', 2)">★</span><span class='star' onclick="setRating('light2-0', 3)">★</span><span class='star' onclick="setRating('light2-0', 4)">★</span><span class='star' onclick="setRating('light2-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-0');</script>
+</section>
+
+<section id="light2-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Light Meal Recipe 2 (L2)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 2 (L2).</div>
+      <div class="stars" data-stars-for="light2-1"><span class='star' onclick="setRating('light2-1', 1)">★</span><span class='star' onclick="setRating('light2-1', 2)">★</span><span class='star' onclick="setRating('light2-1', 3)">★</span><span class='star' onclick="setRating('light2-1', 4)">★</span><span class='star' onclick="setRating('light2-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-1');</script>
+</section>
+
+<section id="light2-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Light Meal Recipe 3 (L2)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 3 (L2).</div>
+      <div class="stars" data-stars-for="light2-2"><span class='star' onclick="setRating('light2-2', 1)">★</span><span class='star' onclick="setRating('light2-2', 2)">★</span><span class='star' onclick="setRating('light2-2', 3)">★</span><span class='star' onclick="setRating('light2-2', 4)">★</span><span class='star' onclick="setRating('light2-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-2');</script>
+</section>
+
+<section id="light2-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Light Meal Recipe 4 (L2)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 4 (L2).</div>
+      <div class="stars" data-stars-for="light2-3"><span class='star' onclick="setRating('light2-3', 1)">★</span><span class='star' onclick="setRating('light2-3', 2)">★</span><span class='star' onclick="setRating('light2-3', 3)">★</span><span class='star' onclick="setRating('light2-3', 4)">★</span><span class='star' onclick="setRating('light2-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-3');</script>
+</section>
+
+<section id="light2-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Light Meal Recipe 5 (L2)</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 5 (L2).</div>
+      <div class="stars" data-stars-for="light2-4"><span class='star' onclick="setRating('light2-4', 1)">★</span><span class='star' onclick="setRating('light2-4', 2)">★</span><span class='star' onclick="setRating('light2-4', 3)">★</span><span class='star' onclick="setRating('light2-4', 4)">★</span><span class='star' onclick="setRating('light2-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-4');</script>
+</section>
+
+<section id="light2-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Light Meal Recipe 6 (L2)</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 6 (L2).</div>
+      <div class="stars" data-stars-for="light2-5"><span class='star' onclick="setRating('light2-5', 1)">★</span><span class='star' onclick="setRating('light2-5', 2)">★</span><span class='star' onclick="setRating('light2-5', 3)">★</span><span class='star' onclick="setRating('light2-5', 4)">★</span><span class='star' onclick="setRating('light2-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-5');</script>
+</section>
+
+<section id="light2-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Light Meal Recipe 7 (L2)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 7 (L2).</div>
+      <div class="stars" data-stars-for="light2-6"><span class='star' onclick="setRating('light2-6', 1)">★</span><span class='star' onclick="setRating('light2-6', 2)">★</span><span class='star' onclick="setRating('light2-6', 3)">★</span><span class='star' onclick="setRating('light2-6', 4)">★</span><span class='star' onclick="setRating('light2-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-6');</script>
+</section>
+
+<section id="light2-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Light Meal Recipe 8 (L2)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 8 (L2).</div>
+      <div class="stars" data-stars-for="light2-7"><span class='star' onclick="setRating('light2-7', 1)">★</span><span class='star' onclick="setRating('light2-7', 2)">★</span><span class='star' onclick="setRating('light2-7', 3)">★</span><span class='star' onclick="setRating('light2-7', 4)">★</span><span class='star' onclick="setRating('light2-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-7');</script>
+</section>
+
+<section id="light2-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Light Meal Recipe 9 (L2)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 9 (L2).</div>
+      <div class="stars" data-stars-for="light2-8"><span class='star' onclick="setRating('light2-8', 1)">★</span><span class='star' onclick="setRating('light2-8', 2)">★</span><span class='star' onclick="setRating('light2-8', 3)">★</span><span class='star' onclick="setRating('light2-8', 4)">★</span><span class='star' onclick="setRating('light2-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-8');</script>
+</section>
+
+<section id="light2-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Light Meal Recipe 10 (L2)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 10 (L2).</div>
+      <div class="stars" data-stars-for="light2-9"><span class='star' onclick="setRating('light2-9', 1)">★</span><span class='star' onclick="setRating('light2-9', 2)">★</span><span class='star' onclick="setRating('light2-9', 3)">★</span><span class='star' onclick="setRating('light2-9', 4)">★</span><span class='star' onclick="setRating('light2-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light2-list')">Back</button></div>
+  <script>renderStars('light2-9');</script>
+</section>
+
+<section id="hearty2-list" class="page">
+  <h2 class="section-title">Hearty Meals</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='hearty2-0' onclick="go('hearty2-0')">Hearty Meal Recipe 1 (L2)</button><button class='home-btn yellow' data-recipe-link='hearty2-1' onclick="go('hearty2-1')">Hearty Meal Recipe 2 (L2)</button><button class='home-btn pink' data-recipe-link='hearty2-2' onclick="go('hearty2-2')">Hearty Meal Recipe 3 (L2)</button><button class='home-btn blue' data-recipe-link='hearty2-3' onclick="go('hearty2-3')">Hearty Meal Recipe 4 (L2)</button><button class='home-btn purple' data-recipe-link='hearty2-4' onclick="go('hearty2-4')">Hearty Meal Recipe 5 (L2)</button><button class='home-btn coral' data-recipe-link='hearty2-5' onclick="go('hearty2-5')">Hearty Meal Recipe 6 (L2)</button><button class='home-btn green' data-recipe-link='hearty2-6' onclick="go('hearty2-6')">Hearty Meal Recipe 7 (L2)</button><button class='home-btn yellow' data-recipe-link='hearty2-7' onclick="go('hearty2-7')">Hearty Meal Recipe 8 (L2)</button><button class='home-btn pink' data-recipe-link='hearty2-8' onclick="go('hearty2-8')">Hearty Meal Recipe 9 (L2)</button><button class='home-btn blue' data-recipe-link='hearty2-9' onclick="go('hearty2-9')">Hearty Meal Recipe 10 (L2)</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="hearty2-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Hearty Meal Recipe 1 (L2)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 1 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-0"><span class='star' onclick="setRating('hearty2-0', 1)">★</span><span class='star' onclick="setRating('hearty2-0', 2)">★</span><span class='star' onclick="setRating('hearty2-0', 3)">★</span><span class='star' onclick="setRating('hearty2-0', 4)">★</span><span class='star' onclick="setRating('hearty2-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-0');</script>
+</section>
+
+<section id="hearty2-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Hearty Meal Recipe 2 (L2)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 2 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-1"><span class='star' onclick="setRating('hearty2-1', 1)">★</span><span class='star' onclick="setRating('hearty2-1', 2)">★</span><span class='star' onclick="setRating('hearty2-1', 3)">★</span><span class='star' onclick="setRating('hearty2-1', 4)">★</span><span class='star' onclick="setRating('hearty2-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-1');</script>
+</section>
+
+<section id="hearty2-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Hearty Meal Recipe 3 (L2)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 3 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-2"><span class='star' onclick="setRating('hearty2-2', 1)">★</span><span class='star' onclick="setRating('hearty2-2', 2)">★</span><span class='star' onclick="setRating('hearty2-2', 3)">★</span><span class='star' onclick="setRating('hearty2-2', 4)">★</span><span class='star' onclick="setRating('hearty2-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-2');</script>
+</section>
+
+<section id="hearty2-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Hearty Meal Recipe 4 (L2)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 4 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-3"><span class='star' onclick="setRating('hearty2-3', 1)">★</span><span class='star' onclick="setRating('hearty2-3', 2)">★</span><span class='star' onclick="setRating('hearty2-3', 3)">★</span><span class='star' onclick="setRating('hearty2-3', 4)">★</span><span class='star' onclick="setRating('hearty2-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-3');</script>
+</section>
+
+<section id="hearty2-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Hearty Meal Recipe 5 (L2)</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 5 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-4"><span class='star' onclick="setRating('hearty2-4', 1)">★</span><span class='star' onclick="setRating('hearty2-4', 2)">★</span><span class='star' onclick="setRating('hearty2-4', 3)">★</span><span class='star' onclick="setRating('hearty2-4', 4)">★</span><span class='star' onclick="setRating('hearty2-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-4');</script>
+</section>
+
+<section id="hearty2-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Hearty Meal Recipe 6 (L2)</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 6 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-5"><span class='star' onclick="setRating('hearty2-5', 1)">★</span><span class='star' onclick="setRating('hearty2-5', 2)">★</span><span class='star' onclick="setRating('hearty2-5', 3)">★</span><span class='star' onclick="setRating('hearty2-5', 4)">★</span><span class='star' onclick="setRating('hearty2-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-5');</script>
+</section>
+
+<section id="hearty2-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Hearty Meal Recipe 7 (L2)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 7 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-6"><span class='star' onclick="setRating('hearty2-6', 1)">★</span><span class='star' onclick="setRating('hearty2-6', 2)">★</span><span class='star' onclick="setRating('hearty2-6', 3)">★</span><span class='star' onclick="setRating('hearty2-6', 4)">★</span><span class='star' onclick="setRating('hearty2-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-6');</script>
+</section>
+
+<section id="hearty2-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Hearty Meal Recipe 8 (L2)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 8 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-7"><span class='star' onclick="setRating('hearty2-7', 1)">★</span><span class='star' onclick="setRating('hearty2-7', 2)">★</span><span class='star' onclick="setRating('hearty2-7', 3)">★</span><span class='star' onclick="setRating('hearty2-7', 4)">★</span><span class='star' onclick="setRating('hearty2-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-7');</script>
+</section>
+
+<section id="hearty2-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Hearty Meal Recipe 9 (L2)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 9 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-8"><span class='star' onclick="setRating('hearty2-8', 1)">★</span><span class='star' onclick="setRating('hearty2-8', 2)">★</span><span class='star' onclick="setRating('hearty2-8', 3)">★</span><span class='star' onclick="setRating('hearty2-8', 4)">★</span><span class='star' onclick="setRating('hearty2-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-8');</script>
+</section>
+
+<section id="hearty2-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Hearty Meal Recipe 10 (L2)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 10 (L2).</div>
+      <div class="stars" data-stars-for="hearty2-9"><span class='star' onclick="setRating('hearty2-9', 1)">★</span><span class='star' onclick="setRating('hearty2-9', 2)">★</span><span class='star' onclick="setRating('hearty2-9', 3)">★</span><span class='star' onclick="setRating('hearty2-9', 4)">★</span><span class='star' onclick="setRating('hearty2-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty2-list')">Back</button></div>
+  <script>renderStars('hearty2-9');</script>
+</section>
+
+  
+<section id="level-3" class="page">
+  <h2 class="section-title">Level 3</h2>
+  <p class="note">Under 15 mins</p>
+  <nav class="home-grid">
+    <button class="home-btn sub-green" onclick="go('snacks3-list')">Snacks</button>
+    <button class="home-btn sub-green" onclick="go('light3-list')">Light Meals</button>
+    <button class="home-btn sub-green" onclick="go('hearty3-list')">Hearty Meals</button>
+  </nav>
+  <div class="nav-row">
+    <button class="reset" onclick="resetRatings()">Reset ratings</button>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('home')">Back</button></div>
+</section>
+
+<section id="snacks3-list" class="page">
+  <h2 class="section-title">Snacks</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='snacks3-0' onclick="go('snacks3-0')">Snack Recipe 1 (L3)</button><button class='home-btn yellow' data-recipe-link='snacks3-1' onclick="go('snacks3-1')">Snack Recipe 2 (L3)</button><button class='home-btn pink' data-recipe-link='snacks3-2' onclick="go('snacks3-2')">Snack Recipe 3 (L3)</button><button class='home-btn blue' data-recipe-link='snacks3-3' onclick="go('snacks3-3')">Snack Recipe 4 (L3)</button><button class='home-btn purple' data-recipe-link='snacks3-4' onclick="go('snacks3-4')">Snack Recipe 5 (L3)</button><button class='home-btn coral' data-recipe-link='snacks3-5' onclick="go('snacks3-5')">Snack Recipe 6 (L3)</button><button class='home-btn green' data-recipe-link='snacks3-6' onclick="go('snacks3-6')">Snack Recipe 7 (L3)</button><button class='home-btn yellow' data-recipe-link='snacks3-7' onclick="go('snacks3-7')">Snack Recipe 8 (L3)</button><button class='home-btn pink' data-recipe-link='snacks3-8' onclick="go('snacks3-8')">Snack Recipe 9 (L3)</button><button class='home-btn blue' data-recipe-link='snacks3-9' onclick="go('snacks3-9')">Snack Recipe 10 (L3)</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="snacks3-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Snack Recipe 1 (L3)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 1 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-0"><span class='star' onclick="setRating('snacks3-0', 1)">★</span><span class='star' onclick="setRating('snacks3-0', 2)">★</span><span class='star' onclick="setRating('snacks3-0', 3)">★</span><span class='star' onclick="setRating('snacks3-0', 4)">★</span><span class='star' onclick="setRating('snacks3-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-0');</script>
+</section>
+
+<section id="snacks3-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Snack Recipe 2 (L3)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 2 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-1"><span class='star' onclick="setRating('snacks3-1', 1)">★</span><span class='star' onclick="setRating('snacks3-1', 2)">★</span><span class='star' onclick="setRating('snacks3-1', 3)">★</span><span class='star' onclick="setRating('snacks3-1', 4)">★</span><span class='star' onclick="setRating('snacks3-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-1');</script>
+</section>
+
+<section id="snacks3-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Snack Recipe 3 (L3)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 3 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-2"><span class='star' onclick="setRating('snacks3-2', 1)">★</span><span class='star' onclick="setRating('snacks3-2', 2)">★</span><span class='star' onclick="setRating('snacks3-2', 3)">★</span><span class='star' onclick="setRating('snacks3-2', 4)">★</span><span class='star' onclick="setRating('snacks3-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-2');</script>
+</section>
+
+<section id="snacks3-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Snack Recipe 4 (L3)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 4 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-3"><span class='star' onclick="setRating('snacks3-3', 1)">★</span><span class='star' onclick="setRating('snacks3-3', 2)">★</span><span class='star' onclick="setRating('snacks3-3', 3)">★</span><span class='star' onclick="setRating('snacks3-3', 4)">★</span><span class='star' onclick="setRating('snacks3-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-3');</script>
+</section>
+
+<section id="snacks3-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Snack Recipe 5 (L3)</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 5 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-4"><span class='star' onclick="setRating('snacks3-4', 1)">★</span><span class='star' onclick="setRating('snacks3-4', 2)">★</span><span class='star' onclick="setRating('snacks3-4', 3)">★</span><span class='star' onclick="setRating('snacks3-4', 4)">★</span><span class='star' onclick="setRating('snacks3-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-4');</script>
+</section>
+
+<section id="snacks3-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Snack Recipe 6 (L3)</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 6 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-5"><span class='star' onclick="setRating('snacks3-5', 1)">★</span><span class='star' onclick="setRating('snacks3-5', 2)">★</span><span class='star' onclick="setRating('snacks3-5', 3)">★</span><span class='star' onclick="setRating('snacks3-5', 4)">★</span><span class='star' onclick="setRating('snacks3-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-5');</script>
+</section>
+
+<section id="snacks3-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Snack Recipe 7 (L3)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 7 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-6"><span class='star' onclick="setRating('snacks3-6', 1)">★</span><span class='star' onclick="setRating('snacks3-6', 2)">★</span><span class='star' onclick="setRating('snacks3-6', 3)">★</span><span class='star' onclick="setRating('snacks3-6', 4)">★</span><span class='star' onclick="setRating('snacks3-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-6');</script>
+</section>
+
+<section id="snacks3-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Snack Recipe 8 (L3)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 8 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-7"><span class='star' onclick="setRating('snacks3-7', 1)">★</span><span class='star' onclick="setRating('snacks3-7', 2)">★</span><span class='star' onclick="setRating('snacks3-7', 3)">★</span><span class='star' onclick="setRating('snacks3-7', 4)">★</span><span class='star' onclick="setRating('snacks3-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-7');</script>
+</section>
+
+<section id="snacks3-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Snack Recipe 9 (L3)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 9 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-8"><span class='star' onclick="setRating('snacks3-8', 1)">★</span><span class='star' onclick="setRating('snacks3-8', 2)">★</span><span class='star' onclick="setRating('snacks3-8', 3)">★</span><span class='star' onclick="setRating('snacks3-8', 4)">★</span><span class='star' onclick="setRating('snacks3-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-8');</script>
+</section>
+
+<section id="snacks3-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Snack Recipe 10 (L3)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Snack Recipe 10 (L3).</div>
+      <div class="stars" data-stars-for="snacks3-9"><span class='star' onclick="setRating('snacks3-9', 1)">★</span><span class='star' onclick="setRating('snacks3-9', 2)">★</span><span class='star' onclick="setRating('snacks3-9', 3)">★</span><span class='star' onclick="setRating('snacks3-9', 4)">★</span><span class='star' onclick="setRating('snacks3-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('snacks3-list')">Back</button></div>
+  <script>renderStars('snacks3-9');</script>
+</section>
+
+<section id="light3-list" class="page">
+  <h2 class="section-title">Light Meals</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='light3-0' onclick="go('light3-0')">Light Meal Recipe 1 (L3)</button><button class='home-btn yellow' data-recipe-link='light3-1' onclick="go('light3-1')">Light Meal Recipe 2 (L3)</button><button class='home-btn pink' data-recipe-link='light3-2' onclick="go('light3-2')">Light Meal Recipe 3 (L3)</button><button class='home-btn blue' data-recipe-link='light3-3' onclick="go('light3-3')">Light Meal Recipe 4 (L3)</button><button class='home-btn purple' data-recipe-link='light3-4' onclick="go('light3-4')">Light Meal Recipe 5 (L3)</button><button class='home-btn coral' data-recipe-link='light3-5' onclick="go('light3-5')">Light Meal Recipe 6 (L3)</button><button class='home-btn green' data-recipe-link='light3-6' onclick="go('light3-6')">Light Meal Recipe 7 (L3)</button><button class='home-btn yellow' data-recipe-link='light3-7' onclick="go('light3-7')">Light Meal Recipe 8 (L3)</button><button class='home-btn pink' data-recipe-link='light3-8' onclick="go('light3-8')">Light Meal Recipe 9 (L3)</button><button class='home-btn blue' data-recipe-link='light3-9' onclick="go('light3-9')">Light Meal Recipe 10 (L3)</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="light3-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Light Meal Recipe 1 (L3)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 1 (L3).</div>
+      <div class="stars" data-stars-for="light3-0"><span class='star' onclick="setRating('light3-0', 1)">★</span><span class='star' onclick="setRating('light3-0', 2)">★</span><span class='star' onclick="setRating('light3-0', 3)">★</span><span class='star' onclick="setRating('light3-0', 4)">★</span><span class='star' onclick="setRating('light3-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-0');</script>
+</section>
+
+<section id="light3-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Light Meal Recipe 2 (L3)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 2 (L3).</div>
+      <div class="stars" data-stars-for="light3-1"><span class='star' onclick="setRating('light3-1', 1)">★</span><span class='star' onclick="setRating('light3-1', 2)">★</span><span class='star' onclick="setRating('light3-1', 3)">★</span><span class='star' onclick="setRating('light3-1', 4)">★</span><span class='star' onclick="setRating('light3-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-1');</script>
+</section>
+
+<section id="light3-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Light Meal Recipe 3 (L3)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 3 (L3).</div>
+      <div class="stars" data-stars-for="light3-2"><span class='star' onclick="setRating('light3-2', 1)">★</span><span class='star' onclick="setRating('light3-2', 2)">★</span><span class='star' onclick="setRating('light3-2', 3)">★</span><span class='star' onclick="setRating('light3-2', 4)">★</span><span class='star' onclick="setRating('light3-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-2');</script>
+</section>
+
+<section id="light3-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Light Meal Recipe 4 (L3)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 4 (L3).</div>
+      <div class="stars" data-stars-for="light3-3"><span class='star' onclick="setRating('light3-3', 1)">★</span><span class='star' onclick="setRating('light3-3', 2)">★</span><span class='star' onclick="setRating('light3-3', 3)">★</span><span class='star' onclick="setRating('light3-3', 4)">★</span><span class='star' onclick="setRating('light3-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-3');</script>
+</section>
+
+<section id="light3-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Light Meal Recipe 5 (L3)</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 5 (L3).</div>
+      <div class="stars" data-stars-for="light3-4"><span class='star' onclick="setRating('light3-4', 1)">★</span><span class='star' onclick="setRating('light3-4', 2)">★</span><span class='star' onclick="setRating('light3-4', 3)">★</span><span class='star' onclick="setRating('light3-4', 4)">★</span><span class='star' onclick="setRating('light3-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-4');</script>
+</section>
+
+<section id="light3-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Light Meal Recipe 6 (L3)</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 6 (L3).</div>
+      <div class="stars" data-stars-for="light3-5"><span class='star' onclick="setRating('light3-5', 1)">★</span><span class='star' onclick="setRating('light3-5', 2)">★</span><span class='star' onclick="setRating('light3-5', 3)">★</span><span class='star' onclick="setRating('light3-5', 4)">★</span><span class='star' onclick="setRating('light3-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-5');</script>
+</section>
+
+<section id="light3-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Light Meal Recipe 7 (L3)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 7 (L3).</div>
+      <div class="stars" data-stars-for="light3-6"><span class='star' onclick="setRating('light3-6', 1)">★</span><span class='star' onclick="setRating('light3-6', 2)">★</span><span class='star' onclick="setRating('light3-6', 3)">★</span><span class='star' onclick="setRating('light3-6', 4)">★</span><span class='star' onclick="setRating('light3-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-6');</script>
+</section>
+
+<section id="light3-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Light Meal Recipe 8 (L3)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 8 (L3).</div>
+      <div class="stars" data-stars-for="light3-7"><span class='star' onclick="setRating('light3-7', 1)">★</span><span class='star' onclick="setRating('light3-7', 2)">★</span><span class='star' onclick="setRating('light3-7', 3)">★</span><span class='star' onclick="setRating('light3-7', 4)">★</span><span class='star' onclick="setRating('light3-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-7');</script>
+</section>
+
+<section id="light3-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Light Meal Recipe 9 (L3)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 9 (L3).</div>
+      <div class="stars" data-stars-for="light3-8"><span class='star' onclick="setRating('light3-8', 1)">★</span><span class='star' onclick="setRating('light3-8', 2)">★</span><span class='star' onclick="setRating('light3-8', 3)">★</span><span class='star' onclick="setRating('light3-8', 4)">★</span><span class='star' onclick="setRating('light3-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-8');</script>
+</section>
+
+<section id="light3-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Light Meal Recipe 10 (L3)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Light Meal Recipe 10 (L3).</div>
+      <div class="stars" data-stars-for="light3-9"><span class='star' onclick="setRating('light3-9', 1)">★</span><span class='star' onclick="setRating('light3-9', 2)">★</span><span class='star' onclick="setRating('light3-9', 3)">★</span><span class='star' onclick="setRating('light3-9', 4)">★</span><span class='star' onclick="setRating('light3-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('light3-list')">Back</button></div>
+  <script>renderStars('light3-9');</script>
+</section>
+
+<section id="hearty3-list" class="page">
+  <h2 class="section-title">Hearty Meals</h2>
+  <p class="note">Under 5 mins</p>
+  <nav class="home-grid"><button class='home-btn green' data-recipe-link='hearty3-0' onclick="go('hearty3-0')">Hearty Meal Recipe 1 (L3)</button><button class='home-btn yellow' data-recipe-link='hearty3-1' onclick="go('hearty3-1')">Hearty Meal Recipe 2 (L3)</button><button class='home-btn pink' data-recipe-link='hearty3-2' onclick="go('hearty3-2')">Hearty Meal Recipe 3 (L3)</button><button class='home-btn blue' data-recipe-link='hearty3-3' onclick="go('hearty3-3')">Hearty Meal Recipe 4 (L3)</button><button class='home-btn purple' data-recipe-link='hearty3-4' onclick="go('hearty3-4')">Hearty Meal Recipe 5 (L3)</button><button class='home-btn coral' data-recipe-link='hearty3-5' onclick="go('hearty3-5')">Hearty Meal Recipe 6 (L3)</button><button class='home-btn green' data-recipe-link='hearty3-6' onclick="go('hearty3-6')">Hearty Meal Recipe 7 (L3)</button><button class='home-btn yellow' data-recipe-link='hearty3-7' onclick="go('hearty3-7')">Hearty Meal Recipe 8 (L3)</button><button class='home-btn pink' data-recipe-link='hearty3-8' onclick="go('hearty3-8')">Hearty Meal Recipe 9 (L3)</button><button class='home-btn blue' data-recipe-link='hearty3-9' onclick="go('hearty3-9')">Hearty Meal Recipe 10 (L3)</button></nav>
+  <div class="nav-row"><button class="back" onclick="go('level-1')">Back</button></div>
+</section>
+
+<section id="hearty3-0" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Hearty Meal Recipe 1 (L3)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 1 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-0"><span class='star' onclick="setRating('hearty3-0', 1)">★</span><span class='star' onclick="setRating('hearty3-0', 2)">★</span><span class='star' onclick="setRating('hearty3-0', 3)">★</span><span class='star' onclick="setRating('hearty3-0', 4)">★</span><span class='star' onclick="setRating('hearty3-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-0');</script>
+</section>
+
+<section id="hearty3-1" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Hearty Meal Recipe 2 (L3)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 2 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-1"><span class='star' onclick="setRating('hearty3-1', 1)">★</span><span class='star' onclick="setRating('hearty3-1', 2)">★</span><span class='star' onclick="setRating('hearty3-1', 3)">★</span><span class='star' onclick="setRating('hearty3-1', 4)">★</span><span class='star' onclick="setRating('hearty3-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-1');</script>
+</section>
+
+<section id="hearty3-2" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Hearty Meal Recipe 3 (L3)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 3 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-2"><span class='star' onclick="setRating('hearty3-2', 1)">★</span><span class='star' onclick="setRating('hearty3-2', 2)">★</span><span class='star' onclick="setRating('hearty3-2', 3)">★</span><span class='star' onclick="setRating('hearty3-2', 4)">★</span><span class='star' onclick="setRating('hearty3-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-2');</script>
+</section>
+
+<section id="hearty3-3" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Hearty Meal Recipe 4 (L3)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 4 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-3"><span class='star' onclick="setRating('hearty3-3', 1)">★</span><span class='star' onclick="setRating('hearty3-3', 2)">★</span><span class='star' onclick="setRating('hearty3-3', 3)">★</span><span class='star' onclick="setRating('hearty3-3', 4)">★</span><span class='star' onclick="setRating('hearty3-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-3');</script>
+</section>
+
+<section id="hearty3-4" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-purple"><span>Hearty Meal Recipe 5 (L3)</span></div>
+    <div class="card card-green">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 5 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-4"><span class='star' onclick="setRating('hearty3-4', 1)">★</span><span class='star' onclick="setRating('hearty3-4', 2)">★</span><span class='star' onclick="setRating('hearty3-4', 3)">★</span><span class='star' onclick="setRating('hearty3-4', 4)">★</span><span class='star' onclick="setRating('hearty3-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-4');</script>
+</section>
+
+<section id="hearty3-5" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-coral"><span>Hearty Meal Recipe 6 (L3)</span></div>
+    <div class="card card-purple">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 6 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-5"><span class='star' onclick="setRating('hearty3-5', 1)">★</span><span class='star' onclick="setRating('hearty3-5', 2)">★</span><span class='star' onclick="setRating('hearty3-5', 3)">★</span><span class='star' onclick="setRating('hearty3-5', 4)">★</span><span class='star' onclick="setRating('hearty3-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-5');</script>
+</section>
+
+<section id="hearty3-6" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-green"><span>Hearty Meal Recipe 7 (L3)</span></div>
+    <div class="card card-yellow">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 7 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-6"><span class='star' onclick="setRating('hearty3-6', 1)">★</span><span class='star' onclick="setRating('hearty3-6', 2)">★</span><span class='star' onclick="setRating('hearty3-6', 3)">★</span><span class='star' onclick="setRating('hearty3-6', 4)">★</span><span class='star' onclick="setRating('hearty3-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-6');</script>
+</section>
+
+<section id="hearty3-7" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-yellow"><span>Hearty Meal Recipe 8 (L3)</span></div>
+    <div class="card card-pink">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 8 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-7"><span class='star' onclick="setRating('hearty3-7', 1)">★</span><span class='star' onclick="setRating('hearty3-7', 2)">★</span><span class='star' onclick="setRating('hearty3-7', 3)">★</span><span class='star' onclick="setRating('hearty3-7', 4)">★</span><span class='star' onclick="setRating('hearty3-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-7');</script>
+</section>
+
+<section id="hearty3-8" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-pink"><span>Hearty Meal Recipe 9 (L3)</span></div>
+    <div class="card card-blue">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 9 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-8"><span class='star' onclick="setRating('hearty3-8', 1)">★</span><span class='star' onclick="setRating('hearty3-8', 2)">★</span><span class='star' onclick="setRating('hearty3-8', 3)">★</span><span class='star' onclick="setRating('hearty3-8', 4)">★</span><span class='star' onclick="setRating('hearty3-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-8');</script>
+</section>
+
+<section id="hearty3-9" class="page">
+  <div class="recipe-wrap">
+    <div class="recipe-header rh-blue"><span>Hearty Meal Recipe 10 (L3)</span></div>
+    <div class="card card-coral">
+      <h3>Ingredients</h3>
+      <ul><li>Ingredient 1</li><li>Ingredient 2</li><li>Ingredient 3</li></ul>
+      <h3>Method</h3>
+      <ol><li>Step 1</li><li>Step 2</li><li>Step 3</li></ol>
+      <div class="shortcut">★ <b>Shortcut:</b> Shortcut tip for Hearty Meal Recipe 10 (L3).</div>
+      <div class="stars" data-stars-for="hearty3-9"><span class='star' onclick="setRating('hearty3-9', 1)">★</span><span class='star' onclick="setRating('hearty3-9', 2)">★</span><span class='star' onclick="setRating('hearty3-9', 3)">★</span><span class='star' onclick="setRating('hearty3-9', 4)">★</span><span class='star' onclick="setRating('hearty3-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+    </div>
+  </div>
+  <div class="nav-row"><button class="back" onclick="go('hearty3-list')">Back</button></div>
+  <script>renderStars('hearty3-9');</script>
+</section>
+
+  
+<section id="level-2" class="page"><h2 class="section-title">Level 2</h2><p class="placeholder">Coming soon</p><div class="nav-row"><button class="back" onclick="go('home')">Back</button></div></section>
+<section id="level-3" class="page"><h2 class="section-title">Level 3</h2><p class="placeholder">Coming soon</p><div class="nav-row"><button class="back" onclick="go('home')">Back</button></div></section>
+<section id="cocktails" class="page"><h2 class="section-title">Cocktails</h2><p class="placeholder">Coming soon</p><div class="nav-row"><button class="back" onclick="go('home')">Back</button></div></section>
+<section id="shortcuts" class="page"><h2 class="section-title">Shortcuts</h2><p class="placeholder">Coming soon</p><div class="nav-row"><button class="back" onclick="go('home')">Back</button></div></section>
+<section id="staples" class="page"><h2 class="section-title">Staples</h2><p class="placeholder">Coming soon</p><div class="nav-row"><button class="back" onclick="go('home')">Back</button></div></section>
+
+  <footer>Made with love for Tali<br/>Dad x</footer>
+  <script>
+const PAGES=[...document.querySelectorAll('.page')];
+function go(id){PAGES.forEach(p=>p.classList.remove('active'));document.getElementById(id)?.classList.add('active');window.scrollTo(0,0);localStorage.setItem('tali_last',id);applyRecipeFilters();}
+function randomAff(){const list=["You are stronger than you think.", "Your voice matters.", "Step by step, you rise.", "Courage is already in you.", "You are enough, exactly as you are.", "Your presence makes a difference.", "Confidence is your natural state.", "Every new day is your chance.", "You carry light wherever you go.", "Your worth is unshakable.", "You are becoming who you were meant to be.", "There is power in your calm.", "You rise by lifting yourself.", "Your potential is limitless.", "Keep going \u2014 you\u2019re closer than you think.", "You are allowed to take up space.", "Strength grows with every choice you make.", "Peace is your power.", "The future is open to you.", "You are unafraid, unstoppable, undeniable.", "Your resilience is your crown.", "You are the author of your own story.", "Nothing can dim your inner light.", "You are steady, grounded, and capable.", "Every step forward is victory."];const pick=list[Math.floor(Math.random()*list.length)];document.getElementById('affirmation').textContent='✨ '+pick;}
+function setRating(id,n){localStorage.setItem('rate_'+id,String(n));renderStars(id);}
+function getRating(id){return parseInt(localStorage.getItem('rate_'+id)||'0');}
+function renderStars(id){const n=getRating(id);document.querySelectorAll('[data-stars-for="'+id+'"] .star').forEach((s,i)=>{s.classList.toggle('on', i+1<=n);});const note=document.querySelector('[data-stars-for="'+id+'"] .rating-note');if(note) note.textContent=n?('Rated '+n+'/5'):'Tap to rate';}
+function applyRecipeFilters(){document.querySelectorAll('[data-recipe-link]').forEach(btn=>{const id=btn.getAttribute('data-recipe-link');const r=getRating(id);btn.classList.toggle('hidden', r>0 && r<=3);});}
+function resetRatings(){Object.keys(localStorage).filter(k=>k.startsWith('rate_')).forEach(k=>localStorage.removeItem(k));applyRecipeFilters();document.querySelectorAll('[data-stars-for]').forEach(box=>{const id=box.getAttribute('data-stars-for');renderStars(id);});}
+window.addEventListener('load',()=>{randomAff();applyRecipeFilters();const last=localStorage.getItem('tali_last');go(last&&document.getElementById(last)?last:'home');});
+</script>
+</body>
+</html>
