@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Tali’s Uni Recipes</title>
+  <style>
+    body {background:#0b0c1a;color:white;font-family:Arial,sans-serif;margin:0;padding:0;text-align:center;}
+    h1 {margin-top:20px;}
+    .grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;max-width:600px;margin:20px auto;}
+    button {border:none;border-radius:10px;padding:15px;font-weight:bold;font-size:1em;cursor:pointer;}
+    footer {margin-top:20px;color:#ccc;font-size:0.9em;}
+    .recipe {display:none;background:#222;padding:20px;border-radius:10px;margin:20px auto;max-width:600px;text-align:left;}
+    .back-btn {background:black;color:red;border:2px solid red;border-radius:10px;padding:10px 20px;cursor:pointer;text-shadow:0 0 10px red;margin-top:20px;display:inline-block;}
+  </style>
+  <script>
+    function showRecipe() {
+      document.getElementById('recipe').style.display='block';
+      window.scrollTo({top: document.getElementById('recipe').offsetTop, behavior:'smooth'});
+    }
+  </script>
+</head>
+<body>
+  <h1>Snacks</h1>
+  <h2>Under 10 mins</h2>
+  <div class="grid">
+    <button style="background-color:#98fb98;" onclick="showRecipe()">Halloumi & Sweet Chilli Wrap</button>
+    <button style="background-color:#ffd966;">Cheesy Beans on Toast</button>
+    <button style="background-color:#f4cccc;">Pesto Mozzarella Toastie</button>
+    <button style="background-color:#9fc5e8;">Spicy Hummus & Veg Wrap</button>
+    <button style="background-color:#b4a7d6;">Tomato & Feta on Crackers</button>
+    <button style="background-color:#f6b26b;">Avocado & Sriracha Bagel</button>
+    <button style="background-color:#b6d7a8;">Chickpea Smash Sandwich</button>
+    <button style="background-color:#d9d2e9;">Garlic Mushroom Quesadilla</button>
+    <button style="background-color:#f4cccc;">Caprese Skewers</button>
+    <button style="background-color:#9fc5e8;">Peanut Crunch Rice Cake</button>
+  </div>
+
+  <div id="recipe" class="recipe">
+    <h3>Halloumi & Sweet Chilli Wrap</h3>
+    <ul>
+      <li>2–3 slices halloumi cheese</li>
+      <li>1 tortilla wrap</li>
+      <li>Sweet chilli sauce</li>
+      <li>Optional: lettuce or spinach</li>
+    </ul>
+    <p><strong>Method:</strong> Fry the halloumi slices in a non‑stick pan until golden. Place them on the tortilla wrap, drizzle generously with sweet chilli sauce, and add greens if you like. Roll up and enjoy—ready in under 10 minutes.</p>
+  </div>
+
+  <footer>Made with love for Tali</footer>
+</body>
+</html>
