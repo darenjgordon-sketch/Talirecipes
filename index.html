@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tali’s Uni Recipes</title>
+<style>
+  :root{
+    --bg:#0e0e0e;
+    --text:#ffffff;
+    --muted:#cfcfcf;
+    --card-radius:18px;
+    --shadow: 0 10px 18px rgba(0,0,0,.45);
+    --gap:16px;
+    --pad:18px;
+    --green:#49e07a;
+    --yellow:#ffd36b;
+    --pink:#ff88a5;
+    --blue:#7ec8ff;
+    --purple:#b894ff;
+    --red:#ff7f7f;
+  }
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  /* Header */
+  .header{
+    background: linear-gradient(90deg, #ff0080, #7928ca, #00b4d8, #90ee02);
+    padding: 28px 18px 24px;
+    text-align:center;
+  }
+  .title{
+    margin:0;
+    font-size: clamp(28px, 6vw, 44px);
+    font-weight: 800;
+    letter-spacing:.3px;
+    text-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  .subtitle{
+    margin:6px 0 0;
+    color:#f3f3f3;
+    opacity:.9;
+    font-size: clamp(14px, 3.2vw, 20px);
+    font-weight:600;
+  }
+  .aff{
+    text-align:center;
+    margin: 18px auto 14px;
+    font-size: clamp(15px, 3.6vw, 22px);
+    color:#f0f0f0;
+  }
+  main{padding: 0 16px 32px;}
+  /* Card grid */
+  .grid{
+    margin: 10px auto 8px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    max-width: 760px;
+  }
+  .card{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 22px 14px;
+    border-radius: var(--card-radius);
+    background:#e9e9e9;
+    color:#121212;
+    font-weight:800;
+    font-size: clamp(16px, 4.2vw, 22px);
+    box-shadow: var(--shadow);
+    text-decoration:none;
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .card:active{ transform: scale(.98); filter:brightness(.95); }
+  .level1{ background: var(--green); }
+  .level2{ background: var(--yellow); }
+  .level3{ background: var(--pink); }
+  .cocktails{ background: var(--blue); }
+  .shortcuts{ background: var(--purple); }
+  .staples{ background: var(--red); }
+  /* Footer */
+  footer{
+    text-align:center;
+    color:var(--muted);
+    margin: 28px 0 40px;
+    font-size: 16px;
+  }
+  /* Views */
+  .view{ display:none; }
+  .view.active{ display:block; }
+  .section{
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 12px 10px 24px;
+  }
+  .back{
+    display:inline-block;
+    margin: 8px 0 18px;
+    color:#9bd1ff;
+    text-decoration:none;
+    font-weight:700;
+  }
+  .pill-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+    max-width: 600px;
+    margin: 14px auto 0;
+  }
+  .pill{
+    background:#1c1c1c;
+    border:1px solid #2a2a2a;
+    color:#f7f7f7;
+    padding: 14px 16px;
+    border-radius: 12px;
+    text-decoration:none;
+    box-shadow: var(--shadow);
+    display:block;
+  }
+  /* ===== Replicated recipe grids for Level 2 & 3 ===== */
+  .recipe-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    max-width: 700px;
+    margin: 6px auto 0;
+  }
+  .rec-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:16px 12px;
+    border-radius:14px;
+    color:#0d0d0d;
+    font-weight:900;
+    text-decoration:none;
+    box-shadow: var(--shadow);
+  }
+  .c-green{ background: var(--green); }
+  .c-yellow{ background: var(--yellow); }
+  .c-pink{ background: var(--pink); }
+  .c-blue{ background: var(--blue); }
+  .c-purple{ background: var(--purple); }
+  .c-red{ background: var(--red); }
+
+  /* Simple recipe detail card */
+  .recipe-card{
+    background:#1a1a1a;
+    border:1px solid #2a2a2a;
+    border-radius:18px;
+    padding:16px;
+    box-shadow: var(--shadow);
+    text-align:left;
+  }
+  .recipe-head{
+    padding:10px 12px;
+    border-radius:12px;
+    color:#121212;
+    font-weight:900;
+    margin-bottom:10px;
+  }
+  .rh-green{ background: var(--green); }
+  .rh-yellow{ background: var(--yellow); }
+  .rh-pink{ background: var(--pink); }
+  .rh-blue{ background: var(--blue); }
+  .rh-purple{ background: var(--purple); }
+  .rh-red{ background: var(--red); }
+
+  @media (min-width:680px){
+    .pill-grid{ grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+  <!-- HOME VIEW -->
+  <div id="home" class="view active">
+    <div class="header">
+      <h1 class="title">Tali’s Uni Recipes</h1>
+      <div class="subtitle">Birmingham University</div>
+    </div>
+    <main>
+      <div class="aff">✨ Lead the way and don’t look back.</div>
+      <div class="grid">
+        <a class="card level1" href="#/level1">🌟&nbsp;Level 1</a>
+        <a class="card level2" href="#/level2">🥗&nbsp;Level 2</a>
+        <a class="card level3" href="#/level3">🍜&nbsp;Level 3</a>
+        <a class="card cocktails" href="#/cocktails">🍹&nbsp;Cocktails</a>
+        <a class="card shortcuts" href="#/shortcuts">⚡&nbsp;Shortcuts</a>
+        <a class="card staples" href="#/staples">📦&nbsp;Staples</a>
+      </div>
+      <footer>Made with love for Tali, Dad x</footer>
+    </main>
+  </div>
+
+  <!-- LEVEL 1 (unchanged layout from master) -->
+  <div id="level1" class="view">
+    <div class="header">
+      <h1 class="title">Level 1</h1>
+      <div class="subtitle">Choose a subcategory</div>
+    </div>
+    <main class="section">
+      <a class="back" href="#/">← Back</a>
+      <div class="pill-grid">
+        <a class="pill" href="#/level1/snacks">🥪 Snacks</a>
+        <a class="pill" href="#/level1/light">🥗 Light Meals</a>
+        <a class="pill" href="#/level1/hearty">🍲 Hearty Meals</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- LEVEL 1 SUBPAGES (kept placeholders) -->
+  <div id="level1-snacks" class="view">
+    <div class="header"><h1 class="title">Snacks • Level 1</h1></div>
+    <main class="section">
+      <a class="back" href="#/level1">← Back</a>
+      <div class="placeholder">Placeholder for Level 1 Snacks recipes…</div>
+    </main>
+  </div>
+  <div id="level1-light" class="view">
+    <div class="header"><h1 class="title">Light Meals • Level 1</h1></div>
+    <main class="section">
+      <a class="back" href="#/level1">← Back</a>
+      <div class="placeholder">Placeholder for Level 1 Light Meals…</div>
+    </main>
+  </div>
+  <div id="level1-hearty" class="view">
+    <div class="header"><h1 class="title">Hearty Meals • Level 1</h1></div>
+    <main class="section">
+      <a class="back" href="#/level1">← Back</a>
+      <div class="placeholder">Placeholder for Level 1 Hearty Meals…</div>
+    </main>
+  </div>
+
+  <!-- LEVEL 2 -->
+  <div id="level2" class="view">
+    <div class="header"><h1 class="title">Level 2</h1><div class="subtitle">Choose a subcategory</div></div>
+    <main class="section">
+      <a class="back" href="#/">← Back</a>
+      <div class="pill-grid">
+        <a class="pill" href="#/level2/snacks">🥪 Snacks</a>
+        <a class="pill" href="#/level2/light">🥗 Light Meals</a>
+        <a class="pill" href="#/level2/hearty">🍲 Hearty Meals</a>
+      </div>
+    </main>
+  </div>
+  <div id="level2-snacks" class="view">
+    <div class="header"><h1 class="title">Snacks • Level 2</h1></div>
+    <main class="section">
+      <a class="back" href="#/level2">← Back</a>
+      <div class="recipe-grid" id="grid-l2-snacks"></div>
+    </main>
+  </div>
+  <div id="level2-light" class="view">
+    <div class="header"><h1 class="title">Light Meals • Level 2</h1></div>
+    <main class="section">
+      <a class="back" href="#/level2">← Back</a>
+      <div class="recipe-grid" id="grid-l2-light"></div>
+    </main>
+  </div>
+  <div id="level2-hearty" class="view">
+    <div class="header"><h1 class="title">Hearty Meals • Level 2</h1></div>
+    <main class="section">
+      <a class="back" href="#/level2">← Back</a>
+      <div class="recipe-grid" id="grid-l2-hearty"></div>
+    </main>
+  </div>
+
+  <!-- LEVEL 3 -->
+  <div id="level3" class="view">
+    <div class="header"><h1 class="title">Level 3</h1><div class="subtitle">Choose a subcategory</div></div>
+    <main class="section">
+      <a class="back" href="#/">← Back</a>
+      <div class="pill-grid">
+        <a class="pill" href="#/level3/snacks">🥪 Snacks</a>
+        <a class="pill" href="#/level3/light">🥗 Light Meals</a>
+        <a class="pill" href="#/level3/hearty">🍲 Hearty Meals</a>
+      </div>
+    </main>
+  </div>
+  <div id="level3-snacks" class="view">
+    <div class="header"><h1 class="title">Snacks • Level 3</h1></div>
+    <main class="section">
+      <a class="back" href="#/level3">← Back</a>
+      <div class="recipe-grid" id="grid-l3-snacks"></div>
+    </main>
+  </div>
+  <div id="level3-light" class="view">
+    <div class="header"><h1 class="title">Light Meals • Level 3</h1></div>
+    <main class="section">
+      <a class="back" href="#/level3">← Back</a>
+      <div class="recipe-grid" id="grid-l3-light"></div>
+    </main>
+  </div>
+  <div id="level3-hearty" class="view">
+    <div class="header"><h1 class="title">Hearty Meals • Level 3</h1></div>
+    <main class="section">
+      <a class="back" href="#/level3">← Back</a>
+      <div class="recipe-grid" id="grid-l3-hearty"></div>
+    </main>
+  </div>
+
+  <!-- COCKTAILS / SHORTCUTS / STAPLES (unchanged placeholders) -->
+  <div id="cocktails" class="view">
+    <div class="header"><h1 class="title">Cocktails</h1></div>
+    <main class="section">
+      <a class="back" href="#/">← Back</a>
+      <div class="placeholder">Placeholder for cocktail recipes…</div>
+    </main>
+  </div>
+  <div id="shortcuts" class="view">
+    <div class="header"><h1 class="title">Shortcuts</h1></div>
+    <main class="section">
+      <a class="back" href="#/">← Back</a>
+      <div class="placeholder">Placeholder for cooking &amp; shopping shortcuts…</div>
+    </main>
+  </div>
+  <div id="staples" class="view">
+    <div class="header"><h1 class="title">Staples</h1></div>
+    <main class="section">
+      <a class="back" href="#/">← Back</a>
+      <div class="placeholder">Placeholder for staples lists…</div>
+    </main>
+  </div>
+
+  <!-- Recipe detail view -->
+  <div id="recipe-view" class="view">
+    <div class="header"><h1 class="title" id="rv-title">Recipe</h1></div>
+    <main class="section" id="rv-body"></main>
+  </div>
+
+<script>
+/* Router + dynamic recipe grid/detail for Level 2 & 3 */
+(function(){
+  const routes = {
+    "": "home",
+    "/": "home",
+    "/level1": "level1",
+    "/level1/snacks": "level1-snacks",
+    "/level1/light": "level1-light",
+    "/level1/hearty": "level1-hearty",
+    "/level2": "level2",
+    "/level2/snacks": "level2-snacks",
+    "/level2/light": "level2-light",
+    "/level2/hearty": "level2-hearty",
+    "/level3": "level3",
+    "/level3/snacks": "level3-snacks",
+    "/level3/light": "level3-light",
+    "/level3/hearty": "level3-hearty",
+    "/cocktails": "cocktails",
+    "/shortcuts": "shortcuts",
+    "/staples": "staples"
+  };
+
+  const colours = ["green","yellow","pink","blue","purple","red"];
+  const colorClass = i => colours[i % colours.length];
+
+  function ensureGrids(){
+    const make = (idBase, level, cat) => {
+      const grid = document.getElementById(idBase);
+      if(!grid || grid.dataset.done) return;
+      let s = "";
+      for(let i=1;i<=10;i++){
+        const c = colorClass(i-1);
+        s += `<a class="rec-btn c-${c}" href="#/${level}/${cat}/${i}">${cap(cat)} Recipe ${i}</a>`;
+      }
+      grid.innerHTML = s;
+      grid.dataset.done = "1";
+    };
+    make("grid-l2-snacks","level2","snacks");
+    make("grid-l2-light","level2","light");
+    make("grid-l2-hearty","level2","hearty");
+    make("grid-l3-snacks","level3","snacks");
+    make("grid-l3-light","level3","light");
+    make("grid-l3-hearty","level3","hearty");
+  }
+
+  function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function render(){
+    const hash = decodeURI(location.hash.replace(/^#/, ""));
+    // deep recipe route: /level[23]/(snacks|light|hearty)/N
+    const m = hash.match(/^\/(level[23])\/(snacks|light|hearty)\/(\d{1,2})$/);
+    if(m){ return showRecipe(m[1], m[2], parseInt(m[3],10)); }
+    const key = hash in routes ? hash : ("/" + hash) in routes ? ("/" + hash) : "";
+    const targetId = routes[key] || "home";
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    const target = document.getElementById(targetId);
+    if(target){ target.classList.add("active"); }
+    ensureGrids();
+    window.scrollTo({top:0, behavior:"instant"});
+  }
+
+  function showRecipe(level, cat, idx){
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    const body = document.getElementById("rv-body");
+    const title = `${cap(cat)} Recipe ${idx}`;
+    document.getElementById("rv-title").textContent = title;
+    const color = colorClass(idx-1);
+    body.innerHTML = `
+      <div class="recipe-card">
+        <div class="recipe-head rh-${color}">${title} • ${level.toUpperCase()}</div>
+        <h3>Ingredients</h3>
+        <ul>
+          <li>Ingredient 1</li>
+          <li>Ingredient 2</li>
+          <li>Ingredient 3</li>
+        </ul>
+        <h3>Method</h3>
+        <ol>
+          <li>Step 1</li>
+          <li>Step 2</li>
+          <li>Step 3</li>
+        </ol>
+        <a class="back" href="#/${level}/${cat}">← Back</a>
+      </div>
+    `;
+    document.getElementById("recipe-view").classList.add("active");
+    window.scrollTo({top:0, behavior:"instant"});
+  }
+
+  window.addEventListener("hashchange", render);
+  window.addEventListener("DOMContentLoaded", render);
+})();
+</script>
+</body>
+</html>
