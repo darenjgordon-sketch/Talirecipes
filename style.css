@@ -1,0 +1,62 @@
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+  text-align: center;
+}
+header {
+  background: linear-gradient(90deg, #ff8a00, #e52e71);
+  color: white;
+  padding: 20px;
+  font-size: 1.8em;
+}
+button, .nav-button {
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1em;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  color: #333;
+  transition: background-color 0.3s, transform 0.2s;
+}
+button:hover, .nav-button:hover {
+  background-color: #ccc;
+  transform: scale(1.05);
+}
+footer {
+  margin: 30px 0;
+  color: #777;
+}
+a {
+  color: #0077cc;
+  text-decoration: none;
+}
+.cocktail-icon {
+  width: 50px;
+  height: 50px;
+  margin: 20px auto;
+  position: relative;
+}
+.cocktail-icon::before, .cocktail-icon::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ff8a00;
+  animation: bounce 1s infinite alternate;
+}
+.cocktail-icon::after {
+  left: 20px;
+  background-color: #e52e71;
+  animation-delay: 0.5s;
+}
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-15px); }
+}
