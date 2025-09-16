@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Tali’s Uni Recipes</title>
+<style>
+:root{ --text:#0b0e1d; --muted:#5b6078; }
+body{margin:0;font-family:system-ui,sans-serif;background:#0b0e1d;color:#fff}
+.header{padding:32px 16px;text-align:center;background:linear-gradient(90deg,#ff5f6d,#ffc371,#47c6ff,#9a6dff);background-size:600% 600%;animation:grad 15s ease infinite}
+@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.header h1{margin:0;font-size:28px}
+.subtitle{margin:4px 0;color:#eee}
+.affirmation{margin:6px 0 0;font-weight:600}
+.page{display:none;max-width:900px;margin:0 auto;padding:16px}
+.page.active{display:block}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0}
+.home-btn{padding:18px;font-size:16px;font-weight:700;border-radius:14px;border:none;cursor:pointer;color:#000;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.home-btn:active{transform:translateY(1px)}
+.green{background:#7fffa1}.yellow{background:#ffd966}.pink{background:#ff9eb3}.blue{background:#9ed0ff}.purple{background:#c7a4ff}.coral{background:#ffb29e}
+.sub-green{background:#7fffa1;color:#000}
+.nav-row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.back{background:#000;color:#ff3333;padding:12px 20px;border-radius:12px;border:3px solid #ff3333;cursor:pointer;font-weight:800;font-size:16px;font-family:'Courier New',monospace;letter-spacing:0.5px;text-transform:uppercase;text-shadow:0 0 6px rgba(255,51,51,0.9), 0 0 12px rgba(255,51,51,0.6)}
+.reset{background:#ff5f6d;color:#fff;padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+.section-title{margin:8px 0 4px;font-size:22px}
+.note{margin:0 0 6px 2px;color:#ddd}
+.placeholder{opacity:0.85}
+.recipe-wrap{margin-top:10px}
+.recipe-header{padding:14px 16px;border-radius:14px;color:#000;font-weight:800}
+.rh-green{background:#7fffa1}.rh-yellow{background:#ffd966}.rh-pink{background:#ff9eb3}.rh-blue{background:#9ed0ff}.rh-purple{background:#c7a4ff}.rh-coral{background:#ffb29e}
+.card{border-radius:14px;padding:14px;margin-top:12px}
+.card h3{margin:6px 0 8px}
+.card ul, .card ol{margin:6px 0 12px 20px}
+.card li{margin-bottom:4px}
+.shortcut{color:orange;font-weight:700;margin-top:6px}
+.card-green{background:#fff2b3;color:var(--text)}
+.card-yellow{background:#ffd1dc;color:var(--text)}
+.card-pink{background:#d6ecff;color:var(--text)}
+.card-blue{background:#ffd9cc;color:var(--text)}
+.card-purple{background:#c9ffd7;color:var(--text)}
+.card-coral{background:#e6d6ff;color:var(--text)}
+.stars{display:flex;gap:6px;align-items:center;margin-top:8px}
+.star{font-size:28px;cursor:pointer;color:#ffffff;text-shadow:0 0 3px rgba(0,0,0,.35)}
+.star.on{color:#ffd700;text-shadow:0 0 4px #000}
+.rating-note{color:var(--text);font-size:13px;opacity:.85;margin-left:8px}
+footer{text-align:center;padding:28px 12px;color:#ccc}
+.hidden{display:none!important}
+
+.shortcut{
+  display:inline-block;
+  background:#fff3b0;
+  color:#000;
+  font-weight:700;
+  padding:4px 8px;
+  border-radius:8px;
+  margin-top:8px;
+}
+</style>
+<style>
+/* === SHOP / STAPLES (scoped) === */
+#staples{padding:12px 10px 28px}
+#staples .shop-grid{display:grid;gap:14px;max-width:960px;margin:12px auto}
+@media (min-width:760px){ #staples .shop-grid{grid-template-columns:1fr 1fr} }
+#staples .shop-card{background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:14px;box-shadow:0 10px 18px rgba(0,0,0,.45)}
+#staples .shop-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+#staples .shop-title{font-weight:900;letter-spacing:.2px}
+#staples .shop-items{margin-top:8px}
+#staples .shop-row{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:8px 0;border-radius:12px;position:relative}
+/* colourful but simple accents per category */
+#staples .fresh    .shop-row{background:rgba(73,224,122,.14); border:1px solid rgba(73,224,122,.35)}
+#staples .vegfruit .shop-row{background:rgba(255,136,165,.14); border:1px solid rgba(255,136,165,.35)}
+#staples .cupboard .shop-row{background:rgba(255,211,107,.14); border:1px solid rgba(255,211,107,.35)}
+#staples .frozen   .shop-row{background:rgba(126,200,255,.14); border:1px solid rgba(126,200,255,.35)}
+#staples .household .shop-row{background:rgba(184,148,255,.14); border:1px solid rgba(184,148,255,.35)}
+#staples .shop-row input[type="checkbox"]{width:20px;height:20px}
+#staples .shop-row label{flex:1;color:#f5f5f5}
+#staples .del{margin-left:auto;background:#000;border:2px solid #444;color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
+#staples .del:hover{filter:brightness(1.1)}
+#staples .shop-add{display:flex;gap:10px;margin-top:10px}
+#staples .shop-add input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a2a2a;background:#0c0c0c;color:#fff}
+#staples .shop-add button{padding:10px 14px;border-radius:10px;border:2px solid #2d6cdf;background:#0b1a35;color:#cfe2ff;font-weight:800;cursor:pointer}
+
+#staples .del svg{width:18px;height:18px;display:block}
+</style>
+<style>
+/* ===== Cocktails (scoped) ===== */
+#cocktails{padding:16px 12px 28px}
+#cocktails .neon-grid{display:grid;gap: 18px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));max-width:960px;margin:  10px auto}
+#cocktails .neon-btn{
+  background:#0b0e1d;
+  border:2px solid #ff3ba7;
+  color:#ffe8f2;
+  text-shadow:0 0 6px rgba(255,59,167,.9),0 0 14px rgba(255,59,167,.5);
+  box-shadow:0 0 10px rgba(255,59,167,.35), inset 0 0 10px rgba(255,59,167,.25);
+  padding:16px; border-radius:16px; font-weight:900; font-size:16px; cursor:pointer;
+ min-height:64px; display:flex; align-items:center; justify-content:center; text-align:center;}
+#cocktails .neon-btn:active{transform:translateY(1px)}
+#cocktails .neon-title{font-size:24px;margin:8px 0 6px;text-shadow:0 0 8px rgba(255,59,167,.7)}
+#cocktails .neon-card{border-radius:16px;padding:14px;margin-top:12px;background:#111222;border:1px solid #2a2a3a;box-shadow:0 12px 24px rgba(0,0,0,.45)}
+#cocktails .tagline{
+  display:block;
+  margin:6px 0 10px;
+  font-weight:900;
+  color:#ff7cc3;
+  text-shadow:0 0 8px rgba(255,124,195,.85),0 0 18px rgba(255,124,195,.5);
+  letter-spacing:.4px;
+}
+#cocktails .method, #cocktails .ingredients{background:#151626;border-radius:14px;padding:12px;margin-top:10px;border:1px solid #2b2c3e}
+#cocktails h3{margin:6px 0 8px}
+#cocktails ul, #cocktails ol{margin:6px 0 12px 20px}
+#cocktails li{margin-bottom:4px}
+
+/* Neon cocktail hero (scoped to #cocktails) */
+#cocktails .neon-hero{display:grid;place-items:center;margin: 6px 0 6px}
+#cocktails .glass-stage{position:relative;width:min(300px, 78vw);aspect-ratio:1/1}
+#cocktails .glass-stage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#cocktails .bubble{
+  position:absolute;top:26%;left:var(--left);
+  width:var(--size);height:var(--size);border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.55) 45%, rgba(255,255,255,0) 75%);
+  border:1px solid rgba(255,70,200,.55);
+  box-shadow:0 0 10px rgba(255,70,200,.35), 0 0 18px rgba(255,70,200,.25);
+  opacity:0;animation:cocktail-rise var(--dur) cubic-bezier(.22,.61,.36,1) infinite;
+  animation-delay:var(--delay,0s);will-change:top,left,opacity,transform
+}
+@keyframes cocktail-rise{
+  0%{ top:26%; opacity:0; transform:translateY(0) scale(1) }
+  10%{ opacity:1 }
+  60%{ opacity:.9 }
+  100%{ top:-12%; left:var(--left-end); opacity:0; transform:translateY(-2%) scale(.92) }
+}
+
+
+#cocktails .glass-stage svg *{
+  shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
+}
+
+</style>
+</head>
+<body>
+<section class="page active" id="home">
+<header class="header">
+<h1>Tali’s Uni Recipes</h1>
+<p class="subtitle">Birmingham University</p>
+<p class="affirmation" id="affirmation"></p>
+</header>
+<nav class="home-grid">
+<button class="home-btn green" onclick="go('level-1')">🌟 Level 1</button>
+<button class="home-btn yellow" onclick="go('level-2')">🥙 Level 2</button>
+<button class="home-btn pink" onclick="go('level-3')">🍜 Level 3</button>
+<button class="home-btn blue" onclick="go('cocktails')">🍹 Cocktails</button>
+<button class="home-btn purple" onclick="go('shortcuts')">⚡ Shortcuts</button>
+<button class="home-btn coral" onclick="go('staples')">🛒 Shop</button>
+</nav>
+
+<footer>Made with love for Tali<br/>Dad x</footer>
+</section>
+<section class="page" id="level-1">
+<h2 class="section-title">Level 1</h2>
+<p class="note">Under 5 mins</p>
+<nav class="home-grid">
+<button class="home-btn sub-green" onclick="go('snacks-list')">Snacks</button>
+<button class="home-btn sub-green" onclick="go('light-list')">Light Meals</button>
+<button class="home-btn sub-green" onclick="go('hearty-list')">Hearty Meals</button>
+</nav>
+<div class="nav-row">
+<button class="reset" onclick="resetRatings()">Reset ratings</button>
+</div>
+<div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+</section>
+<section class="page" id="snacks-list">
+<h2 class="section-title">Snacks</h2>
+<p class="note">Under 5 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="snacks-0" onclick="go('snacks-0')">Avocado Toast</button><button class="home-btn yellow" data-recipe-link="snacks-1" onclick="go('snacks-1')">Peanut Butter Banana</button><button class="home-btn pink" data-recipe-link="snacks-2" onclick="go('snacks-2')">Cheese Quesadilla</button><button class="home-btn blue" data-recipe-link="snacks-3" onclick="go('snacks-3')">Hummus Dip</button><button class="home-btn purple" data-recipe-link="snacks-4" onclick="go('snacks-4')">Greek Yogurt &amp; Honey</button><button class="home-btn coral" data-recipe-link="snacks-5" onclick="go('snacks-5')">Tomato Bruschetta</button><button class="home-btn green" data-recipe-link="snacks-6" onclick="go('snacks-6')">Fruit Salad Cup</button><button class="home-btn yellow" data-recipe-link="snacks-7" onclick="go('snacks-7')">Crisps &amp; Salsa</button><button class="home-btn pink" data-recipe-link="snacks-8" onclick="go('snacks-8')">Rice Cake Snack</button><button class="home-btn blue" data-recipe-link="snacks-9" onclick="go('snacks-9')">Apple &amp; Peanut Butter</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-1')">BACK</button></div>
+</section>
+<section class="page" id="snacks-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Avocado Toast</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>1 slice bread</li><li>½ avocado</li><li>Pinch salt &amp; pepper</li></ul>
+<h3>Method</h3>
+<ol><li>Toast bread.</li><li>Mash avocado on top.</li><li>Sprinkle salt &amp; pepper.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Mash avocado directly on toast to save washing up.</div>
+<div class="stars" data-stars-for="snacks-0"><span class="star" onclick="setRating('snacks-0', 1)">★</span><span class="star" onclick="setRating('snacks-0', 2)">★</span><span class="star" onclick="setRating('snacks-0', 3)">★</span><span class="star" onclick="setRating('snacks-0', 4)">★</span><span class="star" onclick="setRating('snacks-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-0');</script>
+</section>
+<section class="page" id="snacks-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Peanut Butter Banana</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>1 slice bread</li><li>1 tbsp peanut butter</li><li>½ banana</li></ul>
+<h3>Method</h3>
+<ol><li>Spread peanut butter.</li><li>Slice banana.</li><li>Place on top of bread.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre-sliced banana from a fruit pot.</div>
+<div class="stars" data-stars-for="snacks-1"><span class="star" onclick="setRating('snacks-1', 1)">★</span><span class="star" onclick="setRating('snacks-1', 2)">★</span><span class="star" onclick="setRating('snacks-1', 3)">★</span><span class="star" onclick="setRating('snacks-1', 4)">★</span><span class="star" onclick="setRating('snacks-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-1');</script>
+</section>
+<section class="page" id="snacks-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Cheese Quesadilla</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>1 tortilla</li><li>2 tbsp grated cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Heat tortilla in pan.</li><li>Sprinkle cheese on half.</li><li>Fold &amp; toast until melted.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Microwave instead of pan to save washing up.</div>
+<div class="stars" data-stars-for="snacks-2"><span class="star" onclick="setRating('snacks-2', 1)">★</span><span class="star" onclick="setRating('snacks-2', 2)">★</span><span class="star" onclick="setRating('snacks-2', 3)">★</span><span class="star" onclick="setRating('snacks-2', 4)">★</span><span class="star" onclick="setRating('snacks-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-2');</script>
+</section>
+<section class="page" id="snacks-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Hummus Dip</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>3 tbsp hummus</li><li>Carrot sticks</li><li>Cucumber sticks</li></ul>
+<h3>Method</h3>
+<ol><li>Spoon hummus into bowl.</li><li>Serve with veg sticks.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre-cut veg packs.</div>
+<div class="stars" data-stars-for="snacks-3"><span class="star" onclick="setRating('snacks-3', 1)">★</span><span class="star" onclick="setRating('snacks-3', 2)">★</span><span class="star" onclick="setRating('snacks-3', 3)">★</span><span class="star" onclick="setRating('snacks-3', 4)">★</span><span class="star" onclick="setRating('snacks-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-3');</script>
+</section>
+<section class="page" id="snacks-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Greek Yogurt &amp; Honey</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>½ cup Greek yogurt</li><li>1 tsp honey</li></ul>
+<h3>Method</h3>
+<ol><li>Scoop yogurt into bowl.</li><li>Drizzle with honey.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Swap honey for maple syrup sachet for variety.</div>
+<div class="stars" data-stars-for="snacks-4"><span class="star" onclick="setRating('snacks-4', 1)">★</span><span class="star" onclick="setRating('snacks-4', 2)">★</span><span class="star" onclick="setRating('snacks-4', 3)">★</span><span class="star" onclick="setRating('snacks-4', 4)">★</span><span class="star" onclick="setRating('snacks-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-4');</script>
+</section>
+<section class="page" id="snacks-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Tomato Bruschetta</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>1 slice baguette</li><li>1 chopped tomato</li><li>Pinch basil</li></ul>
+<h3>Method</h3>
+<ol><li>Toast bread.</li><li>Top with tomato &amp; basil.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use dried basil instead of fresh.</div>
+<div class="stars" data-stars-for="snacks-5"><span class="star" onclick="setRating('snacks-5', 1)">★</span><span class="star" onclick="setRating('snacks-5', 2)">★</span><span class="star" onclick="setRating('snacks-5', 3)">★</span><span class="star" onclick="setRating('snacks-5', 4)">★</span><span class="star" onclick="setRating('snacks-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-5');</script>
+</section>
+<section class="page" id="snacks-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Fruit Salad Cup</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>½ apple</li><li>½ banana</li><li>Handful grapes</li></ul>
+<h3>Method</h3>
+<ol><li>Chop fruit.</li><li>Mix in bowl or cup.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use a ready fruit cup.</div>
+<div class="stars" data-stars-for="snacks-6"><span class="star" onclick="setRating('snacks-6', 1)">★</span><span class="star" onclick="setRating('snacks-6', 2)">★</span><span class="star" onclick="setRating('snacks-6', 3)">★</span><span class="star" onclick="setRating('snacks-6', 4)">★</span><span class="star" onclick="setRating('snacks-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-6');</script>
+</section>
+<section class="page" id="snacks-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Crisps &amp; Salsa</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Tortilla chips</li><li>2 tbsp salsa</li></ul>
+<h3>Method</h3>
+<ol><li>Pour chips into bowl.</li><li>Serve with salsa dip.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave nacho cheese dip.</div>
+<div class="stars" data-stars-for="snacks-7"><span class="star" onclick="setRating('snacks-7', 1)">★</span><span class="star" onclick="setRating('snacks-7', 2)">★</span><span class="star" onclick="setRating('snacks-7', 3)">★</span><span class="star" onclick="setRating('snacks-7', 4)">★</span><span class="star" onclick="setRating('snacks-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-7');</script>
+</section>
+<section class="page" id="snacks-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Rice Cake Snack</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>1 rice cake</li><li>1 tbsp cream cheese</li><li>Cucumber slices</li></ul>
+<h3>Method</h3>
+<ol><li>Spread cream cheese.</li><li>Top with cucumber.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Swap cream cheese for hummus.</div>
+<div class="stars" data-stars-for="snacks-8"><span class="star" onclick="setRating('snacks-8', 1)">★</span><span class="star" onclick="setRating('snacks-8', 2)">★</span><span class="star" onclick="setRating('snacks-8', 3)">★</span><span class="star" onclick="setRating('snacks-8', 4)">★</span><span class="star" onclick="setRating('snacks-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-8');</script>
+</section>
+<section class="page" id="snacks-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Apple &amp; Peanut Butter</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>1 apple</li><li>2 tbsp peanut butter</li></ul>
+<h3>Method</h3>
+<ol><li>Slice apple.</li><li>Dip into peanut butter.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy snack pots with both apple and PB.</div>
+<div class="stars" data-stars-for="snacks-9"><span class="star" onclick="setRating('snacks-9', 1)">★</span><span class="star" onclick="setRating('snacks-9', 2)">★</span><span class="star" onclick="setRating('snacks-9', 3)">★</span><span class="star" onclick="setRating('snacks-9', 4)">★</span><span class="star" onclick="setRating('snacks-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks-list')">BACK</button></div>
+<script>renderStars('snacks-9');</script>
+</section>
+<section class="page" id="light-list">
+<h2 class="section-title">Light Meals</h2>
+<p class="note">Under 5 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="light-0" onclick="go('light-0')">Caprese Wrap</button><button class="home-btn yellow" data-recipe-link="light-1" onclick="go('light-1')">Egg Mayo Sandwich</button><button class="home-btn pink" data-recipe-link="light-2" onclick="go('light-2')">Cheese &amp; Spinach Pita</button><button class="home-btn blue" data-recipe-link="light-3" onclick="go('light-3')">Couscous Salad Cup</button><button class="home-btn purple" data-recipe-link="light-4" onclick="go('light-4')">Avocado &amp; Halloumi Wrap</button><button class="home-btn coral" data-recipe-link="light-5" onclick="go('light-5')">Bean &amp; Cheese Toastie</button><button class="home-btn green" data-recipe-link="light-6" onclick="go('light-6')">Greek Salad Bowl</button><button class="home-btn yellow" data-recipe-link="light-7" onclick="go('light-7')">Houmous &amp; Veg Pita</button><button class="home-btn pink" data-recipe-link="light-8" onclick="go('light-8')">Tomato &amp; Cheese Bagel</button><button class="home-btn blue" data-recipe-link="light-9" onclick="go('light-9')">Microwave Mac &amp; Cheese Mug</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-1')">BACK</button></div>
+</section>
+<section class="page" id="light-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Caprese Wrap</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>1 tortilla</li><li>Mozzarella slices</li><li>Tomato slices</li><li>Basil or pesto</li></ul>
+<h3>Method</h3>
+<ol><li>Layer ingredients on tortilla.</li><li>Fold and eat.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pesto instead of fresh basil for speed.</div>
+<div class="stars" data-stars-for="light-0"><span class="star" onclick="setRating('light-0', 1)">★</span><span class="star" onclick="setRating('light-0', 2)">★</span><span class="star" onclick="setRating('light-0', 3)">★</span><span class="star" onclick="setRating('light-0', 4)">★</span><span class="star" onclick="setRating('light-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-0');</script>
+</section>
+<section class="page" id="light-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Egg Mayo Sandwich</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>2 slices bread</li><li>1 boiled egg (pre-cooked)</li><li>1 tbsp mayo</li></ul>
+<h3>Method</h3>
+<ol><li>Mash egg with mayo.</li><li>Spread on bread.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy pre-boiled eggs.</div>
+<div class="stars" data-stars-for="light-1"><span class="star" onclick="setRating('light-1', 1)">★</span><span class="star" onclick="setRating('light-1', 2)">★</span><span class="star" onclick="setRating('light-1', 3)">★</span><span class="star" onclick="setRating('light-1', 4)">★</span><span class="star" onclick="setRating('light-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-1');</script>
+</section>
+<section class="page" id="light-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Cheese &amp; Spinach Pita</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>1 pita</li><li>2 tbsp cheese</li><li>Handful spinach</li></ul>
+<h3>Method</h3>
+<ol><li>Stuff pita.</li><li>Microwave 30 sec.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use frozen spinach straight from freezer.</div>
+<div class="stars" data-stars-for="light-2"><span class="star" onclick="setRating('light-2', 1)">★</span><span class="star" onclick="setRating('light-2', 2)">★</span><span class="star" onclick="setRating('light-2', 3)">★</span><span class="star" onclick="setRating('light-2', 4)">★</span><span class="star" onclick="setRating('light-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-2');</script>
+</section>
+<section class="page" id="light-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Couscous Salad Cup</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>½ cup couscous</li><li>Hot water</li><li>Veg (cucumber, tomato)</li></ul>
+<h3>Method</h3>
+<ol><li>Cover couscous with water.</li><li>Stir in veg.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use instant couscous sachet.</div>
+<div class="stars" data-stars-for="light-3"><span class="star" onclick="setRating('light-3', 1)">★</span><span class="star" onclick="setRating('light-3', 2)">★</span><span class="star" onclick="setRating('light-3', 3)">★</span><span class="star" onclick="setRating('light-3', 4)">★</span><span class="star" onclick="setRating('light-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-3');</script>
+</section>
+<section class="page" id="light-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Avocado &amp; Halloumi Wrap</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>1 wrap</li><li>2 slices halloumi</li><li>½ avocado</li></ul>
+<h3>Method</h3>
+<ol><li>Fill wrap with halloumi &amp; avocado.</li><li>Fold.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy pre-grilled halloumi strips.</div>
+<div class="stars" data-stars-for="light-4"><span class="star" onclick="setRating('light-4', 1)">★</span><span class="star" onclick="setRating('light-4', 2)">★</span><span class="star" onclick="setRating('light-4', 3)">★</span><span class="star" onclick="setRating('light-4', 4)">★</span><span class="star" onclick="setRating('light-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-4');</script>
+</section>
+<section class="page" id="light-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Bean &amp; Cheese Toastie</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>2 slices bread</li><li>2 tbsp beans</li><li>Cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Fill bread with beans &amp; cheese.</li><li>Toast in pan.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Microwave beans in bread before toasting.</div>
+<div class="stars" data-stars-for="light-5"><span class="star" onclick="setRating('light-5', 1)">★</span><span class="star" onclick="setRating('light-5', 2)">★</span><span class="star" onclick="setRating('light-5', 3)">★</span><span class="star" onclick="setRating('light-5', 4)">★</span><span class="star" onclick="setRating('light-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-5');</script>
+</section>
+<section class="page" id="light-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Greek Salad Bowl</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Cucumber</li><li>Tomato</li><li>Olives</li><li>Feta</li><li>Olive oil</li></ul>
+<h3>Method</h3>
+<ol><li>Chop veg.</li><li>Mix with feta &amp; olives.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy a pre-cut salad pack.</div>
+<div class="stars" data-stars-for="light-6"><span class="star" onclick="setRating('light-6', 1)">★</span><span class="star" onclick="setRating('light-6', 2)">★</span><span class="star" onclick="setRating('light-6', 3)">★</span><span class="star" onclick="setRating('light-6', 4)">★</span><span class="star" onclick="setRating('light-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-6');</script>
+</section>
+<section class="page" id="light-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Houmous &amp; Veg Pita</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>1 pita</li><li>3 tbsp hummus</li><li>Sliced cucumber/carrot</li></ul>
+<h3>Method</h3>
+<ol><li>Spread hummus.</li><li>Stuff with veg.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre-sliced veg sticks.</div>
+<div class="stars" data-stars-for="light-7"><span class="star" onclick="setRating('light-7', 1)">★</span><span class="star" onclick="setRating('light-7', 2)">★</span><span class="star" onclick="setRating('light-7', 3)">★</span><span class="star" onclick="setRating('light-7', 4)">★</span><span class="star" onclick="setRating('light-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-7');</script>
+</section>
+<section class="page" id="light-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Tomato &amp; Cheese Bagel</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>1 bagel</li><li>2 tomato slices</li><li>2 cheese slices</li></ul>
+<h3>Method</h3>
+<ol><li>Toast bagel.</li><li>Add tomato &amp; cheese.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use soft cheese spread instead of slicing.</div>
+<div class="stars" data-stars-for="light-8"><span class="star" onclick="setRating('light-8', 1)">★</span><span class="star" onclick="setRating('light-8', 2)">★</span><span class="star" onclick="setRating('light-8', 3)">★</span><span class="star" onclick="setRating('light-8', 4)">★</span><span class="star" onclick="setRating('light-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-8');</script>
+</section>
+<section class="page" id="light-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Microwave Mac &amp; Cheese Mug</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>½ cup pasta</li><li>½ cup water</li><li>2 tbsp cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave pasta &amp; water (4 mins).</li><li>Stir in cheese.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use instant macaroni sachet.</div>
+<div class="stars" data-stars-for="light-9"><span class="star" onclick="setRating('light-9', 1)">★</span><span class="star" onclick="setRating('light-9', 2)">★</span><span class="star" onclick="setRating('light-9', 3)">★</span><span class="star" onclick="setRating('light-9', 4)">★</span><span class="star" onclick="setRating('light-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light-list')">BACK</button></div>
+<script>renderStars('light-9');</script>
+</section>
+<section class="page" id="hearty-list">
+<h2 class="section-title">Hearty Meals</h2>
+<p class="note">Under 5 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="hearty-0" onclick="go('hearty-0')">Instant Noodle Veg Bowl</button><button class="home-btn yellow" data-recipe-link="hearty-1" onclick="go('hearty-1')">Chilli Bean Wrap</button><button class="home-btn pink" data-recipe-link="hearty-2" onclick="go('hearty-2')">Lentil Soup Mug</button><button class="home-btn blue" data-recipe-link="hearty-3" onclick="go('hearty-3')">Veggie Fried Rice (Microwave)</button><button class="home-btn purple" data-recipe-link="hearty-4" onclick="go('hearty-4')">Halloumi Burger</button><button class="home-btn coral" data-recipe-link="hearty-5" onclick="go('hearty-5')">3-Bean Salad Bowl</button><button class="home-btn green" data-recipe-link="hearty-6" onclick="go('hearty-6')">Pasta Pesto Pot</button><button class="home-btn yellow" data-recipe-link="hearty-7" onclick="go('hearty-7')">Veggie Nachos</button><button class="home-btn pink" data-recipe-link="hearty-8" onclick="go('hearty-8')">Spinach &amp; Feta Omelette (Microwave)</button><button class="home-btn blue" data-recipe-link="hearty-9" onclick="go('hearty-9')">Quick Chickpea Curry</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-1')">BACK</button></div>
+</section>
+<section class="page" id="hearty-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Instant Noodle Veg Bowl</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>1 pack noodles</li><li>Frozen peas</li><li>Soy sauce</li></ul>
+<h3>Method</h3>
+<ol><li>Add peas to noodles.</li><li>Microwave/cook.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use kettle-boiled water straight in the bowl.</div>
+<div class="stars" data-stars-for="hearty-0"><span class="star" onclick="setRating('hearty-0', 1)">★</span><span class="star" onclick="setRating('hearty-0', 2)">★</span><span class="star" onclick="setRating('hearty-0', 3)">★</span><span class="star" onclick="setRating('hearty-0', 4)">★</span><span class="star" onclick="setRating('hearty-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-0');</script>
+</section>
+<section class="page" id="hearty-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Chilli Bean Wrap</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>1 wrap</li><li>½ tin chilli beans</li><li>Cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Heat beans.</li><li>Fill wrap with beans &amp; cheese.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave chilli pot.</div>
+<div class="stars" data-stars-for="hearty-1"><span class="star" onclick="setRating('hearty-1', 1)">★</span><span class="star" onclick="setRating('hearty-1', 2)">★</span><span class="star" onclick="setRating('hearty-1', 3)">★</span><span class="star" onclick="setRating('hearty-1', 4)">★</span><span class="star" onclick="setRating('hearty-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-1');</script>
+</section>
+<section class="page" id="hearty-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Lentil Soup Mug</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>½ tin lentil soup</li><li>½ cup water</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave soup.</li><li>Serve in mug.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy ready-to-heat cartons.</div>
+<div class="stars" data-stars-for="hearty-2"><span class="star" onclick="setRating('hearty-2', 1)">★</span><span class="star" onclick="setRating('hearty-2', 2)">★</span><span class="star" onclick="setRating('hearty-2', 3)">★</span><span class="star" onclick="setRating('hearty-2', 4)">★</span><span class="star" onclick="setRating('hearty-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-2');</script>
+</section>
+<section class="page" id="hearty-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Veggie Fried Rice (Microwave)</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>1 microwave rice pack</li><li>Soy sauce</li><li>Frozen veg</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave rice &amp; veg.</li><li>Stir with soy sauce.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave stir-fry mix.</div>
+<div class="stars" data-stars-for="hearty-3"><span class="star" onclick="setRating('hearty-3', 1)">★</span><span class="star" onclick="setRating('hearty-3', 2)">★</span><span class="star" onclick="setRating('hearty-3', 3)">★</span><span class="star" onclick="setRating('hearty-3', 4)">★</span><span class="star" onclick="setRating('hearty-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-3');</script>
+</section>
+<section class="page" id="hearty-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Halloumi Burger</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>1 bun</li><li>2 slices halloumi</li><li>Lettuce</li><li>Mayo</li></ul>
+<h3>Method</h3>
+<ol><li>Grill halloumi.</li><li>Assemble burger.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy pre-grilled halloumi strips.</div>
+<div class="stars" data-stars-for="hearty-4"><span class="star" onclick="setRating('hearty-4', 1)">★</span><span class="star" onclick="setRating('hearty-4', 2)">★</span><span class="star" onclick="setRating('hearty-4', 3)">★</span><span class="star" onclick="setRating('hearty-4', 4)">★</span><span class="star" onclick="setRating('hearty-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-4');</script>
+</section>
+<section class="page" id="hearty-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>3-Bean Salad Bowl</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>½ tin 3-bean mix</li><li>Cucumber</li><li>Dressing</li></ul>
+<h3>Method</h3>
+<ol><li>Drain beans.</li><li>Mix with veg &amp; dressing.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use bottled salad dressing.</div>
+<div class="stars" data-stars-for="hearty-5"><span class="star" onclick="setRating('hearty-5', 1)">★</span><span class="star" onclick="setRating('hearty-5', 2)">★</span><span class="star" onclick="setRating('hearty-5', 3)">★</span><span class="star" onclick="setRating('hearty-5', 4)">★</span><span class="star" onclick="setRating('hearty-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-5');</script>
+</section>
+<section class="page" id="hearty-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Pasta Pesto Pot</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>½ cup pasta</li><li>Hot water</li><li>1 tbsp pesto</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave pasta in water (4 mins).</li><li>Stir in pesto.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use instant pasta cup.</div>
+<div class="stars" data-stars-for="hearty-6"><span class="star" onclick="setRating('hearty-6', 1)">★</span><span class="star" onclick="setRating('hearty-6', 2)">★</span><span class="star" onclick="setRating('hearty-6', 3)">★</span><span class="star" onclick="setRating('hearty-6', 4)">★</span><span class="star" onclick="setRating('hearty-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-6');</script>
+</section>
+<section class="page" id="hearty-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Veggie Nachos</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Tortilla chips</li><li>Cheese</li><li>Salsa</li></ul>
+<h3>Method</h3>
+<ol><li>Spread chips.</li><li>Sprinkle cheese &amp; salsa.</li><li>Microwave 1 min.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use grated cheese.</div>
+<div class="stars" data-stars-for="hearty-7"><span class="star" onclick="setRating('hearty-7', 1)">★</span><span class="star" onclick="setRating('hearty-7', 2)">★</span><span class="star" onclick="setRating('hearty-7', 3)">★</span><span class="star" onclick="setRating('hearty-7', 4)">★</span><span class="star" onclick="setRating('hearty-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-7');</script>
+</section>
+<section class="page" id="hearty-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Spinach &amp; Feta Omelette (Microwave)</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>2 eggs</li><li>Handful spinach</li><li>Feta</li></ul>
+<h3>Method</h3>
+<ol><li>Beat eggs.</li><li>Add spinach &amp; feta.</li><li>Microwave 2 mins.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use frozen spinach cubes.</div>
+<div class="stars" data-stars-for="hearty-8"><span class="star" onclick="setRating('hearty-8', 1)">★</span><span class="star" onclick="setRating('hearty-8', 2)">★</span><span class="star" onclick="setRating('hearty-8', 3)">★</span><span class="star" onclick="setRating('hearty-8', 4)">★</span><span class="star" onclick="setRating('hearty-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-8');</script>
+</section>
+<section class="page" id="hearty-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Quick Chickpea Curry</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>½ tin chickpeas</li><li>Curry paste</li><li>2 tbsp yogurt</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave chickpeas with curry paste.</li><li>Stir in yogurt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use tikka masala stir-in sauce.</div>
+<div class="stars" data-stars-for="hearty-9"><span class="star" onclick="setRating('hearty-9', 1)">★</span><span class="star" onclick="setRating('hearty-9', 2)">★</span><span class="star" onclick="setRating('hearty-9', 3)">★</span><span class="star" onclick="setRating('hearty-9', 4)">★</span><span class="star" onclick="setRating('hearty-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty-list')">BACK</button></div>
+<script>renderStars('hearty-9');</script>
+</section>
+<section class="page" id="level-2">
+<h2 class="section-title">Level 2</h2>
+<p class="note">Under 10 mins</p>
+<nav class="home-grid">
+<button class="home-btn sub-green" onclick="go('snacks2-list')">Snacks</button>
+<button class="home-btn sub-green" onclick="go('light2-list')">Light Meals</button>
+<button class="home-btn sub-green" onclick="go('hearty2-list')">Hearty Meals</button>
+</nav>
+<div class="nav-row">
+<button class="reset" onclick="resetRatings()">Reset ratings</button>
+</div>
+<div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+</section>
+<section class="page" id="snacks2-list">
+<h2 class="section-title">Snacks</h2>
+<p class="note">Under 10 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="snacks2-0" onclick="go('snacks2-0')">Halloumi &amp; Sweet Chilli Wrap</button><button class="home-btn yellow" data-recipe-link="snacks2-1" onclick="go('snacks2-1')">Cheesy Beans on Toast</button><button class="home-btn pink" data-recipe-link="snacks2-2" onclick="go('snacks2-2')">Pesto Mozzarella Toastie</button><button class="home-btn blue" data-recipe-link="snacks2-3" onclick="go('snacks2-3')">Spicy Hummus &amp; Veg Wrap</button><button class="home-btn purple" data-recipe-link="snacks2-4" onclick="go('snacks2-4')">Tomato &amp; Feta on Crackers</button><button class="home-btn coral" data-recipe-link="snacks2-5" onclick="go('snacks2-5')">Avocado &amp; Sriracha Bagel</button><button class="home-btn green" data-recipe-link="snacks2-6" onclick="go('snacks2-6')">Chickpea Smash Sandwich</button><button class="home-btn yellow" data-recipe-link="snacks2-7" onclick="go('snacks2-7')">Garlic Mushroom Quesadilla</button><button class="home-btn pink" data-recipe-link="snacks2-8" onclick="go('snacks2-8')">Caprese Skewers</button><button class="home-btn blue" data-recipe-link="snacks2-9" onclick="go('snacks2-9')">Peanut Crunch Rice Cake</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-2')">BACK</button></div>
+</section>
+<section class="page" id="snacks2-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Halloumi &amp; Sweet Chilli Wrap</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>1 tortilla</li><li>3 slices halloumi</li><li>1 tbsp sweet chilli sauce</li><li>Handful spinach</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑sear halloumi 2–3 mins.</li><li>Fill wrap with halloumi, spinach &amp; sauce.</li><li>Roll up and halve.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy pre‑grilled halloumi to skip the pan.</div>
+<div class="stars" data-stars-for="snacks2-0"><span class="star" onclick="setRating('snacks2-0', 1)">★</span><span class="star" onclick="setRating('snacks2-0', 2)">★</span><span class="star" onclick="setRating('snacks2-0', 3)">★</span><span class="star" onclick="setRating('snacks2-0', 4)">★</span><span class="star" onclick="setRating('snacks2-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-0');</script>
+</section>
+<section class="page" id="snacks2-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Cheesy Beans on Toast</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>2 slices bread</li><li>½ tin baked beans</li><li>40g grated cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Toast bread.</li><li>Warm beans (microwave).</li><li>Top toast with beans and cheese.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave toastie bag to melt cheese fast.</div>
+<div class="stars" data-stars-for="snacks2-1"><span class="star" onclick="setRating('snacks2-1', 1)">★</span><span class="star" onclick="setRating('snacks2-1', 2)">★</span><span class="star" onclick="setRating('snacks2-1', 3)">★</span><span class="star" onclick="setRating('snacks2-1', 4)">★</span><span class="star" onclick="setRating('snacks2-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-1');</script>
+</section>
+<section class="page" id="snacks2-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Pesto Mozzarella Toastie</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>2 slices bread</li><li>1 tbsp pesto</li><li>3 slices mozzarella</li></ul>
+<h3>Method</h3>
+<ol><li>Spread pesto on bread.</li><li>Add mozzarella; close.</li><li>Toast in pan 3–4 mins, flip once.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre‑sliced mozzarella.</div>
+<div class="stars" data-stars-for="snacks2-2"><span class="star" onclick="setRating('snacks2-2', 1)">★</span><span class="star" onclick="setRating('snacks2-2', 2)">★</span><span class="star" onclick="setRating('snacks2-2', 3)">★</span><span class="star" onclick="setRating('snacks2-2', 4)">★</span><span class="star" onclick="setRating('snacks2-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-2');</script>
+</section>
+<section class="page" id="snacks2-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Spicy Hummus &amp; Veg Wrap</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>1 tortilla</li><li>3 tbsp hummus</li><li>Cucumber sticks</li><li>Grated carrot</li><li>Hot sauce (optional)</li></ul>
+<h3>Method</h3>
+<ol><li>Spread hummus on wrap.</li><li>Add veg; drizzle hot sauce.</li><li>Roll tight and slice.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy a mixed veg stick tub.</div>
+<div class="stars" data-stars-for="snacks2-3"><span class="star" onclick="setRating('snacks2-3', 1)">★</span><span class="star" onclick="setRating('snacks2-3', 2)">★</span><span class="star" onclick="setRating('snacks2-3', 3)">★</span><span class="star" onclick="setRating('snacks2-3', 4)">★</span><span class="star" onclick="setRating('snacks2-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-3');</script>
+</section>
+<section class="page" id="snacks2-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Tomato &amp; Feta on Crackers</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>6 crackers</li><li>1 tomato (sliced)</li><li>30g feta</li><li>Olive oil</li></ul>
+<h3>Method</h3>
+<ol><li>Lay tomato on crackers.</li><li>Crumble feta; drizzle oil.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use soft feta cubes from a tub.</div>
+<div class="stars" data-stars-for="snacks2-4"><span class="star" onclick="setRating('snacks2-4', 1)">★</span><span class="star" onclick="setRating('snacks2-4', 2)">★</span><span class="star" onclick="setRating('snacks2-4', 3)">★</span><span class="star" onclick="setRating('snacks2-4', 4)">★</span><span class="star" onclick="setRating('snacks2-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-4');</script>
+</section>
+<section class="page" id="snacks2-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Avocado &amp; Sriracha Bagel</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>1 bagel</li><li>½ avocado</li><li>Sriracha</li><li>Salt &amp; pepper</li></ul>
+<h3>Method</h3>
+<ol><li>Toast bagel.</li><li>Mash avocado on halves.</li><li>Drizzle sriracha; season.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use smashed‑avocado pot.</div>
+<div class="stars" data-stars-for="snacks2-5"><span class="star" onclick="setRating('snacks2-5', 1)">★</span><span class="star" onclick="setRating('snacks2-5', 2)">★</span><span class="star" onclick="setRating('snacks2-5', 3)">★</span><span class="star" onclick="setRating('snacks2-5', 4)">★</span><span class="star" onclick="setRating('snacks2-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-5');</script>
+</section>
+<section class="page" id="snacks2-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Chickpea Smash Sandwich</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>2 slices bread</li><li>½ tin chickpeas (drained)</li><li>1 tbsp mayo</li><li>Pinch paprika</li></ul>
+<h3>Method</h3>
+<ol><li>Mash chickpeas with mayo &amp; paprika.</li><li>Spread on bread and serve.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre‑mashed chickpea pot if available.</div>
+<div class="stars" data-stars-for="snacks2-6"><span class="star" onclick="setRating('snacks2-6', 1)">★</span><span class="star" onclick="setRating('snacks2-6', 2)">★</span><span class="star" onclick="setRating('snacks2-6', 3)">★</span><span class="star" onclick="setRating('snacks2-6', 4)">★</span><span class="star" onclick="setRating('snacks2-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-6');</script>
+</section>
+<section class="page" id="snacks2-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Garlic Mushroom Quesadilla</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>1 tortilla</li><li>Cup sliced mushrooms</li><li>40g grated cheese</li><li>1 tsp garlic butter</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave mushrooms 1–2 mins.</li><li>Spread on tortilla with cheese.</li><li>Fold and toast in pan 2–3 mins.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave only: 45 sec per side.</div>
+<div class="stars" data-stars-for="snacks2-7"><span class="star" onclick="setRating('snacks2-7', 1)">★</span><span class="star" onclick="setRating('snacks2-7', 2)">★</span><span class="star" onclick="setRating('snacks2-7', 3)">★</span><span class="star" onclick="setRating('snacks2-7', 4)">★</span><span class="star" onclick="setRating('snacks2-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-7');</script>
+</section>
+<section class="page" id="snacks2-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Caprese Skewers</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Mozzarella pearls</li><li>Cherry tomatoes</li><li>Basil</li><li>Balsamic glaze</li></ul>
+<h3>Method</h3>
+<ol><li>Skewer tomato, mozzarella, basil.</li><li>Drizzle glaze.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Skip skewers: toss in a cup.</div>
+<div class="stars" data-stars-for="snacks2-8"><span class="star" onclick="setRating('snacks2-8', 1)">★</span><span class="star" onclick="setRating('snacks2-8', 2)">★</span><span class="star" onclick="setRating('snacks2-8', 3)">★</span><span class="star" onclick="setRating('snacks2-8', 4)">★</span><span class="star" onclick="setRating('snacks2-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-8');</script>
+</section>
+<section class="page" id="snacks2-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Peanut Crunch Rice Cake</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>1 rice cake</li><li>1 tbsp peanut butter</li><li>Granola handful</li><li>Honey</li></ul>
+<h3>Method</h3>
+<ol><li>Spread peanut butter.</li><li>Top with granola and drizzle honey.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy PB squeeze sachets for zero washing‑up.</div>
+<div class="stars" data-stars-for="snacks2-9"><span class="star" onclick="setRating('snacks2-9', 1)">★</span><span class="star" onclick="setRating('snacks2-9', 2)">★</span><span class="star" onclick="setRating('snacks2-9', 3)">★</span><span class="star" onclick="setRating('snacks2-9', 4)">★</span><span class="star" onclick="setRating('snacks2-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks2-list')">BACK</button></div>
+<script>renderStars('snacks2-9');</script>
+</section>
+<section class="page" id="light2-list">
+<h2 class="section-title">Light Meals</h2>
+<p class="note">Under 10 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="light2-0" onclick="go('light2-0')">Quick Veggie Stir‑Fry Noodles</button><button class="home-btn yellow" data-recipe-link="light2-1" onclick="go('light2-1')">Spinach &amp; Tomato Scramble</button><button class="home-btn pink" data-recipe-link="light2-2" onclick="go('light2-2')">Buttered Gnocchi with Pesto</button><button class="home-btn blue" data-recipe-link="light2-3" onclick="go('light2-3')">Chilli Halloumi Pita</button><button class="home-btn purple" data-recipe-link="light2-4" onclick="go('light2-4')">Creamy Tomato Couscous</button><button class="home-btn coral" data-recipe-link="light2-5" onclick="go('light2-5')">Sweetcorn Fritter Stack</button><button class="home-btn green" data-recipe-link="light2-6" onclick="go('light2-6')">Broccoli Cheese Mug</button><button class="home-btn yellow" data-recipe-link="light2-7" onclick="go('light2-7')">Paneer Tikka Wrap</button><button class="home-btn pink" data-recipe-link="light2-8" onclick="go('light2-8')">Garlic Lemon Pasta Pot</button><button class="home-btn blue" data-recipe-link="light2-9" onclick="go('light2-9')">Mediterranean Bean Bowl</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-2')">BACK</button></div>
+</section>
+<section class="page" id="light2-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Quick Veggie Stir‑Fry Noodles</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>1 nest egg‑free noodles</li><li>Frozen stir‑fry veg</li><li>Soy sauce</li><li>1 tsp oil</li></ul>
+<h3>Method</h3>
+<ol><li>Boil noodles 3–4 mins; drain.</li><li>Stir‑fry veg 3 mins; add noodles &amp; soy.</li><li>Toss and serve.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave noodle packs to skip boiling.</div>
+<div class="stars" data-stars-for="light2-0"><span class="star" onclick="setRating('light2-0', 1)">★</span><span class="star" onclick="setRating('light2-0', 2)">★</span><span class="star" onclick="setRating('light2-0', 3)">★</span><span class="star" onclick="setRating('light2-0', 4)">★</span><span class="star" onclick="setRating('light2-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-0');</script>
+</section>
+<section class="page" id="light2-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Spinach &amp; Tomato Scramble</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>2 eggs</li><li>Handful spinach</li><li>Cherry tomatoes</li><li>1 tsp butter</li></ul>
+<h3>Method</h3>
+<ol><li>Melt butter; add tomatoes 1 min.</li><li>Add eggs; stir to scramble.</li><li>Fold in spinach till wilted.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Microwave in a mug: 90 sec, stir, 30 sec.</div>
+<div class="stars" data-stars-for="light2-1"><span class="star" onclick="setRating('light2-1', 1)">★</span><span class="star" onclick="setRating('light2-1', 2)">★</span><span class="star" onclick="setRating('light2-1', 3)">★</span><span class="star" onclick="setRating('light2-1', 4)">★</span><span class="star" onclick="setRating('light2-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-1');</script>
+</section>
+<section class="page" id="light2-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Buttered Gnocchi with Pesto</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>200g fresh gnocchi</li><li>1 tbsp butter</li><li>1 tbsp pesto</li></ul>
+<h3>Method</h3>
+<ol><li>Boil gnocchi 2–3 mins till float.</li><li>Drain; toss with butter and pesto.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pan‑fried gnocchi packets (no boiling).</div>
+<div class="stars" data-stars-for="light2-2"><span class="star" onclick="setRating('light2-2', 1)">★</span><span class="star" onclick="setRating('light2-2', 2)">★</span><span class="star" onclick="setRating('light2-2', 3)">★</span><span class="star" onclick="setRating('light2-2', 4)">★</span><span class="star" onclick="setRating('light2-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-2');</script>
+</section>
+<section class="page" id="light2-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Chilli Halloumi Pita</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>1 pita</li><li>3 slices halloumi</li><li>Lettuce</li><li>Mayo or yoghurt</li><li>Chilli sauce</li></ul>
+<h3>Method</h3>
+<ol><li>Griddle halloumi 3 mins.</li><li>Split pita; fill with lettuce, halloumi, sauces.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Warm pita in toaster for speed.</div>
+<div class="stars" data-stars-for="light2-3"><span class="star" onclick="setRating('light2-3', 1)">★</span><span class="star" onclick="setRating('light2-3', 2)">★</span><span class="star" onclick="setRating('light2-3', 3)">★</span><span class="star" onclick="setRating('light2-3', 4)">★</span><span class="star" onclick="setRating('light2-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-3');</script>
+</section>
+<section class="page" id="light2-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Creamy Tomato Couscous</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>½ cup couscous</li><li>Boiling water</li><li>2 tbsp passata</li><li>Pinch oregano</li><li>Feta (optional)</li></ul>
+<h3>Method</h3>
+<ol><li>Cover couscous with water; stand 5 mins.</li><li>Fluff with passata &amp; oregano; top with feta.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use tomato‑flavoured couscous sachet.</div>
+<div class="stars" data-stars-for="light2-4"><span class="star" onclick="setRating('light2-4', 1)">★</span><span class="star" onclick="setRating('light2-4', 2)">★</span><span class="star" onclick="setRating('light2-4', 3)">★</span><span class="star" onclick="setRating('light2-4', 4)">★</span><span class="star" onclick="setRating('light2-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-4');</script>
+</section>
+<section class="page" id="light2-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Sweetcorn Fritter Stack</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>½ tin sweetcorn (drained)</li><li>1 egg</li><li>2 tbsp flour</li><li>Pinch salt</li></ul>
+<h3>Method</h3>
+<ol><li>Mix all in a bowl.</li><li>Pan‑fry 2 small fritters 2 mins each side.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Air‑fry dollops on paper for no oil.</div>
+<div class="stars" data-stars-for="light2-5"><span class="star" onclick="setRating('light2-5', 1)">★</span><span class="star" onclick="setRating('light2-5', 2)">★</span><span class="star" onclick="setRating('light2-5', 3)">★</span><span class="star" onclick="setRating('light2-5', 4)">★</span><span class="star" onclick="setRating('light2-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-5');</script>
+</section>
+<section class="page" id="light2-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Broccoli Cheese Mug</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Frozen broccoli florets</li><li>3 tbsp milk</li><li>40g grated cheese</li><li>1 tsp flour</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave broccoli 2 mins.</li><li>Stir in milk, flour, cheese; microwave 1 min; stir.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use steam‑in‑bag broccoli.</div>
+<div class="stars" data-stars-for="light2-6"><span class="star" onclick="setRating('light2-6', 1)">★</span><span class="star" onclick="setRating('light2-6', 2)">★</span><span class="star" onclick="setRating('light2-6', 3)">★</span><span class="star" onclick="setRating('light2-6', 4)">★</span><span class="star" onclick="setRating('light2-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-6');</script>
+</section>
+<section class="page" id="light2-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Paneer Tikka Wrap</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>1 wrap</li><li>100g paneer cubes</li><li>1 tbsp tikka paste</li><li>Lettuce/yogurt</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑sear paneer 3–4 mins with tikka paste.</li><li>Wrap with lettuce and yogurt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy ready‑marinated paneer.</div>
+<div class="stars" data-stars-for="light2-7"><span class="star" onclick="setRating('light2-7', 1)">★</span><span class="star" onclick="setRating('light2-7', 2)">★</span><span class="star" onclick="setRating('light2-7', 3)">★</span><span class="star" onclick="setRating('light2-7', 4)">★</span><span class="star" onclick="setRating('light2-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-7');</script>
+</section>
+<section class="page" id="light2-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Garlic Lemon Pasta Pot</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>½ cup small pasta</li><li>Boiling water</li><li>1 tsp butter</li><li>Garlic granules</li><li>Lemon juice</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave pasta + water 6–7 mins; drain.</li><li>Stir in butter, garlic, lemon.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use instant pasta cups.</div>
+<div class="stars" data-stars-for="light2-8"><span class="star" onclick="setRating('light2-8', 1)">★</span><span class="star" onclick="setRating('light2-8', 2)">★</span><span class="star" onclick="setRating('light2-8', 3)">★</span><span class="star" onclick="setRating('light2-8', 4)">★</span><span class="star" onclick="setRating('light2-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-8');</script>
+</section>
+<section class="page" id="light2-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Mediterranean Bean Bowl</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>½ tin mixed beans</li><li>Olives</li><li>Chopped cucumber</li><li>Feta</li><li>Olive oil &amp; lemon</li></ul>
+<h3>Method</h3>
+<ol><li>Drain beans; mix with veg &amp; feta.</li><li>Dress with oil &amp; lemon.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use deli antipasti mix for speed.</div>
+<div class="stars" data-stars-for="light2-9"><span class="star" onclick="setRating('light2-9', 1)">★</span><span class="star" onclick="setRating('light2-9', 2)">★</span><span class="star" onclick="setRating('light2-9', 3)">★</span><span class="star" onclick="setRating('light2-9', 4)">★</span><span class="star" onclick="setRating('light2-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light2-list')">BACK</button></div>
+<script>renderStars('light2-9');</script>
+</section>
+<section class="page" id="hearty2-list">
+<h2 class="section-title">Hearty Meals</h2>
+<p class="note">Under 10 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="hearty2-0" onclick="go('hearty2-0')">Speedy Chickpea Curry</button><button class="home-btn yellow" data-recipe-link="hearty2-1" onclick="go('hearty2-1')">Creamy Pesto Gnocchi</button><button class="home-btn pink" data-recipe-link="hearty2-2" onclick="go('hearty2-2')">One‑Pan Bean Shakshuka</button><button class="home-btn blue" data-recipe-link="hearty2-3" onclick="go('hearty2-3')">Halloumi &amp; Pepper Rice Bowl</button><button class="home-btn purple" data-recipe-link="hearty2-4" onclick="go('hearty2-4')">Loaded Veggie Nachos</button><button class="home-btn coral" data-recipe-link="hearty2-5" onclick="go('hearty2-5')">Butter Bean &amp; Spinach Stew</button><button class="home-btn green" data-recipe-link="hearty2-6" onclick="go('hearty2-6')">Mushroom &amp; Pea Fried Rice</button><button class="home-btn yellow" data-recipe-link="hearty2-7" onclick="go('hearty2-7')">Pasta Arrabbiata Fast</button><button class="home-btn pink" data-recipe-link="hearty2-8" onclick="go('hearty2-8')">Paneer Butter Bowl</button><button class="home-btn blue" data-recipe-link="hearty2-9" onclick="go('hearty2-9')">Lentil Dhal Express</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-2')">BACK</button></div>
+</section>
+<section class="page" id="hearty2-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Speedy Chickpea Curry</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>½ tin chickpeas</li><li>2 tbsp curry paste</li><li>3 tbsp yogurt</li><li>Microwave rice pouch</li></ul>
+<h3>Method</h3>
+<ol><li>Heat chickpeas with curry paste 2 mins.</li><li>Stir in yogurt; serve with hot rice.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use tikka stir‑in sauce.</div>
+<div class="stars" data-stars-for="hearty2-0"><span class="star" onclick="setRating('hearty2-0', 1)">★</span><span class="star" onclick="setRating('hearty2-0', 2)">★</span><span class="star" onclick="setRating('hearty2-0', 3)">★</span><span class="star" onclick="setRating('hearty2-0', 4)">★</span><span class="star" onclick="setRating('hearty2-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-0');</script>
+</section>
+<section class="page" id="hearty2-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Creamy Pesto Gnocchi</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>200g gnocchi</li><li>2 tbsp pesto</li><li>2 tbsp cream or milk</li><li>Spinach</li></ul>
+<h3>Method</h3>
+<ol><li>Boil gnocchi 2–3 mins; drain.</li><li>Stir through pesto, cream, spinach till wilted.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use ready‑to‑eat gnocchi (pan‑fry 4 mins).</div>
+<div class="stars" data-stars-for="hearty2-1"><span class="star" onclick="setRating('hearty2-1', 1)">★</span><span class="star" onclick="setRating('hearty2-1', 2)">★</span><span class="star" onclick="setRating('hearty2-1', 3)">★</span><span class="star" onclick="setRating('hearty2-1', 4)">★</span><span class="star" onclick="setRating('hearty2-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-1');</script>
+</section>
+<section class="page" id="hearty2-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>One‑Pan Bean Shakshuka</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>½ tin chopped tomatoes</li><li>½ tin mixed beans</li><li>1 tsp paprika</li><li>1 egg</li></ul>
+<h3>Method</h3>
+<ol><li>Simmer tomatoes + beans 3 mins.</li><li>Crack in egg; cover 3 mins till set.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Microwave version: cook beans/tomatoes then add poached egg.</div>
+<div class="stars" data-stars-for="hearty2-2"><span class="star" onclick="setRating('hearty2-2', 1)">★</span><span class="star" onclick="setRating('hearty2-2', 2)">★</span><span class="star" onclick="setRating('hearty2-2', 3)">★</span><span class="star" onclick="setRating('hearty2-2', 4)">★</span><span class="star" onclick="setRating('hearty2-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-2');</script>
+</section>
+<section class="page" id="hearty2-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Halloumi &amp; Pepper Rice Bowl</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Microwave rice pouch</li><li>Halloumi slices</li><li>Roasted peppers (jar)</li><li>Soy or dressing</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑sear halloumi 3 mins.</li><li>Heat rice; top with peppers &amp; halloumi; drizzle.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre‑grilled halloumi and skip the pan.</div>
+<div class="stars" data-stars-for="hearty2-3"><span class="star" onclick="setRating('hearty2-3', 1)">★</span><span class="star" onclick="setRating('hearty2-3', 2)">★</span><span class="star" onclick="setRating('hearty2-3', 3)">★</span><span class="star" onclick="setRating('hearty2-3', 4)">★</span><span class="star" onclick="setRating('hearty2-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-3');</script>
+</section>
+<section class="page" id="hearty2-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Loaded Veggie Nachos</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>Tortilla chips</li><li>Refried beans</li><li>Cheese</li><li>Salsa</li><li>Jalapeños</li></ul>
+<h3>Method</h3>
+<ol><li>Spread chips; dot beans; add cheese.</li><li>Microwave 1–2 mins; top with salsa &amp; jalapeños.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use grated cheese to melt faster.</div>
+<div class="stars" data-stars-for="hearty2-4"><span class="star" onclick="setRating('hearty2-4', 1)">★</span><span class="star" onclick="setRating('hearty2-4', 2)">★</span><span class="star" onclick="setRating('hearty2-4', 3)">★</span><span class="star" onclick="setRating('hearty2-4', 4)">★</span><span class="star" onclick="setRating('hearty2-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-4');</script>
+</section>
+<section class="page" id="hearty2-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Butter Bean &amp; Spinach Stew</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>½ tin butter beans</li><li>½ tin tomatoes</li><li>Garlic granules</li><li>Spinach</li></ul>
+<h3>Method</h3>
+<ol><li>Simmer beans &amp; tomatoes 5 mins.</li><li>Season; stir in spinach to wilt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Add pesto for instant depth.</div>
+<div class="stars" data-stars-for="hearty2-5"><span class="star" onclick="setRating('hearty2-5', 1)">★</span><span class="star" onclick="setRating('hearty2-5', 2)">★</span><span class="star" onclick="setRating('hearty2-5', 3)">★</span><span class="star" onclick="setRating('hearty2-5', 4)">★</span><span class="star" onclick="setRating('hearty2-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-5');</script>
+</section>
+<section class="page" id="hearty2-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Mushroom &amp; Pea Fried Rice</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Microwave rice</li><li>Mushrooms (sliced)</li><li>Frozen peas</li><li>Soy sauce</li><li>Sesame oil (optional)</li></ul>
+<h3>Method</h3>
+<ol><li>Fry mushrooms 2 mins; add peas &amp; rice.</li><li>Splash soy; finish with sesame oil.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave only: cook all together 2 mins.</div>
+<div class="stars" data-stars-for="hearty2-6"><span class="star" onclick="setRating('hearty2-6', 1)">★</span><span class="star" onclick="setRating('hearty2-6', 2)">★</span><span class="star" onclick="setRating('hearty2-6', 3)">★</span><span class="star" onclick="setRating('hearty2-6', 4)">★</span><span class="star" onclick="setRating('hearty2-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-6');</script>
+</section>
+<section class="page" id="hearty2-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Pasta Arrabbiata Fast</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>½ cup pasta</li><li>Passata ½ cup</li><li>Chilli flakes</li><li>Olive oil</li></ul>
+<h3>Method</h3>
+<ol><li>Boil/microwave pasta 6–7 mins; drain.</li><li>Warm passata with chilli; toss pasta.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use arrabbiata jar sauce.</div>
+<div class="stars" data-stars-for="hearty2-7"><span class="star" onclick="setRating('hearty2-7', 1)">★</span><span class="star" onclick="setRating('hearty2-7', 2)">★</span><span class="star" onclick="setRating('hearty2-7', 3)">★</span><span class="star" onclick="setRating('hearty2-7', 4)">★</span><span class="star" onclick="setRating('hearty2-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-7');</script>
+</section>
+<section class="page" id="hearty2-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Paneer Butter Bowl</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Paneer cubes</li><li>Butter 1 tsp</li><li>Jar curry sauce</li><li>Microwave rice</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑sear paneer 3 mins in butter.</li><li>Add sauce; heat 2 mins. Serve with rice.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre‑cooked paneer pack.</div>
+<div class="stars" data-stars-for="hearty2-8"><span class="star" onclick="setRating('hearty2-8', 1)">★</span><span class="star" onclick="setRating('hearty2-8', 2)">★</span><span class="star" onclick="setRating('hearty2-8', 3)">★</span><span class="star" onclick="setRating('hearty2-8', 4)">★</span><span class="star" onclick="setRating('hearty2-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-8');</script>
+</section>
+<section class="page" id="hearty2-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Lentil Dhal Express</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Ready cooked lentil pouch</li><li>Curry powder</li><li>Spinach</li><li>Yogurt</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave lentils; stir in curry powder &amp; spinach.</li><li>Top with yogurt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use sachet dhal and add spinach.</div>
+<div class="stars" data-stars-for="hearty2-9"><span class="star" onclick="setRating('hearty2-9', 1)">★</span><span class="star" onclick="setRating('hearty2-9', 2)">★</span><span class="star" onclick="setRating('hearty2-9', 3)">★</span><span class="star" onclick="setRating('hearty2-9', 4)">★</span><span class="star" onclick="setRating('hearty2-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty2-list')">BACK</button></div>
+<script>renderStars('hearty2-9');</script>
+</section>
+<section class="page" id="level-3">
+<h2 class="section-title">Level 3</h2>
+<p class="note">Under 15 mins</p>
+<nav class="home-grid">
+<button class="home-btn sub-green" onclick="go('snacks3-list')">Snacks</button>
+<button class="home-btn sub-green" onclick="go('light3-list')">Light Meals</button>
+<button class="home-btn sub-green" onclick="go('hearty3-list')">Hearty Meals</button>
+</nav>
+<div class="nav-row">
+<button class="reset" onclick="resetRatings()">Reset ratings</button>
+</div>
+<div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+</section>
+<section class="page" id="snacks3-list">
+<h2 class="section-title">Snacks</h2>
+<p class="note">Under 15 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="snacks3-0" onclick="go('snacks3-0')">Avocado Halloumi Salad Cup</button><button class="home-btn yellow" data-recipe-link="snacks3-1" onclick="go('snacks3-1')">Warm Pita Pizza</button><button class="home-btn pink" data-recipe-link="snacks3-2" onclick="go('snacks3-2')">Garlic Butter Mushrooms on Toast</button><button class="home-btn blue" data-recipe-link="snacks3-3" onclick="go('snacks3-3')">Sweet Chilli Tofu Bites</button><button class="home-btn purple" data-recipe-link="snacks3-4" onclick="go('snacks3-4')">Falafel &amp; Tahini Snack Box</button><button class="home-btn coral" data-recipe-link="snacks3-5" onclick="go('snacks3-5')">Caprese Pasta Cup</button><button class="home-btn green" data-recipe-link="snacks3-6" onclick="go('snacks3-6')">Spiced Corn in a Cup</button><button class="home-btn yellow" data-recipe-link="snacks3-7" onclick="go('snacks3-7')">Cheese &amp; Jalapeño Quesadilla</button><button class="home-btn pink" data-recipe-link="snacks3-8" onclick="go('snacks3-8')">Paneer Tikka Skewers</button><button class="home-btn blue" data-recipe-link="snacks3-9" onclick="go('snacks3-9')">Greek Pita Pockets</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-3')">BACK</button></div>
+</section>
+<section class="page" id="snacks3-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Avocado Halloumi Salad Cup</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>½ avocado</li><li>Grilled halloumi cubes</li><li>Cherry tomatoes</li><li>Leafy salad</li></ul>
+<h3>Method</h3>
+<ol><li>Cube halloumi &amp; avocado; toss with tomatoes and leaves.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pre‑grilled halloumi &amp; salad bag.</div>
+<div class="stars" data-stars-for="snacks3-0"><span class="star" onclick="setRating('snacks3-0', 1)">★</span><span class="star" onclick="setRating('snacks3-0', 2)">★</span><span class="star" onclick="setRating('snacks3-0', 3)">★</span><span class="star" onclick="setRating('snacks3-0', 4)">★</span><span class="star" onclick="setRating('snacks3-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-0');</script>
+</section>
+<section class="page" id="snacks3-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Warm Pita Pizza</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>1 pita</li><li>Tomato sauce</li><li>Mozzarella</li><li>Basil</li></ul>
+<h3>Method</h3>
+<ol><li>Top pita with sauce &amp; mozzarella; grill 6–8 mins; finish with basil.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use tortilla for extra crisp.</div>
+<div class="stars" data-stars-for="snacks3-1"><span class="star" onclick="setRating('snacks3-1', 1)">★</span><span class="star" onclick="setRating('snacks3-1', 2)">★</span><span class="star" onclick="setRating('snacks3-1', 3)">★</span><span class="star" onclick="setRating('snacks3-1', 4)">★</span><span class="star" onclick="setRating('snacks3-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-1');</script>
+</section>
+<section class="page" id="snacks3-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Garlic Butter Mushrooms on Toast</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Mushrooms</li><li>1 tsp garlic butter</li><li>Toast</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑fry mushrooms in garlic butter 5–6 mins.</li><li>Pile onto toast.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave steam bag mushrooms.</div>
+<div class="stars" data-stars-for="snacks3-2"><span class="star" onclick="setRating('snacks3-2', 1)">★</span><span class="star" onclick="setRating('snacks3-2', 2)">★</span><span class="star" onclick="setRating('snacks3-2', 3)">★</span><span class="star" onclick="setRating('snacks3-2', 4)">★</span><span class="star" onclick="setRating('snacks3-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-2');</script>
+</section>
+<section class="page" id="snacks3-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Sweet Chilli Tofu Bites</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Firm tofu cubes</li><li>Sweet chilli sauce</li><li>Sesame seeds</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑fry tofu 6–8 mins until golden; toss in sauce; sprinkle seeds.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use crispy baked tofu pack.</div>
+<div class="stars" data-stars-for="snacks3-3"><span class="star" onclick="setRating('snacks3-3', 1)">★</span><span class="star" onclick="setRating('snacks3-3', 2)">★</span><span class="star" onclick="setRating('snacks3-3', 3)">★</span><span class="star" onclick="setRating('snacks3-3', 4)">★</span><span class="star" onclick="setRating('snacks3-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-3');</script>
+</section>
+<section class="page" id="snacks3-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Falafel &amp; Tahini Snack Box</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>Falafel balls</li><li>Cucumber</li><li>Tomatoes</li><li>Tahini or hummus</li></ul>
+<h3>Method</h3>
+<ol><li>Warm falafel; serve with chopped veg and tahini.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Buy microwave falafel.</div>
+<div class="stars" data-stars-for="snacks3-4"><span class="star" onclick="setRating('snacks3-4', 1)">★</span><span class="star" onclick="setRating('snacks3-4', 2)">★</span><span class="star" onclick="setRating('snacks3-4', 3)">★</span><span class="star" onclick="setRating('snacks3-4', 4)">★</span><span class="star" onclick="setRating('snacks3-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-4');</script>
+</section>
+<section class="page" id="snacks3-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Caprese Pasta Cup</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>Cooked pasta cup</li><li>Tomatoes</li><li>Mozzarella</li><li>Pesto</li></ul>
+<h3>Method</h3>
+<ol><li>Warm pasta; stir in tomatoes, mozzarella &amp; pesto.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use pasta salad kit.</div>
+<div class="stars" data-stars-for="snacks3-5"><span class="star" onclick="setRating('snacks3-5', 1)">★</span><span class="star" onclick="setRating('snacks3-5', 2)">★</span><span class="star" onclick="setRating('snacks3-5', 3)">★</span><span class="star" onclick="setRating('snacks3-5', 4)">★</span><span class="star" onclick="setRating('snacks3-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-5');</script>
+</section>
+<section class="page" id="snacks3-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Spiced Corn in a Cup</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Tinned sweetcorn (drained)</li><li>Butter</li><li>Chilli powder</li><li>Lime</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave corn with butter 1 min; season with chilli &amp; lime.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave corn pouch.</div>
+<div class="stars" data-stars-for="snacks3-6"><span class="star" onclick="setRating('snacks3-6', 1)">★</span><span class="star" onclick="setRating('snacks3-6', 2)">★</span><span class="star" onclick="setRating('snacks3-6', 3)">★</span><span class="star" onclick="setRating('snacks3-6', 4)">★</span><span class="star" onclick="setRating('snacks3-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-6');</script>
+</section>
+<section class="page" id="snacks3-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Cheese &amp; Jalapeño Quesadilla</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Tortilla</li><li>Cheddar</li><li>Jalapeños</li></ul>
+<h3>Method</h3>
+<ol><li>Fill tortilla; toast both sides 3–4 mins till melted.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Microwave 1 min each side if no pan.</div>
+<div class="stars" data-stars-for="snacks3-7"><span class="star" onclick="setRating('snacks3-7', 1)">★</span><span class="star" onclick="setRating('snacks3-7', 2)">★</span><span class="star" onclick="setRating('snacks3-7', 3)">★</span><span class="star" onclick="setRating('snacks3-7', 4)">★</span><span class="star" onclick="setRating('snacks3-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-7');</script>
+</section>
+<section class="page" id="snacks3-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Paneer Tikka Skewers</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Paneer cubes</li><li>Tikka paste</li><li>Yogurt</li></ul>
+<h3>Method</h3>
+<ol><li>Mix paneer with tikka &amp; yogurt; grill or pan‑sear 6–8 mins.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use ready‑marinated paneer.</div>
+<div class="stars" data-stars-for="snacks3-8"><span class="star" onclick="setRating('snacks3-8', 1)">★</span><span class="star" onclick="setRating('snacks3-8', 2)">★</span><span class="star" onclick="setRating('snacks3-8', 3)">★</span><span class="star" onclick="setRating('snacks3-8', 4)">★</span><span class="star" onclick="setRating('snacks3-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-8');</script>
+</section>
+<section class="page" id="snacks3-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Greek Pita Pockets</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Pita</li><li>Tomato</li><li>Cucumber</li><li>Onion</li><li>Feta</li><li>Olives</li></ul>
+<h3>Method</h3>
+<ol><li>Chop veg; mix; stuff into warm pita with feta &amp; olives.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use Greek salad pot.</div>
+<div class="stars" data-stars-for="snacks3-9"><span class="star" onclick="setRating('snacks3-9', 1)">★</span><span class="star" onclick="setRating('snacks3-9', 2)">★</span><span class="star" onclick="setRating('snacks3-9', 3)">★</span><span class="star" onclick="setRating('snacks3-9', 4)">★</span><span class="star" onclick="setRating('snacks3-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('snacks3-list')">BACK</button></div>
+<script>renderStars('snacks3-9');</script>
+</section>
+<section class="page" id="light3-list">
+<h2 class="section-title">Light Meals</h2>
+<p class="note">Under 15 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="light3-0" onclick="go('light3-0')">Pea &amp; Mint Risotto (Cheat)</button><button class="home-btn yellow" data-recipe-link="light3-1" onclick="go('light3-1')">Stir‑Fry Udon with Veg</button><button class="home-btn pink" data-recipe-link="light3-2" onclick="go('light3-2')">Creamy Spinach Tortellini</button><button class="home-btn blue" data-recipe-link="light3-3" onclick="go('light3-3')">Shakshuka Speed‑Pan</button><button class="home-btn purple" data-recipe-link="light3-4" onclick="go('light3-4')">Broccoli Pesto Pasta</button><button class="home-btn coral" data-recipe-link="light3-5" onclick="go('light3-5')">Veggie Fried Egg Rice</button><button class="home-btn green" data-recipe-link="light3-6" onclick="go('light3-6')">Gnocchi Tomato Skillet</button><button class="home-btn yellow" data-recipe-link="light3-7" onclick="go('light3-7')">Halloumi &amp; Couscous Bowl</button><button class="home-btn pink" data-recipe-link="light3-8" onclick="go('light3-8')">Veggie Ramen Upgrade</button><button class="home-btn blue" data-recipe-link="light3-9" onclick="go('light3-9')">Tomato &amp; Lentil One‑Pot</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-3')">BACK</button></div>
+</section>
+<section class="page" id="light3-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Pea &amp; Mint Risotto (Cheat)</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Microwave rice pouch</li><li>Frozen peas</li><li>Mint sauce or pesto</li><li>Parmesan</li></ul>
+<h3>Method</h3>
+<ol><li>Microwave rice &amp; peas together 3 mins.</li><li>Stir in mint sauce and parmesan.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use lemon zest for freshness.</div>
+<div class="stars" data-stars-for="light3-0"><span class="star" onclick="setRating('light3-0', 1)">★</span><span class="star" onclick="setRating('light3-0', 2)">★</span><span class="star" onclick="setRating('light3-0', 3)">★</span><span class="star" onclick="setRating('light3-0', 4)">★</span><span class="star" onclick="setRating('light3-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-0');</script>
+</section>
+<section class="page" id="light3-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Stir‑Fry Udon with Veg</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Udon noodle pack</li><li>Stir‑fry veg</li><li>Soy sauce</li><li>Oil</li></ul>
+<h3>Method</h3>
+<ol><li>Fry veg 3 mins; add udon &amp; soy; toss 2 mins.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use straight‑to‑wok udon.</div>
+<div class="stars" data-stars-for="light3-1"><span class="star" onclick="setRating('light3-1', 1)">★</span><span class="star" onclick="setRating('light3-1', 2)">★</span><span class="star" onclick="setRating('light3-1', 3)">★</span><span class="star" onclick="setRating('light3-1', 4)">★</span><span class="star" onclick="setRating('light3-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-1');</script>
+</section>
+<section class="page" id="light3-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Creamy Spinach Tortellini</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Fresh tortellini</li><li>Cream or milk</li><li>Spinach</li><li>Nutmeg</li></ul>
+<h3>Method</h3>
+<ol><li>Boil tortellini 3–4 mins; drain.</li><li>Warm cream with spinach; toss tortellini.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use ready sauce pot.</div>
+<div class="stars" data-stars-for="light3-2"><span class="star" onclick="setRating('light3-2', 1)">★</span><span class="star" onclick="setRating('light3-2', 2)">★</span><span class="star" onclick="setRating('light3-2', 3)">★</span><span class="star" onclick="setRating('light3-2', 4)">★</span><span class="star" onclick="setRating('light3-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-2');</script>
+</section>
+<section class="page" id="light3-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Shakshuka Speed‑Pan</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Passata</li><li>Paprika</li><li>2 eggs</li><li>Parsley</li></ul>
+<h3>Method</h3>
+<ol><li>Simmer passata with paprika 5 mins.</li><li>Crack in eggs; cover 5 mins.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Serve with toast soldiers.</div>
+<div class="stars" data-stars-for="light3-3"><span class="star" onclick="setRating('light3-3', 1)">★</span><span class="star" onclick="setRating('light3-3', 2)">★</span><span class="star" onclick="setRating('light3-3', 3)">★</span><span class="star" onclick="setRating('light3-3', 4)">★</span><span class="star" onclick="setRating('light3-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-3');</script>
+</section>
+<section class="page" id="light3-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Broccoli Pesto Pasta</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>Pasta</li><li>Frozen broccoli</li><li>Pesto</li><li>Lemon</li></ul>
+<h3>Method</h3>
+<ol><li>Boil pasta with broccoli 8–10 mins; drain.</li><li>Stir in pesto &amp; lemon.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave pasta pack.</div>
+<div class="stars" data-stars-for="light3-4"><span class="star" onclick="setRating('light3-4', 1)">★</span><span class="star" onclick="setRating('light3-4', 2)">★</span><span class="star" onclick="setRating('light3-4', 3)">★</span><span class="star" onclick="setRating('light3-4', 4)">★</span><span class="star" onclick="setRating('light3-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-4');</script>
+</section>
+<section class="page" id="light3-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Veggie Fried Egg Rice</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>Microwave rice</li><li>Egg</li><li>Peas</li><li>Soy sauce</li></ul>
+<h3>Method</h3>
+<ol><li>Fry egg; scramble; add rice &amp; peas; splash soy.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave to cook egg in mug.</div>
+<div class="stars" data-stars-for="light3-5"><span class="star" onclick="setRating('light3-5', 1)">★</span><span class="star" onclick="setRating('light3-5', 2)">★</span><span class="star" onclick="setRating('light3-5', 3)">★</span><span class="star" onclick="setRating('light3-5', 4)">★</span><span class="star" onclick="setRating('light3-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-5');</script>
+</section>
+<section class="page" id="light3-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Gnocchi Tomato Skillet</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Gnocchi</li><li>Tomato sauce</li><li>Mozzarella</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑fry gnocchi 5 mins; add sauce 2 mins; top with mozzarella to melt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use ready‑fried gnocchi.</div>
+<div class="stars" data-stars-for="light3-6"><span class="star" onclick="setRating('light3-6', 1)">★</span><span class="star" onclick="setRating('light3-6', 2)">★</span><span class="star" onclick="setRating('light3-6', 3)">★</span><span class="star" onclick="setRating('light3-6', 4)">★</span><span class="star" onclick="setRating('light3-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-6');</script>
+</section>
+<section class="page" id="light3-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Halloumi &amp; Couscous Bowl</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Couscous</li><li>Boiling water</li><li>Halloumi</li><li>Roasted veg (jar)</li></ul>
+<h3>Method</h3>
+<ol><li>Cover couscous with water 5 mins.</li><li>Pan‑sear halloumi 4 mins; serve on couscous with veg.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave halloumi fries.</div>
+<div class="stars" data-stars-for="light3-7"><span class="star" onclick="setRating('light3-7', 1)">★</span><span class="star" onclick="setRating('light3-7', 2)">★</span><span class="star" onclick="setRating('light3-7', 3)">★</span><span class="star" onclick="setRating('light3-7', 4)">★</span><span class="star" onclick="setRating('light3-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-7');</script>
+</section>
+<section class="page" id="light3-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Veggie Ramen Upgrade</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Instant ramen</li><li>Miso paste (optional)</li><li>Spinach</li><li>Spring onion</li></ul>
+<h3>Method</h3>
+<ol><li>Cook ramen; stir in miso; add spinach to wilt; top with onion.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use kettle water to speed up.</div>
+<div class="stars" data-stars-for="light3-8"><span class="star" onclick="setRating('light3-8', 1)">★</span><span class="star" onclick="setRating('light3-8', 2)">★</span><span class="star" onclick="setRating('light3-8', 3)">★</span><span class="star" onclick="setRating('light3-8', 4)">★</span><span class="star" onclick="setRating('light3-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-8');</script>
+</section>
+<section class="page" id="light3-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Tomato &amp; Lentil One‑Pot</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Cooked lentil pouch</li><li>Passata</li><li>Garlic granules</li><li>Basil</li></ul>
+<h3>Method</h3>
+<ol><li>Simmer lentils with passata &amp; garlic 8–10 mins; finish with basil.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Add a knob of butter for richness.</div>
+<div class="stars" data-stars-for="light3-9"><span class="star" onclick="setRating('light3-9', 1)">★</span><span class="star" onclick="setRating('light3-9', 2)">★</span><span class="star" onclick="setRating('light3-9', 3)">★</span><span class="star" onclick="setRating('light3-9', 4)">★</span><span class="star" onclick="setRating('light3-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('light3-list')">BACK</button></div>
+<script>renderStars('light3-9');</script>
+</section>
+<section class="page" id="hearty3-list">
+<h2 class="section-title">Hearty Meals</h2>
+<p class="note">Under 15 mins</p>
+<nav class="home-grid"><button class="home-btn green" data-recipe-link="hearty3-0" onclick="go('hearty3-0')">Red Lentil Coconut Dahl</button><button class="home-btn yellow" data-recipe-link="hearty3-1" onclick="go('hearty3-1')">Mushroom Stroganoff</button><button class="home-btn pink" data-recipe-link="hearty3-2" onclick="go('hearty3-2')">Paneer &amp; Pepper Wraps</button><button class="home-btn blue" data-recipe-link="hearty3-3" onclick="go('hearty3-3')">Chickpea &amp; Spinach Pasta</button><button class="home-btn purple" data-recipe-link="hearty3-4" onclick="go('hearty3-4')">Butternut &amp; Feta Couscous</button><button class="home-btn coral" data-recipe-link="hearty3-5" onclick="go('hearty3-5')">Creamy Tomato Gnocchi Bake (Pan)</button><button class="home-btn green" data-recipe-link="hearty3-6" onclick="go('hearty3-6')">Thai‑Style Veg Curry</button><button class="home-btn yellow" data-recipe-link="hearty3-7" onclick="go('hearty3-7')">Mac &amp; Cheese with Broccoli</button><button class="home-btn pink" data-recipe-link="hearty3-8" onclick="go('hearty3-8')">Baked Beans &amp; Veg Hash</button><button class="home-btn blue" data-recipe-link="hearty3-9" onclick="go('hearty3-9')">Veggie Pesto Pasta Bake (Pan)</button></nav>
+<div class="nav-row"><button class="back" onclick="go('level-3')">BACK</button></div>
+</section>
+<section class="page" id="hearty3-0">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Red Lentil Coconut Dahl</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Cooked red lentil pouch</li><li>Coconut milk</li><li>Curry powder</li><li>Spinach</li></ul>
+<h3>Method</h3>
+<ol><li>Simmer lentils with coconut &amp; curry 10 mins; stir in spinach.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use curry paste for more punch.</div>
+<div class="stars" data-stars-for="hearty3-0"><span class="star" onclick="setRating('hearty3-0', 1)">★</span><span class="star" onclick="setRating('hearty3-0', 2)">★</span><span class="star" onclick="setRating('hearty3-0', 3)">★</span><span class="star" onclick="setRating('hearty3-0', 4)">★</span><span class="star" onclick="setRating('hearty3-0', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-0');</script>
+</section>
+<section class="page" id="hearty3-1">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Mushroom Stroganoff</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Mushrooms</li><li>Onion (optional)</li><li>Sour cream or yogurt</li><li>Paprika</li><li>Pasta or rice</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑fry mushrooms 6–8 mins.</li><li>Stir in paprika &amp; cream; serve over pasta/rice.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave rice to save time.</div>
+<div class="stars" data-stars-for="hearty3-1"><span class="star" onclick="setRating('hearty3-1', 1)">★</span><span class="star" onclick="setRating('hearty3-1', 2)">★</span><span class="star" onclick="setRating('hearty3-1', 3)">★</span><span class="star" onclick="setRating('hearty3-1', 4)">★</span><span class="star" onclick="setRating('hearty3-1', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-1');</script>
+</section>
+<section class="page" id="hearty3-2">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Paneer &amp; Pepper Wraps</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Paneer</li><li>Peppers (sliced)</li><li>Fajita seasoning</li><li>Wraps</li><li>Yogurt</li></ul>
+<h3>Method</h3>
+<ol><li>Fry paneer &amp; peppers with seasoning 8–10 mins.</li><li>Fill wraps; add yogurt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use frozen pepper strips.</div>
+<div class="stars" data-stars-for="hearty3-2"><span class="star" onclick="setRating('hearty3-2', 1)">★</span><span class="star" onclick="setRating('hearty3-2', 2)">★</span><span class="star" onclick="setRating('hearty3-2', 3)">★</span><span class="star" onclick="setRating('hearty3-2', 4)">★</span><span class="star" onclick="setRating('hearty3-2', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-2');</script>
+</section>
+<section class="page" id="hearty3-3">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Chickpea &amp; Spinach Pasta</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Pasta</li><li>Chickpeas</li><li>Spinach</li><li>Tomato sauce</li></ul>
+<h3>Method</h3>
+<ol><li>Boil pasta 10–12 mins.</li><li>Warm sauce with chickpeas &amp; spinach; toss together.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use fresh pasta for 4‑5 min cook.</div>
+<div class="stars" data-stars-for="hearty3-3"><span class="star" onclick="setRating('hearty3-3', 1)">★</span><span class="star" onclick="setRating('hearty3-3', 2)">★</span><span class="star" onclick="setRating('hearty3-3', 3)">★</span><span class="star" onclick="setRating('hearty3-3', 4)">★</span><span class="star" onclick="setRating('hearty3-3', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-3');</script>
+</section>
+<section class="page" id="hearty3-4">
+<div class="recipe-wrap">
+<div class="recipe-header rh-purple"><span>Butternut &amp; Feta Couscous</span></div>
+<div class="card card-green">
+<h3>Ingredients</h3>
+<ul><li>Couscous</li><li>Roasted butternut (pack)</li><li>Feta</li><li>Pumpkin seeds</li></ul>
+<h3>Method</h3>
+<ol><li>Hydrate couscous 5 mins; stir in butternut &amp; feta; top with seeds.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwavable veg pouch.</div>
+<div class="stars" data-stars-for="hearty3-4"><span class="star" onclick="setRating('hearty3-4', 1)">★</span><span class="star" onclick="setRating('hearty3-4', 2)">★</span><span class="star" onclick="setRating('hearty3-4', 3)">★</span><span class="star" onclick="setRating('hearty3-4', 4)">★</span><span class="star" onclick="setRating('hearty3-4', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-4');</script>
+</section>
+<section class="page" id="hearty3-5">
+<div class="recipe-wrap">
+<div class="recipe-header rh-coral"><span>Creamy Tomato Gnocchi Bake (Pan)</span></div>
+<div class="card card-purple">
+<h3>Ingredients</h3>
+<ul><li>Gnocchi</li><li>Tomato sauce</li><li>Cream</li><li>Cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Pan‑fry gnocchi 5 mins; add sauce &amp; cream 4 mins; scatter cheese to melt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use skillet to avoid oven.</div>
+<div class="stars" data-stars-for="hearty3-5"><span class="star" onclick="setRating('hearty3-5', 1)">★</span><span class="star" onclick="setRating('hearty3-5', 2)">★</span><span class="star" onclick="setRating('hearty3-5', 3)">★</span><span class="star" onclick="setRating('hearty3-5', 4)">★</span><span class="star" onclick="setRating('hearty3-5', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-5');</script>
+</section>
+<section class="page" id="hearty3-6">
+<div class="recipe-wrap">
+<div class="recipe-header rh-green"><span>Thai‑Style Veg Curry</span></div>
+<div class="card card-yellow">
+<h3>Ingredients</h3>
+<ul><li>Coconut milk</li><li>Thai curry paste</li><li>Mixed veg (frozen)</li><li>Microwave rice</li></ul>
+<h3>Method</h3>
+<ol><li>Simmer coconut + paste 3 mins; add veg 6–8 mins; serve with rice.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use steam‑bag veg.</div>
+<div class="stars" data-stars-for="hearty3-6"><span class="star" onclick="setRating('hearty3-6', 1)">★</span><span class="star" onclick="setRating('hearty3-6', 2)">★</span><span class="star" onclick="setRating('hearty3-6', 3)">★</span><span class="star" onclick="setRating('hearty3-6', 4)">★</span><span class="star" onclick="setRating('hearty3-6', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-6');</script>
+</section>
+<section class="page" id="hearty3-7">
+<div class="recipe-wrap">
+<div class="recipe-header rh-yellow"><span>Mac &amp; Cheese with Broccoli</span></div>
+<div class="card card-pink">
+<h3>Ingredients</h3>
+<ul><li>Pasta</li><li>Cheese sauce pot</li><li>Frozen broccoli</li></ul>
+<h3>Method</h3>
+<ol><li>Boil pasta 10 mins; cook broccoli last 3 mins; stir in sauce.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use microwave pasta &amp; broccoli pouches.</div>
+<div class="stars" data-stars-for="hearty3-7"><span class="star" onclick="setRating('hearty3-7', 1)">★</span><span class="star" onclick="setRating('hearty3-7', 2)">★</span><span class="star" onclick="setRating('hearty3-7', 3)">★</span><span class="star" onclick="setRating('hearty3-7', 4)">★</span><span class="star" onclick="setRating('hearty3-7', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-7');</script>
+</section>
+<section class="page" id="hearty3-8">
+<div class="recipe-wrap">
+<div class="recipe-header rh-pink"><span>Baked Beans &amp; Veg Hash</span></div>
+<div class="card card-blue">
+<h3>Ingredients</h3>
+<ul><li>Tinned potatoes (cubed)</li><li>Baked beans</li><li>Peppers</li><li>Cheese</li></ul>
+<h3>Method</h3>
+<ol><li>Fry potatoes &amp; peppers 6–8 mins; add beans; top with cheese to melt.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use air‑fryer for the potatoes.</div>
+<div class="stars" data-stars-for="hearty3-8"><span class="star" onclick="setRating('hearty3-8', 1)">★</span><span class="star" onclick="setRating('hearty3-8', 2)">★</span><span class="star" onclick="setRating('hearty3-8', 3)">★</span><span class="star" onclick="setRating('hearty3-8', 4)">★</span><span class="star" onclick="setRating('hearty3-8', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-8');</script>
+</section>
+<section class="page" id="hearty3-9">
+<div class="recipe-wrap">
+<div class="recipe-header rh-blue"><span>Veggie Pesto Pasta Bake (Pan)</span></div>
+<div class="card card-coral">
+<h3>Ingredients</h3>
+<ul><li>Pasta</li><li>Pesto</li><li>Cherry tomatoes</li><li>Mozzarella</li></ul>
+<h3>Method</h3>
+<ol><li>Boil pasta 10 mins; toss with pesto &amp; tomatoes; top with mozzarella to melt in pan.</li></ol>
+<div class="shortcut">★ <b>Shortcut:</b> Use fresh pasta for speed.</div>
+<div class="stars" data-stars-for="hearty3-9"><span class="star" onclick="setRating('hearty3-9', 1)">★</span><span class="star" onclick="setRating('hearty3-9', 2)">★</span><span class="star" onclick="setRating('hearty3-9', 3)">★</span><span class="star" onclick="setRating('hearty3-9', 4)">★</span><span class="star" onclick="setRating('hearty3-9', 5)">★</span><span class="rating-note">Tap to rate</span></div>
+</div>
+</div>
+<div class="nav-row"><button class="back" onclick="go('hearty3-list')">BACK</button></div>
+<script>renderStars('hearty3-9');</script>
+</section>
+
+<section class="page" id="shortcuts">
+  <h2 class="section-title">⚡ Fast Hacks</h2>
+  <div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+  <p class="note"></p>
+
+  <style>
+    /* ==== SHORTCUTS V2 (scoped) ==== */
+    #shortcuts{padding:14px 10px 24px}
+    #shortcuts .sc-wrap{max-width:980px;margin:10px auto}
+
+    /* Entry animation line */
+    #shortcuts .flashline{
+      height:3px; border-radius:999px; margin:4px 0 10px;
+      background:linear-gradient(90deg,#00f0ff,#ff8a00,#ffe600);
+      background-size:200% 100%;
+      animation:flashRun 1.1s ease-out 1;
+      box-shadow:0 0 10px rgba(255,200,50,.5);
+    }
+    @keyframes flashRun{0%{background-position:0% 50%;opacity:.3}50%{opacity:1}100%{background-position:100% 50%;opacity:.5}}
+
+    /* Grid */
+    #shortcuts .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    @media (min-width:760px){#shortcuts .grid{grid-template-columns:repeat(3,minmax(220px,1fr));gap:14px}}
+    @media (min-width:980px){#shortcuts .grid{grid-template-columns:repeat(4,minmax(200px,1fr));gap:16px}}
+
+    /* Card shells */
+    #shortcuts .hack{perspective:1000px;outline:none;opacity:0;transform:translate(8px,-6px) scale(.98)}
+    #shortcuts.mounted .hack{opacity:1;transform:none;animation:enterSlide .35s cubic-bezier(.25,.9,.2,1) both}
+    @keyframes enterSlide{0%{opacity:0;transform:translate(12px,-8px) scale(.96)}100%{opacity:1;transform:translate(0,0) scale(1)}}
+    /* Stagger */
+    #shortcuts.mounted .hack:nth-child(1){animation-delay:.02s}
+    #shortcuts.mounted .hack:nth-child(2){animation-delay:.05s}
+    #shortcuts.mounted .hack:nth-child(3){animation-delay:.08s}
+    #shortcuts.mounted .hack:nth-child(4){animation-delay:.11s}
+    #shortcuts.mounted .hack:nth-child(5){animation-delay:.14s}
+    #shortcuts.mounted .hack:nth-child(6){animation-delay:.17s}
+    #shortcuts.mounted .hack:nth-child(7){animation-delay:.20s}
+    #shortcuts.mounted .hack:nth-child(8){animation-delay:.23s}
+    #shortcuts.mounted .hack:nth-child(9){animation-delay:.26s}
+    #shortcuts.mounted .hack:nth-child(10){animation-delay:.29s}
+    #shortcuts.mounted .hack:nth-child(11){animation-delay:.32s}
+    #shortcuts.mounted .hack:nth-child(12){animation-delay:.35s}
+    #shortcuts.mounted .hack:nth-child(13){animation-delay:.38s}
+    #shortcuts.mounted .hack:nth-child(14){animation-delay:.41s}
+    #shortcuts.mounted .hack:nth-child(15){animation-delay:.44s}
+    #shortcuts.mounted .hack:nth-child(16){animation-delay:.47s}
+
+    #shortcuts .flip{position:relative;height:108px;transform-style:preserve-3d;transition:transform .28s cubic-bezier(.2,.9,.2,1);border-radius:14px;box-shadow:0 8px 14px rgba(0,0,0,.45)}
+    #shortcuts .flip .side{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;border-radius:14px;backface-visibility:hidden;font-weight:900;letter-spacing:.2px;line-height:1.2}
+    /* Fronts */
+    #shortcuts .front{color:#000}
+    #shortcuts .front.front-a{background:#7fffa1} #shortcuts .front.front-b{background:#ffd966} #shortcuts .front.front-c{background:#ff9eb3}
+    #shortcuts .front.front-d{background:#9ed0ff} #shortcuts .front.front-e{background:#c7a4ff} #shortcuts .front.front-f{background:#ffb29e}
+    #shortcuts .front .label{font-size:18px} #shortcuts .front .icon{font-size:20px;margin-right:6px}
+    /* Backs */
+    #shortcuts .card-back{background:#111222;color:#fff;border:1px solid #2a2a3a;transform:rotateY(180deg)}
+    #shortcuts .card-back .tip{font-size:15px;opacity:.95;padding:0 6px}
+
+    /* Flip + whoosh */
+    #shortcuts .hack.flipped .flip{transform:rotateY(180deg)}
+    #shortcuts .whoosh{animation:whooshX .22s cubic-bezier(.2,.9,.2,1)}
+    @keyframes whooshX{0%{transform:translateX(-6px)}60%{transform:translateX(5px)}100%{transform:translateX(0)}}
+
+    /* Top/bottom nav rows already follow site style */
+    #shortcuts .nav-row{margin:8px 0}
+  </style>
+
+  <div class="sc-wrap">
+    <div class="flashline" aria-hidden="true"></div>
+    <div class="grid" id="hackGrid">
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-a"><span class="icon">⚡</span><span class="label">Kettle</span></div><div class="side card-back"><div class="tip">Boil kettle; pour into pan to <b>halve boiling time</b>.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-b"><span class="icon">🥄</span><span class="label">Slurry</span></div><div class="side card-back"><div class="tip">Mix <b>1 tsp cornflour + 1 tbsp cold water</b>; stir into hot sauce.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-c"><span class="icon">🍳</span><span class="label">Eggs</span></div><div class="side card-back"><div class="tip">Beat in mug; microwave <b>30-sec bursts</b>, stir, total 90–120s.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-d"><span class="icon">🌯</span><span class="label">Tortilla Pizza</span></div><div class="side card-back"><div class="tip">Wrap + sauce + cheese; pan with lid <b>3–4 min</b> for a crisp base.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-e"><span class="icon">🍝</span><span class="label">One-Pan</span></div><div class="side card-back"><div class="tip">Cook gnocchi/noodles <b>straight in the sauce</b>—less washing up.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-f"><span class="icon">🥦</span><span class="label">Steam-bags</span></div><div class="side card-back"><div class="tip">Microwave steam-bag veg <b>3–5 min</b>—no chopping, no pan.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-a"><span class="icon">🧅</span><span class="label">Frozen Prep</span></div><div class="side card-back"><div class="tip">Use frozen diced onion/garlic <b>straight from the freezer</b>.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-b"><span class="icon">🍚</span><span class="label">Rice Pouch</span></div><div class="side card-back"><div class="tip">Microwave rice <b>2 min</b>; fluff with a fork—instant base.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-c"><span class="icon">🧀</span><span class="label">Melt Fast</span></div><div class="side card-back"><div class="tip">Cover pan with a lid to <b>steam-melt cheese</b> quickly.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-d"><span class="icon">🥜</span><span class="label">Toast Nuts</span></div><div class="side card-back"><div class="tip">Dry-toast in a pan <b>60 seconds</b> till fragrant—huge flavour.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-e"><span class="icon">🧊</span><span class="label">Freeze Flat</span></div><div class="side card-back"><div class="tip">Freeze sauces/rice <b>flat in bags</b> for ultra-fast thawing.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-f"><span class="icon">🥫</span><span class="label">Beans Boost</span></div><div class="side card-back"><div class="tip">Microwave beans <b>inside the wrap</b>—then toast 1 min.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-a"><span class="icon">🥄</span><span class="label">Pouch Lentils</span></div><div class="side card-back"><div class="tip"><b>90-second</b> lentil pouch = instant protein for any meal.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-b"><span class="icon">💨</span><span class="label">Steam-Finish</span></div><div class="side card-back"><div class="tip">Add a splash of water; lid on to <b>steam-finish</b> food fast.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-c"><span class="icon">🧻</span><span class="label">Sheet-Pan</span></div><div class="side card-back"><div class="tip">Line tray with foil—roast, then <b>bin the mess</b>.</div></div></div></div>
+      <div class="hack" tabindex="0" role="button" aria-expanded="false"><div class="flip"><div class="side front front-d"><span class="icon">🥣</span><span class="label">1-Cup Couscous</span></div><div class="side card-back"><div class="tip">Cover couscous with <b>kettle water</b>; stand 5 min &amp; fluff.</div></div></div></div>
+    </div>
+  </div>
+
+  <div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+
+  <script>
+  (function(){
+    const root = document.getElementById('shortcuts'); if(!root) return;
+    // Mount animation
+    requestAnimationFrame(()=> root.classList.add('mounted'));
+
+    const cards = Array.from(root.querySelectorAll('.hack'));
+
+    function closeOthers(except){
+      cards.forEach(c => { if(c !== except) c.classList.remove('flipped'); });
+    }
+
+    function attach(card){
+      function toggle(){
+        const nowOpen = !card.classList.contains('flipped');
+        closeOthers(card);
+        card.classList.toggle('flipped', nowOpen);
+        card.setAttribute('aria-expanded', nowOpen ? 'true' : 'false');
+        const fl = card.querySelector('.flip');
+        if(fl){
+          fl.classList.remove('whoosh');
+          void fl.offsetWidth;
+          fl.classList.add('whoosh');
+        }
+      }
+      card.addEventListener('click', toggle);
+      card.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); }
+      });
+    }
+
+    cards.forEach(attach);
+  })();
+  </script>
+</section>
+
+
+
+
+<section class="page" id="staples">
+  <h2 class="section-title">Shop</h2>
+  <p class="note">Tap categories to reveal items. Open any or all.</p>
+
+  <style>
+    /* Scoped accordion styles for Shop */
+    #staples .acc{max-width:960px;margin:10px auto;display:flex;flex-direction:column;gap:10px}
+    #staples .acc-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;
+      width:100%;padding:16px 14px;border:none;border-radius:14px;cursor:pointer;
+      font-weight:900;font-size:16px;color:#000;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+    #staples .acc-btn .label{display:flex;align-items:center;gap:10px}
+    #staples .acc-btn .chev{transition:transform .2s ease}
+    #staples .acc-panel{overflow:hidden;max-height:0;opacity:0;transform:translateY(-4px);
+      transition:max-height .28s cubic-bezier(.2,.8,.2,1), opacity .2s ease-out, transform .28s ease-out}
+    #staples .acc-panel.open{opacity:1;max-height:1600px;transform:translateY(0)}
+
+    /* Use existing row styling for items */
+    #staples .acc-inner{background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:10px;margin:6px 2px;box-shadow:0 10px 18px rgba(0,0,0,.45)}
+    #staples .shop-row{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:8px 0;border-radius:12px;position:relative}
+    #staples .shop-row input[type="checkbox"]{width:20px;height:20px}
+    #staples .shop-row label{flex:1;color:#f5f5f5}
+    #staples .acc-del{margin-left:auto;background:#000;border:2px solid #444;color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
+    #staples .acc-del:hover{filter:brightness(1.1)}
+    #staples .acc-add{display:flex;gap:10px;margin:10px 0 6px}
+    #staples .acc-add input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a2a2a;background:#0c0c0c;color:#fff}
+    #staples .acc-add button{padding:10px 14px;border-radius:10px;border:2px solid #2d6cdf;background:#0b1a35;color:#cfe2ff;font-weight:800;cursor:pointer}
+
+    /* Colour accents matching categories */
+    #staples .fresh .shop-row    {background:rgba(73,224,122,.14); border:1px solid rgba(73,224,122,.35)}
+    #staples .vegfruit .shop-row {background:rgba(255,136,165,.14); border:1px solid rgba(255,136,165,.35)}
+    #staples .cupboard .shop-row {background:rgba(255,211,107,.14); border:1px solid rgba(255,211,107,.35)}
+    #staples .frozen .shop-row   {background:rgba(126,200,255,.14); border:1px solid rgba(126,200,255,.35)}
+    #staples .household .shop-row{background:rgba(184,148,255,.14); border:1px solid rgba(184,148,255,.35)}
+
+    /* Button colours to match site palette */
+    #staples .btn-fresh    {background:#7fffa1}
+    #staples .btn-vegfruit {background:#ff9eb3}
+    #staples .btn-cupboard {background:#ffd966}
+    #staples .btn-frozen   {background:#9ed0ff}
+    #staples .btn-household{background:#c7a4ff}
+
+    #staples .nav-row{margin-top:14px}
+  </style>
+
+  <div class="acc">
+    <button class="acc-btn btn-fresh" data-target="fresh" aria-expanded="false"><span class="label">🥬 Fresh</span><span class="chev">▾</span></button>
+    <div class="acc-panel" id="acc-fresh">
+      <div class="acc-inner fresh">
+        <div class="acc-list" id="acc-list-fresh"></div>
+        <div class="acc-add">
+          <input id="acc-add-fresh" placeholder="Add…”/>
+          <button data-acc-add="fresh">+</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="acc-btn btn-vegfruit" data-target="vegfruit" aria-expanded="false"><span class="label">🍎 Veg &amp; Fruit</span><span class="chev">▾</span></button>
+    <div class="acc-panel" id="acc-vegfruit">
+      <div class="acc-inner vegfruit">
+        <div class="acc-list" id="acc-list-vegfruit"></div>
+        <div class="acc-add">
+          <input id="acc-add-vegfruit" placeholder="Add…”/>
+          <button data-acc-add="vegfruit">+</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="acc-btn btn-cupboard" data-target="cupboard" aria-expanded="false"><span class="label">🗄️ Cupboard</span><span class="chev">▾</span></button>
+    <div class="acc-panel" id="acc-cupboard">
+      <div class="acc-inner cupboard">
+        <div class="acc-list" id="acc-list-cupboard"></div>
+        <div class="acc-add">
+          <input id="acc-add-cupboard" placeholder="Add…”/>
+          <button data-acc-add="cupboard">+</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="acc-btn btn-frozen" data-target="frozen" aria-expanded="false"><span class="label">🧊 Frozen</span><span class="chev">▾</span></button>
+    <div class="acc-panel" id="acc-frozen">
+      <div class="acc-inner frozen">
+        <div class="acc-list" id="acc-list-frozen"></div>
+        <div class="acc-add">
+          <input id="acc-add-frozen" placeholder="Add…”/>
+          <button data-acc-add="frozen">+</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="acc-btn btn-household" data-target="household" aria-expanded="false"><span class="label">🧹 Household</span><span class="chev">▾</span></button>
+    <div class="acc-panel" id="acc-household">
+      <div class="acc-inner household">
+        <div class="acc-list" id="acc-list-household"></div>
+        <div class="acc-add">
+          <input id="acc-add-household" placeholder="Add…”/>
+          <button data-acc-add="household">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="back" onclick="go('home')">BACK</button>
+  </div>
+
+  <script>
+  // Accordion logic + list rendering (scoped to #staples)
+  (function(){
+    const ROOT = document.getElementById('staples');
+    if(!ROOT) return;
+
+    // pull defaults from existing script (parsed at build time)
+    const DEFAULTS = {
+    fresh: ["Halloumi","Mature Cheddar cheese ×400 g","Semi-skimmed milk, 2 pints","Spreadable butter","New York Bakery Co. bagels (plain) ×5","Free-range eggs, large ×6"],
+    vegfruit: ["Banana ×2","Baked potato ×2","Tomatoes pack","Avocado ×4","Cucumber","Fresh coriander 30 g","Green grapes"],
+    cupboard: ["Stock","Balsamic glaze","Choc spread","Baked beans","Sweetener","Soy sauce","Pot noodles","Sunflower oil","Chopped tomatoes tin ×4","Green olives (jar)","Runny honey","Strawberry jam","Garlic mayo","Sweet chilli","Peri peri","Smoked paprika","Garlic granules","Salt cellar","Pepper","Shreddies","Weetabix cereal ×24","Pasta","Microwave rice, white basmati pouches 250 g ×2","Plain milk chocolate bar 200 g","Crisps"],
+    frozen: ["Chips","McCain Crispy French Fries","Linda McCartney’s vegetarian tomato &amp; basil meatballs"],
+    household: ["Washing machine capsules","Toilet tissue ×4 rolls"]
+  };
+
+    const KEY = c => 'tali_shop_'+c;
+    const load = c => {
+      try { 
+        const raw = localStorage.getItem(KEY(c));
+        if(!raw) return (DEFAULTS[c]||[]).map(t=>({text:t,checked:false}));
+        const arr = JSON.parse(raw);
+        return arr.map(x => typeof x === 'string' ? {text:x,checked:false} : x);
+      } catch(e) { return (DEFAULTS[c]||[]).map(t=>({text:t,checked:false})); }
+    };
+    const save = (c,items) => { try{ localStorage.setItem(KEY(c), JSON.stringify(items)); }catch(e){} };
+
+    function render(cat){
+      const mount = ROOT.querySelector('#acc-list-'+cat);
+      if(!mount) return;
+      const items = load(cat);
+      mount.innerHTML = items.map((it,i)=>`
+        <div class="shop-row" data-cat="${cat}" data-idx="${i}">
+          <input type="checkbox" data-cat="${cat}" data-idx="${i}" ${it.checked?'checked':''} />
+          <label>${it.text}</label>
+          <button class="acc-del" data-acc-del="${cat}" data-idx="${i}">×</button>
+        </div>
+      `).join('');
+    }
+
+    function openPanel(cat, btn){
+      const panel = ROOT.querySelector('#acc-'+cat);
+      if(!panel) return;
+      // toggle only this panel
+      const isOpen = panel.classList.contains('open');
+      if(isOpen){ panel.classList.remove('open'); btn?.setAttribute('aria-expanded','false'); return; }
+      panel.classList.add('open');
+      btn?.setAttribute('aria-expanded','true');
+      // render on open
+      render(cat);
+    }
+
+    ROOT.addEventListener('click', (e)=>{
+      const b = e.target.closest('.acc-btn');
+      if(b && ROOT.contains(b)){ 
+        const cat = b.getAttribute('data-target'); 
+        openPanel(cat, b); 
+      }
+
+      const del = e.target.closest('[data-acc-del]');
+      if(del && ROOT.contains(del)){ 
+        const cat = del.getAttribute('data-acc-del'); 
+        const idx = parseInt(del.getAttribute('data-idx'),10);
+        const items = load(cat); 
+        items.splice(idx,1);
+        save(cat, items); 
+        render(cat);
+      }
+
+      const addBtn = e.target.closest('[data-acc-add]');
+      if(addBtn && ROOT.contains(addBtn)){ 
+        const cat = addBtn.getAttribute('data-acc-add'); 
+        const inp = ROOT.querySelector('#acc-add-'+cat);
+        if(inp && inp.value.trim()){ 
+          const items = load(cat); 
+          items.push({text:inp.value.trim(), checked:false}); 
+          save(cat, items); 
+          inp.value=''; 
+          render(cat);
+        }
+      }
+    });
+
+    ROOT.addEventListener('change', (e)=>{
+      const box = e.target.closest('#staples input[type="checkbox"][data-cat]');
+      if(box){ 
+        const cat = box.getAttribute('data-cat'); 
+        const idx = parseInt(box.getAttribute('data-idx'),10);
+        const items = load(cat); 
+        if(items[idx]){ items[idx].checked = !!box.checked; save(cat,items); }
+      }
+    });
+
+  })();
+  </script>
+</section>
+<section class="page" id="staples-fresh"><h2 class="section-title">Shop — 🥬 Fresh</h2><div class="shop-card fresh" data-cat="fresh">
+<div class="shop-head"><div class="shop-title">🥬 Fresh</div></div>
+<div class="shop-items" id="shop-list-fresh"></div>
+
+</div><div class="nav-row"><button class="back" onclick="go('staples')">BACK</button></div></section><section class="page" id="staples-vegfruit"><h2 class="section-title">Shop — 🍎 Veg/Fruit</h2><div class="shop-card vegfruit" data-cat="vegfruit">
+<div class="shop-head"><div class="shop-title">🍎 Veg/Fruit</div></div>
+<div class="shop-items" id="shop-list-vegfruit"></div>
+
+</div><div class="nav-row"><button class="back" onclick="go('staples')">BACK</button></div></section><section class="page" id="staples-cupboard"><h2 class="section-title">Shop — 🗄 Cupboard</h2><div class="shop-card cupboard" data-cat="cupboard">
+<div class="shop-head"><div class="shop-title">🗄 Cupboard</div></div>
+<div class="shop-items" id="shop-list-cupboard"></div>
+
+</div><div class="nav-row"><button class="back" onclick="go('staples')">BACK</button></div></section><section class="page" id="staples-frozen"><h2 class="section-title">Shop — ❄ Frozen</h2><div class="shop-card frozen" data-cat="frozen">
+<div class="shop-head"><div class="shop-title">❄ Frozen</div></div>
+<div class="shop-items" id="shop-list-frozen"></div>
+
+</div><div class="nav-row"><button class="back" onclick="go('staples')">BACK</button></div></section><section class="page" id="staples-household"><h2 class="section-title">Shop — 🧹 Household</h2><div class="shop-card household" data-cat="household">
+<div class="shop-head"><div class="shop-title">🧹 Household</div></div>
+<div class="shop-items" id="shop-list-household"></div>
+
+</div><div class="nav-row"><button class="back" onclick="go('staples')">BACK</button></div></section>
+
+<section class="page" id="cocktails"><div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+<div class="neon-hero" aria-label="Animated neon cocktail glass with rising bubbles">
+  <div class="glass-stage">
+    <svg viewBox="0 0 500 500" role="img" aria-hidden="true">
+      <defs>
+        <line stroke="#ff3ba7"arGradient id="neonPink" x1="0%" y1="0%" x2="100%" y2="0%"
+          <stop offset="0%"  stop-color="#ff2bd6" />
+          <stop offset="100%" stop-color="#ff66f9" />
+        </linearGradient>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur1"/>
+          <feMerge><feMergeNode in="blur1"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="bigGlow" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2"/>
+          <feMerge><feMergeNode in="blur2"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g stroke="url(#neonPink)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#bigGlow)" opacity="0.6">
+        <path stroke="#ff3ba7" d="M 160 130 L 340 130 L 250 250 L 250 340 L 305 380 L 195 380 L 250 340"/
+      </g>
+      <g stroke="url(#neonPink)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#glow)">
+        <path stroke="#ff3ba7" d="M 160 130 L 340 130 L 250 250 L 250 340 L 305 380 L 195 380 L 250 340"/
+      </g>
+    </svg>
+    <div class="bubble" style="--left:33%; --left-end:30%; --size:12px; --dur:4.6s; --delay:-2.0s;"></div>
+    <div class="bubble" style="--left:36%; --left-end:38%; --size:10px; --dur:3.8s; --delay:-1.2s;"></div>
+    <div class="bubble" style="--left:39%; --left-end:36%; --size:13px; --dur:4.2s; --delay:-3.1s;"></div>
+    <div class="bubble" style="--left:42%; --left-end:45%; --size:10px; --dur:3.6s; --delay:-0.8s;"></div>
+    <div class="bubble" style="--left:45%; --left-end:43%; --size:14px; --dur:4.9s; --delay:-2.7s;"></div>
+    <div class="bubble" style="--left:48%; --left-end:51%; --size:11px; --dur:3.9s; --delay:-1.9s;"></div>
+    <div class="bubble" style="--left:51%; --left-end:49%; --size:16px; --dur:5.2s; --delay:-2.6s;"></div>
+    <div class="bubble" style="--left:54%; --left-end:57%; --size:10px; --dur:3.4s; --delay:-0.5s;"></div>
+    <div class="bubble" style="--left:57%; --left-end:55%; --size:14px; --dur:4.4s; --delay:-1.4s;"></div>
+    <div class="bubble" style="--left:60%; --left-end:62%; --size:11px; --dur:3.7s; --delay:-0.3s;"></div>
+    <div class="bubble" style="--left:63%; --left-end:60%; --size:15px; --dur:4.8s; --delay:-3.3s;"></div>
+    <div class="bubble" style="--left:66%; --left-end:68%; --size:10px; --dur:3.5s; --delay:-1.6s;"></div>
+    <div class="bubble" style="--left:68%; --left-end:65%; --size:13px; --dur:4.1s; --delay:-2.2s;"></div>
+    <div class="bubble" style="--left:35%; --left-end:37%; --size:10px; --dur:3.2s; --delay:-0.9s;"></div>
+    <div class="bubble" style="--left:41%; --left-end:44%; --size:12px; --dur:3.9s; --delay:-1.5s;"></div>
+    <div class="bubble" style="--left:58%; --left-end:56%; --size:10px; --dur:3.3s; --delay:-0.7s;"></div>
+  </div>
+</div>
+
+<div class="neon-grid">
+<button class="neon-btn" onclick="go('cocktail-0')">Screwdriver</button><button class="neon-btn" onclick="go('cocktail-1')">Cuba Libre</button><button class="neon-btn" onclick="go('cocktail-2')">Gin &amp; Tonic</button><button class="neon-btn" onclick="go('cocktail-3')">Vodka Cranberry</button><button class="neon-btn" onclick="go('cocktail-4')">Whisky Ginger</button><button class="neon-btn" onclick="go('cocktail-5')">Rum Lemonade</button><button class="neon-btn" onclick="go('cocktail-6')">Vodka Lime Soda</button><button class="neon-btn" onclick="go('cocktail-7')">Tequila Sunrise</button><button class="neon-btn" onclick="go('cocktail-8')">Blackcurrant Fizz</button><button class="neon-btn" onclick="go('cocktail-9')">Apple Vodka Fizz</button><button class="neon-btn" onclick="go('cocktail-10')">Shandy</button><button class="neon-btn" onclick="go('cocktail-11')">Cider Spritz</button><button class="neon-btn" onclick="go('cocktail-12')">White Wine Spritzer</button><button class="neon-btn" onclick="go('cocktail-13')">Moscow Mule</button><button class="neon-btn" onclick="go('cocktail-14')">Dark &amp; Stormy</button><button class="neon-btn" onclick="go('cocktail-15')">Spiced Rum Cola</button>
+</div>
+<div class="nav-row"><button class="back" onclick="go('home')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-0">
+<h2 class="neon-title">Screwdriver</h2>
+<span class="tagline">Sunny &amp; Simple</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Vodka</li><li>Orange juice</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Fill glass with ice.</li><li>Add vodka, top with orange juice.</li><li>Stir.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-1">
+<h2 class="neon-title">Cuba Libre</h2>
+<span class="tagline">Cola • Lime • Rum</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>White rum</li><li>Cola</li><li>Squeeze of lime / lime wedge</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Add ice.</li><li>Pour rum and cola.</li><li>Squeeze lime and drop wedge in.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-2">
+<h2 class="neon-title">Gin &amp; Tonic</h2>
+<span class="tagline">Crisp • Classic</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Gin</li><li>Tonic water</li><li>Slice of lemon/lime</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Fill glass with ice.</li><li>Add gin, top with tonic.</li><li>Garnish with citrus.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-3">
+<h2 class="neon-title">Vodka Cranberry</h2>
+<span class="tagline">Tart &amp; Fresh</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Vodka</li><li>Cranberry juice</li><li>Lime wedge (optional)</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Add ice.</li><li>Pour vodka, top with cranberry.</li><li>Squeeze lime if you like.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-4">
+<h2 class="neon-title">Whisky Ginger</h2>
+<span class="tagline">Fiery &amp; Smooth</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Whisky</li><li>Ginger ale / ginger beer</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Add ice.</li><li>Pour whisky, top with ginger.</li><li>Stir once.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-5">
+<h2 class="neon-title">Rum Lemonade</h2>
+<span class="tagline">Zesty &amp; Light</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>White rum</li><li>Lemonade</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice in glass.</li><li>Rum + lemonade.</li><li>Give a quick stir.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-6">
+<h2 class="neon-title">Vodka Lime Soda</h2>
+<span class="tagline">Fresh &amp; Bubbly</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Vodka</li><li>Soda water</li><li>Dash lime cordial or wedge</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice in glass.</li><li>Vodka + soda.</li><li>Add lime.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-7">
+<h2 class="neon-title">Tequila Sunrise</h2>
+<span class="tagline">Sunset in Glass</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Tequila</li><li>Orange juice</li><li>Small dash grenadine (optional)</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Fill with ice.</li><li>Tequila + orange juice.</li><li>Drizzle grenadine to sink.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-8">
+<h2 class="neon-title">Blackcurrant Fizz</h2>
+<span class="tagline">Purple Party Pop</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Vodka</li><li>Blackcurrant squash</li><li>Lemonade</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice in glass.</li><li>Vodka + a dash of squash.</li><li>Top with lemonade and stir.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-9">
+<h2 class="neon-title">Apple Vodka Fizz</h2>
+<span class="tagline">Apple Snap Fizz</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Vodka</li><li>Apple juice</li><li>Soda water (splash)</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Add ice.</li><li>Vodka + apple juice.</li><li>Top with splash of soda.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-10">
+<h2 class="neon-title">Shandy</h2>
+<span class="tagline">Half &amp; Half</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Lager (chilled)</li><li>Lemonade (chilled)</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Pour equal parts lager and lemonade into a glass.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-11">
+<h2 class="neon-title">Cider Spritz</h2>
+<span class="tagline">Crisp Summer Zip</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Cider</li><li>Lemonade or soda</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice in glass.</li><li>Half cider, half lemonade (or soda).</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-12">
+<h2 class="neon-title">White Wine Spritzer</h2>
+<span class="tagline">Light • Breezy</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>White wine</li><li>Soda water / lemonade</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice in glass.</li><li>Wine + soda (or lemonade).</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-13">
+<h2 class="neon-title">Moscow Mule</h2>
+<span class="tagline">Zingy Ginger Kick</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Vodka</li><li>Ginger beer</li><li>Squeeze of lime</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice.</li><li>Vodka + ginger beer.</li><li>Squeeze lime.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-14">
+<h2 class="neon-title">Dark &amp; Stormy</h2>
+<span class="tagline">Spicy Storm Sip</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Dark/spiced rum</li><li>Ginger beer</li><li>Lime (optional)</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice.</li><li>Top with ginger beer.</li><li>Float rum on top; squeeze lime.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<section class="page" id="cocktail-15">
+<h2 class="neon-title">Spiced Rum Cola</h2>
+<span class="tagline">Warm Spice Cola</span>
+<div class="neon-card ingredients">
+<h3>Ingredients</h3>
+<ul><li>Spiced rum</li><li>Cola</li><li>Ice</li></ul>
+</div>
+<div class="neon-card method">
+<h3>Method</h3>
+<ol><li>Ice.</li><li>Rum + cola.</li><li>Done.</li></ol>
+</div>
+<div class="nav-row"><button class="back" onclick="go('cocktails')">BACK</button></div>
+</section>
+<script>
+function pages(){ return Array.from(document.querySelectorAll('.page')); }
+function go(id){
+  try { pages().forEach(p=>p.classList.remove('active')); } catch(e){}
+  const el = document.getElementById(id);
+  if(el){ el.classList.add('active'); }
+  window.scrollTo(0,0);
+  try { localStorage.setItem('tali_last', id); } catch(e){}
+  try { if (typeof applyRecipeFilters === 'function') applyRecipeFilters(); } catch(e){}
+  try {
+    if(id && id.startsWith('staples-') && typeof window.renderList === 'function'){
+      const cat = id.substring('staples-'.length);
+      window.renderList(cat);
+    }
+  } catch(e){ console.warn('[go] renderList error', e); }
+}
+function randomAff(){
+  const list = [
+    "You’ve got this.","Small steps, big wins.","Cook smart, eat happy.","Quick, tasty, done.","Keep it simple today."
+  ];
+  const el = document.getElementById('affirmation');
+  if(el){ el.textContent = list[Math.floor(Math.random()*list.length)]; }
+}
+function setRating(id, n){
+  try { localStorage.setItem('tali_rate_'+id, String(n)); } catch(e){}
+  renderStars(id);
+}
+function renderStars(id){
+  const wrap = document.querySelector('.stars[data-stars-for="'+id+'"]');
+  if(!wrap) return;
+  let n = 0;
+  try { n = parseInt(localStorage.getItem('tali_rate_'+id) || '0', 10); } catch(e){}
+  const stars = Array.from(wrap.querySelectorAll('.star'));
+  stars.forEach((s,i)=>{ if(i < n) s.classList.add('on'); else s.classList.remove('on'); });
+}
+function resetRatings(){
+  try { Object.keys(localStorage).forEach(k=>{ if(k.startsWith('tali_rate_')) localStorage.removeItem(k); }); } catch(e){}
+  document.querySelectorAll('.stars').forEach(el=>{ const id = el.getAttribute('data-stars-for'); if(id) renderStars(id); });
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  randomAff();
+  try{
+    const last = localStorage.getItem('tali_last');
+    if(last && document.getElementById(last)){ go(last); }
+  }catch(e){}
+});
+</script><script>
+(function(){
+  const DEFAULTS = {
+    fresh: ["Halloumi","Mature Cheddar cheese ×400 g","Semi-skimmed milk, 2 pints","Spreadable butter","New York Bakery Co. bagels (plain) ×5","Free-range eggs, large ×6"],
+    vegfruit: ["Banana ×2","Baked potato ×2","Tomatoes pack","Avocado ×4","Cucumber","Fresh coriander 30 g","Green grapes"],
+    cupboard: ["Stock","Balsamic glaze","Choc spread","Baked beans","Sweetener","Soy sauce","Pot noodles","Sunflower oil","Chopped tomatoes tin ×4","Green olives (jar)","Runny honey","Strawberry jam","Garlic mayo","Sweet chilli","Peri peri","Smoked paprika","Garlic granules","Salt cellar","Pepper","Shreddies","Weetabix cereal ×24","Pasta","Microwave rice, white basmati pouches 250 g ×2","Plain milk chocolate bar 200 g","Crisps"],
+    frozen: ["Chips","McCain Crispy French Fries","Linda McCartney’s vegetarian tomato &amp; basil meatballs"],
+    household: ["Washing machine capsules","Toilet tissue ×4 rolls"]
+  };
+  const KEY = c => 'tali_shop_'+c;
+  const load = c => {
+    try{
+      const raw = localStorage.getItem(KEY(c));
+      if(!raw) return DEFAULTS[c].map(t=>({text:t,checked:false}));
+      const parsed = JSON.parse(raw).map(x => typeof x === 'string' ? ({text:x,checked:false}) : x);
+      if(!Array.isArray(parsed) || parsed.length===0) return DEFAULTS[c].map(t=>({text:t,checked:false}));
+      return parsed;
+    }catch(e){ return DEFAULTS[c].map(t=>({text:t,checked:false})); }
+  };
+  const save = (c,items)=>{ try{ localStorage.setItem(KEY(c), JSON.stringify(items)); }catch(e){} };
+  function renderList(c){
+    const host = document.getElementById('shop-list-'+c);
+    if(!host) return;
+    const items = load(c);
+    host.innerHTML = items.map((it,i)=>`
+      <div class="shop-row">
+        <input type="checkbox" data-cat="${c}" data-idx="${i}" ${it.checked?'checked':''}>
+        <label>${it.text}</label>
+        <button class="del" data-del="${c}" data-idx="${i}" title="Delete" aria-label="Delete">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+            <path d="M10 11v6"></path><path d="M14 11v6"></path>
+            <path d="M9 6V4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </div>
+    `).join('');
+  }
+  window.renderList = renderList;
+
+  document.addEventListener('click', e=>{
+    const add = e.target.closest('section[id^="staples"] [data-add]');
+    if(add){
+      const c = add.getAttribute('data-add');
+      const input = document.getElementById('shop-add-'+c);
+      const v = (input?.value||'').trim();
+      if(v){
+        const items = load(c); items.push({text:v,checked:false}); save(c,items); renderList(c);
+        input.value=''; input.focus();
+      }
+      return;
+    }
+    const del = e.target.closest('section[id^="staples"] [data-del]');
+    if(del){
+      const c = del.getAttribute('data-del'); const i = parseInt(del.getAttribute('data-idx'),10);
+      const items = load(c); if(items[i]){ items.splice(i,1); save(c,items); renderList(c); }
+      return;
+    }
+  });
+
+  document.addEventListener('change', e=>{
+    const box = e.target.closest('section[id^="staples"] input[type="checkbox"]');
+    if(box){
+      const c = box.getAttribute('data-cat'); const i = parseInt(box.getAttribute('data-idx'),10);
+      const items = load(c); if(items[i]){ items[i].checked = !!box.checked; save(c,items); }
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const active = document.querySelector('section.page.active[id^="staples-"]');
+    if(active){ const cat = active.id.split('staples-')[1]; renderList(cat); }
+  });
+
+})();
+</script></body>
+</html>
